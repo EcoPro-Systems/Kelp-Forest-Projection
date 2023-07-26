@@ -42,9 +42,17 @@ Alternatively, we use a down-sampled version of the temperature data which is av
 
 25-35 deg -> giant kelp
 
+## Digital Elevation Models
+
+GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ice topo/bathy; 15 arc-second resolution)
+
+NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
+
 ## Codes to add
 
 - notebook to extract kelp metrics
 - create time series plots
 - create correlation plots
 - regression model + prediction
+
+
