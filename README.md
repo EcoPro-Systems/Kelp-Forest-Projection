@@ -1,6 +1,6 @@
-# KelpForestMonitoring
-An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast.
+# Kelp Forest Monitoring
 
+An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast. 
 
 ## Installation
 
@@ -11,20 +11,35 @@ Set up your python environment
 or 
 
 ```
-conda create -n kelp python=3.9
+conda create -n kelp python=3.10
 conda activate kelp
-conda install ipython jupyter
-pip install pandas matplotlib scipy sklearn
+conda install ipython jupyter pandas matplotlib scipy scikit-learn
+conda install -c conda-forge xarray dask netCDF4 bottleneck
+pip install tqdm
 ```
 
 
+# Datasets
+
+We use various data sets including kelp biomass, sea surface temperature, and digital elevation models.
 
 ## Kelp Biomass
 
-Kelp data from: https://sbclter.msi.ucsb.edu/data/catalog/package/?package=knb-lter-sbc.74
+[Kelp Watch](https://kelpwatch.org/) is an online platform that provides access to satellite data on kelp canopy dynamics along the west coast of North America. Developed through a collaboration between researchers and conservation groups, Kelp Watch uses Landsat imagery to quantify seasonal giant kelp and bull kelp canopy area within 10x10 km regions spanning from Baja California, Mexico to Oregon since 1984. The interactive web interface allows users to visualize, analyze, and download the kelp canopy data to support research and inform management decisions. Key applications include assessing long-term trends, impacts of disturbances like marine heatwaves, and local kelp forest dynamics. Overall, Kelp Watch makes complex satellite data more accessible to better understand and manage these valuable kelp forest ecosystems.
 
-![](data/kelp_california.png)
+Data URL: https://sbclter.msi.ucsb.edu/data/catalog/package/?package=knb-lter-sbc.74
 
+![](Figures/kelp_california.png)
+
+`kelp_area_m2` - The total emergent kelp canopy area in square meters within the selected geometry. Cells with no numerical value correspond to instances when the scene was either obstructed by clouds and/or no clear observation of the area was available and no measurement was obtained.
+
+
+| Quarter | Season        | Months                  | Date              |
+| ------- | ------------- | ----------------------- | ----------------- |
+| Q1      | winter        | January – March         | 02-15T00:00:00.00 |
+| Q2      | spring        | April – June            | 05-15T00:00:00.00 |
+| Q3      | summer        | July – September        | 08-15T00:00:00.00 |
+| Q4      | fall          | October – December      | 11-15T00:00:00.00 |
 
 
 ## Sea Surface Temperature
@@ -36,7 +51,7 @@ You may need to register for an account to access the data. Then filter for the 
 
 - [Alt Link](https://cmr.earthdata.nasa.gov/virtual-directory/collections/C1996881146-POCLOUD/temporal), [AWS Link](https://registry.opendata.aws/mur/#usageexa)
 
-![](data/temperature_map.png)
+![](Figures/temperature_map.png)
 
 Alternatively, we use a down-sampled version of the temperature data which is averaged on a monthly time frame. *Insert reference to how the data was downsampled*
 
@@ -48,11 +63,15 @@ GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ic
 
 NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
 
-## Codes to add
+## Data Preparation
 
-- notebook to extract kelp metrics
+1. Unzip the netCDF files in the `Data/` directory.
+2. Log into the [CMDA server](https://hub.jpl-cmda.org/)
+3. If it is your first time setting up the project see: `Grid_Temp_to_Kelp.ipynb` on CMDA or `kelp_gridding.py`
+4. Now you're ready to extract the kelp_metrics from the netCDF files. See: `Kelp_Metrics.ipynb` on CMDA or `kelp_metrics.py`
+
+## Codes
+
 - create time series plots
 - create correlation plots
 - regression model + prediction
-
-
