@@ -43,19 +43,11 @@ Data URL: https://sbclter.msi.ucsb.edu/data/catalog/package/?package=knb-lter-sb
 
 
 ## Sea Surface Temperature
-- [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1) > Data Access > Search Granules
 
-You may need to register for an account to access the data. Then filter for the dates you want and select download and then direct download to acquire links for each netcdf file. A few download links from our study are below:
-
-- [Download link](https://search.earthdata.nasa.gov/downloads/4436350485) for data from Jan. 2021 - Jan. 2022
-
-- [Alt Link](https://cmr.earthdata.nasa.gov/virtual-directory/collections/C1996881146-POCLOUD/temporal), [AWS Link](https://registry.opendata.aws/mur/#usageexa)
+We use the [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1) data set to get the sea surface temperature data. The data for this project are monthly averages of the SST at 0.01 deg resolution. For more information see [Kalmus et al. 2022](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021EF002608)
 
 ![](Figures/temperature_map.png)
 
-Alternatively, we use a down-sampled version of the temperature data which is averaged on a monthly time frame. *Insert reference to how the data was downsampled*
-
-25-35 deg -> giant kelp
 
 ## Digital Elevation Models
 
@@ -70,9 +62,70 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | Code | Description |
 | ---- | ----------- |
 | `kelp_gridding.py`  `Grid_Temp_to_Kelp.ipynb` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
-| `kelp_metrics.py` | Calculate the various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl` |
+| `kelp_metrics.py` | Calculate the various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are ultimately used as features for our regression algorithm. |
 
 TO DO
 - create time series plots
 - create correlation plots
 - regression model + prediction
+
+
+
+```json
+kelp_interpolated_data = [
+{'lat': 27.1033379433901,
+ 'long': -114.288749436661,
+ 'mur_time': array(['2015-10-15T21:00:00.000000000', '2020-05-15T21:00:00.000000000',
+        '2003-04-15T09:00:00.000000000', '2013-12-15T21:00:00.000000000',
+        '2005-02-14T09:00:00.000000000', '2004-03-15T21:00:00.000000000',
+         ...
+        '2004-02-14T21:00:00.000000000', '2012-12-15T21:00:00.000000000',
+        '2014-10-15T21:00:00.000000000', '2013-11-15T09:00:00.000000000',
+        '2005-01-15T21:00:00.000000000', '2003-03-15T21:00:00.000000000',
+        '2020-04-15T09:00:00.000000000', '2013-02-14T09:00:00.000000000',]),
+ 'mur_temp': array([299.384  , 290.146  , 287.75   , 291.74698, 290.042  , 288.117  ,
+        289.754  , 296.022  , 288.807  , 291.177  , 291.948  , 290.333  ,
+        292.004  , 288.615  , 290.123  , 292.948  , 296.639  , 293.873  ,
+        290.40298, 292.306  , 297.013  , 294.694  , 290.17798, 294.043  ,
+        ...
+        295.227  , 290.258  , 295.85498, 292.669  , 287.998  , 293.235  ,
+        298.947  , 293.712  , 291.421  , 288.292  , 288.763  , 288.895  ,
+        293.267  , 289.93298, 291.845  , 294.632  , 290.422  , 287.93   ,
+        292.472  ], dtype=float32),
+ 'kelp_time': array(['1984-02-15T00:00:00.000000000', '1984-05-15T00:00:00.000000000',
+        '1984-08-15T00:00:00.000000000', '1984-11-15T00:00:00.000000000',
+        '1985-02-15T00:00:00.000000000', '1985-05-15T00:00:00.000000000',
+        '1985-08-15T00:00:00.000000000', '1985-11-15T00:00:00.000000000',
+        '1986-02-15T00:00:00.000000000', '1986-05-15T00:00:00.000000000',
+          ...
+        '2021-08-15T00:00:00.000000000', '2021-11-15T00:00:00.000000000',
+        '2022-02-15T00:00:00.000000000', '2022-05-15T00:00:00.000000000',
+        '2022-08-15T00:00:00.000000000', '2022-11-15T00:00:00.000000000'],
+       dtype='datetime64[ns]'),
+ 'kelp_area': array([ nan,  nan,  nan,  nan,  nan,  nan,  nan,  nan,  nan,   0.,  nan,
+         nan,  nan,   0.,   0.,  nan,  nan,  nan,  nan,  nan,  nan,   0.,
+          0.,   0.,  nan,   0.,  nan,  nan,  nan,   0.,  nan,  nan,  nan,
+          0.,   0.,  nan,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+        482., 194.,   0.,  68., 116., 132.,   0.,  17., 325., 233.,   0.,
+          0., 367.,  64.,   0.,   0.,   0.,   0., 121., 662., 767.,  45.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+        315.,  32.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,   0.,
+          0.,   0.]),
+ 'kelp_temp': array([         nan,          nan,          nan,          nan,
+                 nan,          nan,          nan,          nan,
+                 nan,          nan,          nan,          nan,
+                 nan,          nan,          nan,          nan,
+        ...
+        288.11056221, 290.11753495, 295.60852629, 293.21854901,
+        289.15287285, 289.77734012, 295.68311827, 295.98688144,
+        288.88905684, 290.02875319, 293.25067532, 293.71855876,]),
+}, ...]
+```
+
+The nan's represent missing data either due to incompleteness in either data product for a certain time. The nan's and zeros should be filtered out in future correlation estimates.
