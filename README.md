@@ -15,7 +15,7 @@ conda create -n kelp python=3.10
 conda activate kelp
 conda install ipython jupyter pandas matplotlib scipy scikit-learn
 conda install -c conda-forge xarray dask netCDF4 bottleneck
-pip install tqdm
+pip install tqdm statsmodels
 ```
 
 
@@ -25,11 +25,11 @@ We use various data sets including kelp biomass, sea surface temperature, and di
 
 ## Kelp Biomass
 
-[Kelp Watch](https://kelpwatch.org/) is an online platform that provides access to satellite data on kelp canopy dynamics along the west coast of North America. Developed through a collaboration between researchers and conservation groups, Kelp Watch uses Landsat imagery to quantify seasonal giant kelp and bull kelp canopy area within 10x10 km regions spanning from Baja California, Mexico to Oregon since 1984. The interactive web interface allows users to visualize, analyze, and download the kelp canopy data to support research and inform management decisions. Key applications include assessing long-term trends, impacts of disturbances like marine heatwaves, and local kelp forest dynamics. Overall, Kelp Watch makes complex satellite data more accessible to better understand and manage these valuable kelp forest ecosystems.
+[Kelp Watch](https://kelpwatch.org/) is an online platform that provides access to satellite data on kelp canopy dynamics along the west coast of North America. Developed through a collaboration between researchers and conservation groups, Kelp Watch uses Landsat imagery to quantify seasonal giant kelp and bull kelp canopy area in 30x30m regions spanning from Baja California, Mexico to Oregon since 1984. The interactive web interface allows users to visualize, analyze, and download the kelp canopy data to support research and inform management decisions. Key applications include assessing long-term trends, impacts of disturbances like marine heatwaves, and local kelp forest dynamics. Overall, Kelp Watch makes complex satellite data more accessible to better understand and manage these valuable kelp forest ecosystems. The Kelp Watch project monitors ~500,000 locations along the west coast.
 
 Data URL: https://sbclter.msi.ucsb.edu/data/catalog/package/?package=knb-lter-sbc.74
 
-![](Figures/kelp_california.png)
+![](Figures/kelp_west_coast.png)
 
 `kelp_area_m2` - The total emergent kelp canopy area in square meters within the selected geometry. Cells with no numerical value correspond to instances when the scene was either obstructed by clouds and/or no clear observation of the area was available and no measurement was obtained.
 
@@ -62,9 +62,10 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | Code | Description |
 | ---- | ----------- |
 | `kelp_gridding.py`  `Grid_Temp_to_Kelp.ipynb` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
-| `kelp_metrics.py` | Calculate the various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are ultimately used as features for our regression algorithm. |
+| `kelp_metrics.py`  `Kelp_Metrics.ipynb` | Calculate the various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are ultimately used as features for our regression algorithm. |
 
-TO DO
+
+TO DO:
 - create time series plots
 - create correlation plots
 - regression model + prediction
