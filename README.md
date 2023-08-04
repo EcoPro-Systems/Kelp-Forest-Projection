@@ -55,7 +55,7 @@ GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ic
 
 NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
 
-## Codes
+## Analysis
 
 The python scripts can be run locally and the jupyter notebooks are meant to be run on the CMDA server.
 
@@ -65,9 +65,10 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | `kelp_metrics.py`  `Kelp_Metrics.ipynb` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
 
 
-TO DO:
+Things to transfer from CMDA:
 - create time series plots
-- create correlation plots
+- seasonal histograms
+- lag correlation
 - regression model + prediction
 
 
