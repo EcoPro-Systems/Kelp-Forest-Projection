@@ -63,15 +63,16 @@ GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ic
 
 NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
 
-## Data Preparation
-
-1. Unzip the netCDF files in the `Data/` directory.
-2. Log into the [CMDA server](https://hub.jpl-cmda.org/)
-3. If it is your first time setting up the project see: `Grid_Temp_to_Kelp.ipynb` on CMDA or `kelp_gridding.py`
-4. Now you're ready to extract the kelp_metrics from the netCDF files. See: `Kelp_Metrics.ipynb` on CMDA or `kelp_metrics.py`
-
 ## Codes
 
+The python scripts can be run locally and the jupyter notebooks are meant to be run on the CMDA server.
+
+| Code | Description |
+| ---- | ----------- |
+| `kelp_gridding.py`  `Grid_Temp_to_Kelp.ipynb` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
+| `kelp_metrics.py` | Calculate the various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl` |
+
+TO DO
 - create time series plots
 - create correlation plots
 - regression model + prediction
