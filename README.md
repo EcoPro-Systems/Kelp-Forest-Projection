@@ -62,7 +62,8 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | ----------- | ----------- |
 | `kelp_gridding.py`  `Grid_Temp_to_Kelp.ipynb` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
 | `kelp_metrics.py`  `Kelp_Metrics.ipynb` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
-| `kelp_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
+| `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
+| `plot_lag_correlation.py` | Create lag correlation plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 
 Things to transfer from CMDA:
 - seasonal histograms
@@ -74,3 +75,4 @@ Things to transfer from CMDA:
 The scripts above will be able to create figures like this:
 ![](Data/kelp_metrics_25_37_sst_timeseries.png)
 ![](Data/kelp_metrics_25_37_kelp_timeseries.png)
+![](Data/kelp_metrics_25_37_lag_correlation.png)

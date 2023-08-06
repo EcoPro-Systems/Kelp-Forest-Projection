@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # load data from disk
     with open(args.file_path, 'rb') as f:
         data = pickle.load(f)
-    
+
     # plot time series
     fig, ax = sst_time_series(data)
     plt.savefig(args.file_path.replace('.pkl', '_sst_timeseries.png'))
