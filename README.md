@@ -18,7 +18,6 @@ conda install -c conda-forge xarray dask netCDF4 bottleneck
 pip install tqdm statsmodels
 ```
 
-
 # Datasets
 
 We use various data sets including kelp biomass, sea surface temperature, and digital elevation models.
@@ -63,12 +62,15 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | ----------- | ----------- |
 | `kelp_gridding.py`  `Grid_Temp_to_Kelp.ipynb` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
 | `kelp_metrics.py`  `Kelp_Metrics.ipynb` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
-
+| `kelp_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 
 Things to transfer from CMDA:
-- create time series plots
 - seasonal histograms
 - lag correlation
 - regression model + prediction
 
+## Figures
 
+The scripts above will be able to create figures like this:
+![](Data/kelp_metrics_25_37_sst_timeseries.png)
+![](Data/kelp_metrics_25_37_kelp_timeseries.png)

@@ -152,8 +152,8 @@ if __name__ == "__main__":
 
     # load bathymetry data
     bathymetry = xr.open_dataset('Data/GEBCO_2022_sub_ice_topo.nc')
-    lower_lat = 25
-    upper_lat = 37
+    lower_lat = 37
+    upper_lat = 50
 
     # if using noaa dem: limit: 31-37
     #bathymetry = xr.open_dataset('Data/crm_socal_1as_vers2.nc')
@@ -166,5 +166,3 @@ if __name__ == "__main__":
     #save to pkl file
     with open(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl", "wb") as f:
         pickle.dump(kelp_data, f)
-
-    # will take ~2 hours to run
