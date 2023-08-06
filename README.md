@@ -65,10 +65,12 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 | `plot_lag_correlation.py` | Create lag correlation plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 | `plot_histogram.py`  | Create seasonal histograms for change in abundance using `kelp_metrics.pkl`, averages over the entire region. |
+| `train_regressors.py` | Train various regression models to predict the abundance of Kelp using ordinary least-squares, multi-layer perceptron and random forest with features from `kelp_metrics.pkl`. |
 
-Things to transfer from CMDA:
-- seasonal histograms
-- regression model + prediction
+## To Do
+- Create table of F-test, Mutual Info, Correlation Coefficient and RF importance scores
+- Hyperparameter tuning for regressors
+- Get future temperature data + make predictions using best regressor
 
 ## Figures
 
@@ -77,3 +79,4 @@ The scripts above will be able to create figures like this:
 ![](Data/kelp_metrics_25_37_kelp_timeseries.png)
 ![](Data/kelp_metrics_25_37_lag_correlation.png)
 ![](Data/kelp_metrics_25_37_histogram.png)
+![](Data/kelp_metrics_25_37_regressors.png)
