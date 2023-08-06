@@ -77,7 +77,9 @@ def kelp_time_series(kelp_metrics):
 if __name__ == "__main__":
     # argparse for input filepath
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--file_path', type=str, help='path to input metrics file')
+    parser.add_argument('-f', '--file_path', type=str, 
+                        help='path to input metrics file', 
+                        default=" Data/kelp_metrics_25_37.pkl")
     args = parser.parse_args()
 
     # load data from disk

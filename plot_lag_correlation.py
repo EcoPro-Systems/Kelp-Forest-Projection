@@ -20,6 +20,7 @@ def lag_correlation(kelp_metrics):
     mean_temp_lag2 = []
     std_temp_lag2 = []
 
+    # compute mean and std of temperature and kelp area
     for t in unique_times:
         mask = kelp_metrics['time'] == t
         mean_temp.append(np.mean(kelp_metrics['temp'][mask]))
@@ -30,6 +31,7 @@ def lag_correlation(kelp_metrics):
         mean_temp_lag2.append(np.mean(kelp_metrics['temp_lag2'][mask]))
         std_temp_lag2.append(np.std(kelp_metrics['temp_lag2'][mask]))
 
+    # convert to numpy arrays
     mean_temp = np.array(mean_temp)
     mean_kelp = np.array(mean_kelp)
     std_temp = np.array(std_temp)
@@ -41,6 +43,7 @@ def lag_correlation(kelp_metrics):
 
     fig, ax = plt.subplots(figsize=(7,6))
     ax.plot(mean_temp-273.15, mean_kelp,  'o', color='black', markersize=4)
+    
     # measure trend line
     A = np.vstack([mean_temp-273.15, np.ones(len(mean_temp))]).T
     res = OLS(mean_kelp, A).fit()
@@ -51,6 +54,7 @@ def lag_correlation(kelp_metrics):
 
     # temp lagged by one quarter
     ax.plot(mean_temp_lag[1:]-273.15, mean_kelp[1:],  'o', color='red', markersize=4)
+    
     # measure trend line
     A = np.vstack([mean_temp_lag[1:]-273.15, np.ones(len(mean_temp_lag[1:]))]).T
     res = OLS(mean_kelp[1:], A).fit()
@@ -60,6 +64,7 @@ def lag_correlation(kelp_metrics):
 
     # temp lagged by two quarters
     ax.plot(mean_temp_lag2[2:]-273.15, mean_kelp[2:],  'o', color='blue', markersize=4)
+    
     # measure trend line
     A = np.vstack([mean_temp_lag2[2:]-273.15, np.ones(len(mean_temp_lag2[2:]))]).T
     res = OLS(mean_kelp[2:], A).fit()
@@ -79,7 +84,9 @@ def lag_correlation(kelp_metrics):
 if __name__ == "__main__":
     # argparse for input filepath
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--file_path', type=str, help='path to input metrics file')
+    parser.add_argument('-f', '--file_path', type=str, 
+                        help='path to input metrics file', 
+                        default=" Data/kelp_metrics_25_37.pkl")
     args = parser.parse_args()
 
     # load data from disk

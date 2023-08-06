@@ -64,10 +64,10 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | `kelp_metrics.py`  `Kelp_Metrics.ipynb` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
 | `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 | `plot_lag_correlation.py` | Create lag correlation plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
+| `plot_histogram.py`  | Create seasonal histograms for change in abundance using `kelp_metrics.pkl`, averages over the entire region. |
 
 Things to transfer from CMDA:
 - seasonal histograms
-- lag correlation
 - regression model + prediction
 
 ## Figures
