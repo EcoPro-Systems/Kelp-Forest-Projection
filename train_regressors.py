@@ -165,7 +165,8 @@ if __name__ == "__main__":
     ax[0].set_ylabel("Kelp Area [m^2]")
     ax[0].set_title("Ordinary Least Squares (OLS) Regression")
     ax[0].grid(True,ls='--',alpha=0.5)
-    ax[0].set_ylim(top=650)
+    ax[0].set_ylim([0,666])
+
     # MLP timeseries
     ax[1].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='black', label='binned data')
     ax[1].errorbar(utime_train_dt, mean_mlp_train, yerr=std_mlp_train, fmt='.', ls='none', color='blue', label=f'train (avg. err: {abs_err_mlp_train:.1f} m^2)')
@@ -177,7 +178,8 @@ if __name__ == "__main__":
     ax[1].set_ylabel("Kelp Area [m^2]")
     ax[1].set_title("Multi-Layer Perceptron (MLP) Regression")
     ax[1].grid(True,ls='--',alpha=0.5)
-    ax[1].set_ylim(top=650)
+    ax[1].set_ylim([0,666])
+
 
     # DT timeseries
     ax[2].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='black', label='binned data')
@@ -191,7 +193,7 @@ if __name__ == "__main__":
     ax[2].set_ylabel("Kelp Area [m^2]")
     ax[2].set_title("Random Forest (RF) Regression")
     ax[2].grid(True,ls='--',alpha=0.5)
-    ax[2].set_ylim(top=650)
+    ax[2].set_ylim([0,666])
 
     #DT Text
 #     train_representation = tree.export_text()
