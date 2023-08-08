@@ -72,6 +72,7 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 - Hyperparameter tuning for regressors
 - Get future temperature data + make predictions using best regressor
 - Look into EcoStress SST temperatures
+- Lag correlation plot for change in kelp
 
 ## Figures
 
