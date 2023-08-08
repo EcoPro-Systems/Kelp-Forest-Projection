@@ -31,6 +31,7 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
         'dtemp':[],          # one quarter difference in temperature
         'dtemp_temp':[],     # temperature at same time as difference (average of neighboring quarters)
         'dtemp_temp_lag':[], # temperature one quarter before 
+        'dtemp_temp_lag2':[],# temperature two quarter before 
         'kelp':[],           # total kelp area
         'temp':[],           # temperature
         'temp_lag':[],       # temperature one quarter before
@@ -43,7 +44,6 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
         'dlon':[],           # longitude corresponding to difference measurements
         'elevation':[],      # elevation [m]
         'delevation':[],     # elevation corresponding to difference measurements [m]
-        
     }
 
     # loop over all locations
@@ -95,7 +95,9 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
 
         # average temperature at same time as difference
         kelp_data['dtemp_temp'].extend((d['kelp_temp'][1:][nonnanmask] + d['kelp_temp'][:-1][nonnanmask])/2)
-        kelp_data['dtemp_temp_lag'].extend((d['kelp_temp_lag'][1:][nonnanmask] + d['kelp_temp'][:-1][nonnanmask])/2)
+        kelp_data['dtemp_temp_lag'].extend((d['kelp_temp_lag'][1:][nonnanmask] + d['kelp_temp_lag'][:-1][nonnanmask])/2)
+        kelp_data['dtemp_temp_lag2'].extend((d['kelp_temp_lag2'][1:][nonnanmask] + d['kelp_temp_lag2'][:-1][nonnanmask])/2)
+        
         kelp_data['dtemp'].extend(nandiff_temp[nonnanmask]) # save temperature difference data
 
         # save time data for differences by averaging time of sequential quartersq
@@ -151,15 +153,15 @@ if __name__ == "__main__":
         data = pickle.load(f)
 
     # load bathymetry data
-    bathymetry = xr.open_dataset('Data/GEBCO_2022_sub_ice_topo.nc')
-    lower_lat = 37
-    upper_lat = 50
+    #bathymetry = xr.open_dataset('Data/GEBCO_2022_sub_ice_topo.nc')
+    #lower_lat = 37
+    #upper_lat = 50
 
     # if using noaa dem: limit: 31-37
-    #bathymetry = xr.open_dataset('Data/crm_socal_1as_vers2.nc')
-    #bathymetry = bathymetry.rename({'Band1':'elevation'})
-    #lower_lat = 31
-    #upper_lat = 37
+    bathymetry = xr.open_dataset('Data/crm_socal_1as_vers2.nc')
+    bathymetry = bathymetry.rename({'Band1':'elevation'})
+    lower_lat = 31
+    upper_lat = 36
 
     kelp_data = extract_kelp_metrics(data, bathymetry, lower_lat, upper_lat)
 

@@ -75,8 +75,8 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 ## Figures
 
 The scripts above will be able to create figures like this:
-![](Data/kelp_metrics_25_37_sst_timeseries.png)
-![](Data/kelp_metrics_25_37_kelp_timeseries.png)
-![](Data/kelp_metrics_25_37_lag_correlation.png)
-![](Data/kelp_metrics_25_37_histogram.png)
-![](Data/kelp_metrics_25_37_regressors.png)
+![](Data/kelp_metrics_31_36_sst_timeseries.png)
+![](Data/kelp_metrics_31_36_kelp_timeseries.png)
+![](Data/kelp_metrics_31_36_lag_correlation.png)
+![](Data/kelp_metrics_31_36_histogram.png)
+![](Data/kelp_metrics_31_36_regressors.png)

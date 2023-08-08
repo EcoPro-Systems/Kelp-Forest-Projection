@@ -12,7 +12,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_25_37.pkl")
+                        default="Data/kelp_metrics_31_36.pkl")
     args = parser.parse_args()
 
     # load data from disk
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     Xp_test = (Xp_test - Xp_test.mean(0)) / Xp_test.std(0)
 
     # create multi-layer perceptron regressor
-    mlp = MLPRegressor(hidden_layer_sizes=(30,8,4), activation='relu', solver='adam', max_iter=50, verbose=True, alpha=0.1)
+    mlp = MLPRegressor(hidden_layer_sizes=(30,8,4), activation='relu', solver='adam', max_iter=20, verbose=True, alpha=0.01)
     y_mlp_train = mlp.fit(Xp_train, y_train).predict(Xp_train)
     abs_err_mlp_train = np.abs(y_train - y_mlp_train).mean()
     print(f"Avg. Absolute Error (MLP) train: {abs_err_mlp_train:.3f} m^2")
