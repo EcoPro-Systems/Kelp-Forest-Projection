@@ -204,7 +204,26 @@ if __name__ == "__main__":
     #DT tree
 #     fig = plt.figure(figsize=(25,20))
 #     _ = tree.plot_tree(rf, feature_names=features, filled=True)
+
+#mutual_information, F-test NOTE: change for loop to match # of features
+    f_test, _ = f_regression(X, y)
     
+    f_test /= np.max(f_test)
+
+    mi = mutual_info_regression(X, y)
+    mi /= np.max(mi)
+    
+    plt.figure(figsize=(15, 5))
+    for i in range(7):
+        plt.subplot(1, 7, i + 1)
+        plt.scatter(X[:, i], y, edgecolor="black", s=20)
+        plt.xlabel("$x_{}$".format(i + 1), fontsize=14)
+        if i == 0:
+            plt.ylabel("$y$", fontsize=14)
+        plt.title("F-test={:.2f}, MI={:.2f}".format(f_test[i], mi[i]), fontsize=16)
+        print(f"{features[i]}:F-Test={f_test[i]}, MI={mi[i]}")
+
+    print(f'Feature Importances: {dt.feature_importances_}')
     plt.tight_layout()
     plt.savefig(args.file_path.replace('.pkl', '_regressors.png'))
     plt.show()
