@@ -81,5 +81,6 @@ The scripts above will be able to create figures like this:
 ![](Data/kelp_metrics_31_36_sst_timeseries.png)
 ![](Data/kelp_metrics_31_36_kelp_timeseries.png)
 ![](Data/kelp_metrics_31_36_lag_correlation.png)
+![](Data/kelp_metrics_31_36_lag_correlation_change.png)
 ![](Data/kelp_metrics_31_36_histogram.png)
 ![](Data/kelp_metrics_31_36_regressors.png)

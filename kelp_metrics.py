@@ -97,7 +97,7 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
         kelp_data['dtemp_temp'].extend((d['kelp_temp'][1:][nonnanmask] + d['kelp_temp'][:-1][nonnanmask])/2)
         kelp_data['dtemp_temp_lag'].extend((d['kelp_temp_lag'][1:][nonnanmask] + d['kelp_temp_lag'][:-1][nonnanmask])/2)
         kelp_data['dtemp_temp_lag2'].extend((d['kelp_temp_lag2'][1:][nonnanmask] + d['kelp_temp_lag2'][:-1][nonnanmask])/2)
-        
+
         kelp_data['dtemp'].extend(nandiff_temp[nonnanmask]) # save temperature difference data
 
         # save time data for differences by averaging time of sequential quartersq

@@ -43,6 +43,8 @@ def lag_correlation(kelp_metrics):
 
     fig, ax = plt.subplots(figsize=(7,6))
     ax.plot(mean_temp-273.15, mean_kelp,  'o', color='black', markersize=4)
+    # plot x-axis errorbar
+    #ax.errorbar(mean_temp-273.15, mean_kelp, xerr=std_temp, color='black', marker='o', ls='none', ecolor='black', alpha=0.5)
     
     # measure trend line
     A = np.vstack([mean_temp-273.15, np.ones(len(mean_temp))]).T
@@ -54,23 +56,34 @@ def lag_correlation(kelp_metrics):
 
     # temp lagged by one quarter
     ax.plot(mean_temp_lag[1:]-273.15, mean_kelp[1:],  'o', color='red', markersize=4)
-    
+    # plot x-axis errorbar
+    #ax.errorbar(mean_temp_lag[1:]-273.15, mean_kelp[1:], xerr=std_temp_lag[1:], color='red', marker='o', ls='none', ecolor='red', alpha=0.5)
+
     # measure trend line
     A = np.vstack([mean_temp_lag[1:]-273.15, np.ones(len(mean_temp_lag[1:]))]).T
     res = OLS(mean_kelp[1:], A).fit()
     m,b = res.params[0], res.params[1]
+    x = np.linspace(np.min(mean_temp_lag[1:]-273.15), np.max(mean_temp_lag[1:]-273.15), 100)
     corrcoeff = np.corrcoef(mean_temp_lag[1:]-273.15, mean_kelp[1:])[0,1]
     ax.plot(x, m*x+b, 'r-',alpha=0.75,lw=2,label=r'Temperature Lagged by One Quarter ($r=%.2f$)'%corrcoeff)
+    # estimate x when y = 0
+    x0 = -b/m
+    print(f"Quarter lagged temperature when kelp area is zero: {x0:.2f}C")
 
     # temp lagged by two quarters
     ax.plot(mean_temp_lag2[2:]-273.15, mean_kelp[2:],  'o', color='blue', markersize=4)
+    # plot x-axis errorbar
+    #ax.errorbar(mean_temp_lag2[2:]-273.15, mean_kelp[2:], xerr=std_temp_lag2[2:], color='blue', marker='o', ls='none', ecolor='blue', alpha=0.5)
     
     # measure trend line
     A = np.vstack([mean_temp_lag2[2:]-273.15, np.ones(len(mean_temp_lag2[2:]))]).T
     res = OLS(mean_kelp[2:], A).fit()
     m,b = res.params[0], res.params[1]
+    x = np.linspace(np.min(mean_temp_lag2[2:]-273.15), np.max(mean_temp_lag2[2:]-273.15), 100)
     corrcoeff = np.corrcoef(mean_temp_lag2[2:]-273.15, mean_kelp[2:])[0,1]
     ax.plot(x, m*x+b, 'b-',alpha=0.75,lw=2,label=r'Temperature Lagged by Two Quarters ($r=%.2f$)'%corrcoeff)
+    x0 = -b/m
+    print(f"Two Quarter lagged temperature when kelp area is zero: {x0:.2f}C")
 
     ax.set_ylabel(r'Kelp Area $[m^2]$', fontsize=14)
     ax.set_xlabel('Sea Surface Temperature [C]', fontsize=14)
