@@ -1,0 +1,475 @@
+Populations of many species display spatially synchronous fluctuations in
+abundance. Synchrony is most commonly attributed to three processes: factors that influence
+recruitment (e.g., dispersal, early survival), large-scale environmental variability, and spatially
+autocorrelated trophic interactions. However it is often difficult to link population synchrony
+to a specific dominant process, particularly when multiple synchronizing forces are operating.
+We utilized a new satellite-based data set of giant kelp (Macrocystis pyrifera) canopy biomass
+to examine population synchrony in southern California kelp forests on spatial scales ranging
+from 50 m to 300 km and temporal scales ranging from 1 to 11 years. We examined the
+relationship between synchrony and distance for adult kelp populations, kelp recruits, sea
+urchin abundance (a major grazer of kelp), and environmental variables known to influence
+kelp population dynamics. Population synchrony in giant kelp decreased with distance
+between populations: an initial rapid exponential decrease between 50 m and 1.3 km was
+followed by a second, large-scale decrease between distances of 1.3 km and 172 km. The 50-m
+to 1.3-km spatial scale corresponded to the scales of synchrony in the abundance of sea
+urchins and young kelp recruits, suggesting that local drivers of predation and recruitment
+influence small-scale synchrony in kelp populations. The spatial correlation patterns of
+environmental variables, particularly wave height, were similar to the synchrony–distance
+relationship of kelp populations from 1.3 km to 172 km, suggesting that regional
+environmental variability, i.e., the Moran effect, was the dominant process affecting
+synchrony at larger spatial scales. This two-step pattern in the relationship between kelp
+biomass synchrony and distance was apparent in each of the 11 years of our study. Our results
+highlight the potential for synthesizing approaches from both landscape and population
+ecology in order to identify the multiple processes that generate synchrony in population
+dynamics.
+
+Understanding how and why populations vary in
+space and time is a central challenge in ecology. A great
+deal of theoretical work has addressed how various
+processes interact to create spatial and temporal
+patterns in population abundance (Kareiva and Wennergren 1995, Bascompte and Sole´ 1998). Testing this
+theory with empirical data has been challenging because
+there are few species for which long-term abundance
+data across large spatial scales are available.
+
+One commonly observed spatiotemporal pattern in
+ecology is synchrony, the tendency of populations to
+fluctuate together through time (Buonaccorsi et al.
+2001). Synchrony is most commonly calculated as the
+correlation between two populations through time
+(Bjørnstad et al. 1999a). Such trends have been observed
+in a variety of animal (Hanski and Woiwod 1993, de
+Valpine et al. 2010) and plant (Koenig and Knopes
+2000) populations. Covariance in population dynamics
+is generally attributed to three types of mechanisms:
+regional stochasticity (often in the form of environmental variability), recruitment processes (such as dispersal), and trophic interactions. In his classic study of the
+Canadian lynx, P. A. P. Moran hypothesized that
+spatially separated populations are synchronized by
+regional, density independent variability in temperature,
+a mechanism later termed the Moran effect (Moran
+1953). If local dynamics among populations are similar
+and not highly nonlinear, the Moran effect predicts that
+population synchrony will mirror environmental synchrony (e.g., Bjørnstad 2000). Dispersal can also synchronize populations through the movement of
+individuals or reproductive stages (Ranta et al. 1995).
+Finally, trophic interactions such as predation and
+parasitoidism have been invoked as a mechanism to
+synchronize populations at spatial scales corresponding
+to the scale of synchrony of the predator population
+(Ims and Andreassen 2000).
+
+Theoretical studies have shown that associating
+synchrony with a particular forcing process can be
+difficult. For example, dispersal can generate synchrony
+over distances longer than the scale of dispersal (Lande
+et al. 1999, Gouhier et al. 2010) and interactions between
+dispersal and environmental effects can reduce each
+factor’s synchronizing effect (Kendall et al. 2000).
+However, the degree to which synchronizing processes
+can be differentiated will depend on the particular
+system in question. If one factor is substantially more
+influential than others or if the factors operate on very
+different spatial scales, then population dynamics may
+display ‘‘characteristic spatial scales of regulation’’
+(Bjørnstad et al. 1999b), making it easier to link pattern
+with process (de Roos et al. 1991). Also, in many species,
+autocorrelation in population dynamics declines with
+increasing distance. The rate of this decline and the
+distance at which spatial autocorrelation falls to zero
+can serve as tools for identifying synchronizing mechanisms.
+
+However, analyzing patterns of population synchrony
+in isolation is typically not sufficient to draw conclusions
+about the processes producing these patterns (Abbott
+2007). One must also evaluate the spatial autocorrelation of environmental controls, dispersal, and trophic
+interactions. If populations are autocorrelated over long
+distances relative to dispersal and exhibit a decline in
+synchrony with distance comparable to that of largescale environmental controls, then environmental fluctuations are potentially the cause of the large-scale
+correlation (Peltonen et al. 2002). On the other hand,
+rapid decreases in synchrony over relatively short
+distances may be driven by dispersal or local trophic
+interactions (de Roos et al. 1991). For sessile organisms,
+rapid decreases in synchrony can also reflect small-scale
+variability in environmental processes that control
+recruitment success (e.g., topography, soil type, elevation, light). In most cases the relationship between
+synchrony and distance in populations will likely be
+controlled by a combination of processes, and very few
+empirical studies have simultaneously examined the
+roles of multiple processes in causing spatial autocorrelation in population dynamics. Still, caution is warranted when inferring causality by matching patterns of
+synchrony among populations with the patterns of their
+potential regulating factors. For example, Lande et al.
+(1999) demonstrated that small-scale dispersal could
+induce synchrony at large scales in the presence of
+environmental correlation when the dispersal rate is
+much larger than the strength of density regulation.
+During the past decade the significance of synchrony–
+distance relationships has been examined in several
+species using novel statistical techniques (Bjørnstad et al.
+1999b, Bjørnstad and Falck 2001, de Valpine et al.
+2010). Still, the spatial resolution and/or extent of these
+studies have been limited. Either the spatial resolution of
+observations was equal to or coarser than the dispersal
+distance of the species under investigation (Bjørnstad et
+al. 1999b, Peltonen et al. 2002) or the extent was too
+small to observe spatial variability in environmental
+factors (de Valpine et al. 2010). As a result, most past
+studies of synchrony have not been able to fully evaluate
+how the roles of different synchronizing processes vary
+across spatial scales (but see Gouhier et al. 2010).
+
+We utilized a new long-term, large-scale, highresolution remotely sensed data set of giant kelp
+(Macrocystis pyrifera) canopy biomass in the coastal
+waters of southern California (Cavanaugh et al. 2011) as
+a case study to examine patterns of spatial synchrony
+across scales ranging from tens of meters to hundreds of
+kilometers. Compared to other habitat-structuring
+primary producers, giant kelp forests are exceptionally
+dynamic. Short life spans of both kelp fronds (4–6
+months) and entire kelp plants (2–3 years) combine with
+rapid growth (;2% of total biomass per day) to produce
+a standing biomass that turns over 6–7 times per year
+(e.g., Reed et al. 2008, 2011). Growth and mortality of
+giant kelp is strongly influenced by environmental
+factors such as light, wave height, and nutrient levels
+(reviewed in Graham et al. 2007). Therefore, we
+expected to observe at least some synchrony in kelp
+dynamics due to seasonal cycles in these controls.
+Hence, our analyses focused on how patterns of
+synchrony in giant kelp populations declined with
+distance, and how these patterns varied over time. In
+order to identify the most important synchronizing
+processes, we compared the synchrony–distance curve of
+giant kelp to patterns of autocorrelation in environmental variables, predator abundance, and giant kelp
+recruitment. We examined synchrony in changes of kelp
+biomass rather than raw biomass in order to emphasize
+autocorrelation patterns in the growth and mortality of
+giant kelp populations. Using changes in biomass also
+has the benefit of removing long-term trends that can
+induce spurious correlation (Bjørnstad et al. 1999a,
+Koenig 1999).
+
+Sea surface temperature (used as a proxy for nutrient
+levels in this region) and storm-driven wave disturbance,
+two important environmental controls of kelp biomass,
+are correlated on scales much larger than the scale of
+kelp dispersal (Reed et al. 2006a, Cavanaugh et al. 2011;
+see also Results: Spatial synchrony in giant kelp,
+environmental, and urchin data). Therefore any decreases
+in synchrony observed over large distances would likely
+reflect a large-scale Moran effect, while decreases over
+very short distances could be due to dispersal or other
+local processes that influence giant kelp recruitment
+(e.g., bottom irradiance, local currents, competition). Grazers could induce synchrony in kelp populations on
+scales corresponding to the scales of synchrony in grazer
+abundances. Unlike regional-scale environmental factors such as waves and nutrients, we did not have much
+a priori knowledge of the spatial scales of synchrony in
+patterns of kelp recruitment or grazer abundance.
+
+The strength and timing of the seasonal cycle in kelp
+abundance varies a great deal among years (Cavanaugh
+et al. 2011), and so we might expect that the patterns of
+synchrony in kelp populations also vary substantially
+among years. To explore this inter-annual variability we
+examined the relationship between kelp biomass synchrony and distance separately for each year from 2000
+to 2011. We show that by combining large-scale, highspatial-resolution data of giant kelp with data characterizing environmental variables and grazer abundance,
+it may be possible to identify the effects of multiple
+synchronizing processes on the relationship between
+kelp synchrony and distance. The availability of longterm time series data from satellite sensors such as
+Landsat TM has increased dramatically in recent years,
+and so these methods can be used to characterize
+synchrony across multiple space and time scales in a
+variety of habitats where changes in abundance can be
+tracked from satellite imagery.
+
+Limited nutrient levels, specifically nitrogen, have
+been shown to limit kelp growth in southern California
+(Jackson 1977, Gerard 1982). Although kelp growth
+appears not to be influenced by water temperature per se
+(North and Zimmerman 1984), local sea surface
+temperature (SST) and nutrients (specifically nitrate þ
+nitrite) show a strong negative linear relationship in
+southern California (Fram et al. 2008, Lucas et al. 2011).
+Therefore, we used satellite observations of local SST as
+a proxy for nitrate/nitrite levels. Monthly mean SST was
+assessed using merged MODIS Terra and MODIS Aqua
+daytime 1-km-resolution satellite observations (Kahru
+et al. 2009). This SST data set covered the entire region
+for which we had kelp data (Fig. 1a). To place the SST
+data on the same grid as the kelp canopy biomass data,
+we found the MODIS pixel that was closest to the center
+of each 50-m coastline segment. Because the SST data
+were coarser than the kelp canopy data (1 km vs. 50 m),
+the resolution of the synchrony–distance analysis for
+SST was limited to 1 km.
+
+Large waves associated with storm events are a
+major source of disturbance for kelp populations in
+southern California (Dayton and Tegner 1984, Reed et
+al. 2008). Wave events can also induce synchrony in the
+recovery of kelp populations by removing existing
+canopy, thereby reducing shading and promoting
+juvenile growth (Graham et al. 1997). We calculated
+local wave disturbance using significant wave height
+measurements from the Coastal Data Information
+Project’s (CDIP) swell model (available online).7 This
+swell model used a linear refraction–diffraction wave
+propagation model to transform offshore deep-water
+buoy measurements of the wave field to locations along
+the coast at a 10-m depth (O’Reilly and Guza 1993).
+The model provided hourly data at 10-m depth for
+points spaced 1 km apart across our entire study area.
+We calculated the maximum significant wave height in
+each month at each model analysis location. Maximum
+significant wave height was used rather than mean
+significant wave height because extreme wave events
+have the greatest effect on kelp populations (Denny
+1988). As we did with the SST data, we matched each
+model analysis location with the nearest 50-m coastline
+segment.
+
+Sea urchins are responsible for the vast majority of kelp
+biomass lost to herbivory (Harrold and Pearse 1987);
+grazing rates of other fish and invertebrates in California
+kelp forests are generally low (Foster and Schiel 1985).
+Red and purple sea urchins (Strongylocentrotus franciscanus, S. purpuratus) are by far the most abundant species of urchin in southern California and account for most of
+the kelp grazing in this region (Foster and Schiel 1985).
+Spatial autocorrelation in sea urchin abundance, and by
+extension rates of kelp grazing, could cause synchrony in
+kelp populations at scales corresponding to the scales of
+autocorrelation in urchin abundance. However, causality
+could also operate in the opposite direction, as consumer
+synchrony could be driven by producer abundance. In
+either case we would expect correspondence between the
+scales of synchrony in changes in kelp and urchin
+abundances. We used data from annual surveys of the
+combined density of red and purple sea urchins at 32
+transects along the Santa Barbara coastline and 18
+transects along the San Clemente coastline (red crosses
+in Fig. 1a) to examine synchrony in herbivore dynamics.
+The 50 transects were located between 20 m and 300 km
+apart, and the median pairwise distance between transects
+was 60 km. Red and purple urchins were counted by
+divers in six 1-m2 quadrats uniformly spaced along fixed
+40 3 2 m transects. Surveys were conducted at each
+transect once per year during the summer; 11 years of
+data (2000–2010) were collected at the Santa Barbara
+sites and 8 years of data (2000–2007) were collected at the
+San Clemente sites. Sea urchins are long lived, and so
+annual sampling is sufficient to characterize their
+population dynamics (Ebert and Southon 2003). Kelp
+forests that are heavily impacted by urchin grazing often
+display relatively low and stable levels of kelp abundance
+(i.e., dampened seasonal cycles in abundance) for
+multiple years (Lawrence 1975). Therefore, long-term
+changes in urchin dynamics have the potential to
+influence synchrony measured on monthly to seasonal
+time scales.
+
+While the macroscopic stage of giant kelp is sedentary
+and firmly anchored to the bottom, its microscopic
+spores disperse freely in the water column and typically
+travel distances on the order of meters to kilometers
+before settling to the seafloor (Reed et al. 2006a). Once
+spores settle to the bottom, they require firm substrate
+and sufficient light and nutrients for successful recruitment (Graham et al. 2007). The amount of light and
+nutrients available to recently settled spores can vary
+greatly in space and time (Deysher and Dean 1986).
+Therefore spatial autocorrelation in these variables
+could create spatial patterns in kelp recruitment, which
+could in turn impact synchrony in adult populations
+(Nisbet and Bence 1989). If this is the case, then patterns
+of synchrony in kelp recruitment should resemble those
+of adult density as determined by Landsat imagery. We
+used annual surveys of the density of giant kelp juveniles
+,1 year old (defined as all individuals with fewer than
+three fronds) from 32 transects along the Santa Barbara
+coastline and 18 transects along the San Clemente
+coastline (red crosses in Fig. 1a) to examine synchrony
+in recruitment at scales of 50 m–300 km. Surveys were conducted along the same transects used for the urchin
+surveys previously described
+
+Researchers have long called for more interaction
+between the fields of population and landscape ecology
+(Levin 1992, Wiens 1997). This study demonstrates how
+remote sensing and geospatial analysis techniques, widely
+used by landscape ecologists, can be combined with time
+series analysis of population dynamics to analyze spatial
+autocorrelation in populations. This approach can help
+address the well-recognized problem that many conclusions regarding spatial population dynamics are limited
+by the scale of the study design (Wiens 1989, Bjørnstad et
+al. 1999b). Landsat TM provides relatively uninterrupted
+coverage from 1984 to 2011, and so these methods can be
+applied to examine long-term synchrony patterns in other
+habitats where changes in species abundance can be
+quantified from satellite imagery (e.g., seagrasses, coral
+reefs, wetlands, grasslands). However, the ability to
+observe synchrony over multiple generations will depend
+on the life span of the species in question, and so these
+techniques may not be applicable for habitats made up of
+long-lived species (e.g., pine forests). In these cases it may
+be more informative to examine synchrony in phenology
+or recruitment.
+
+The spatial resolution (50 m) and extent (550 km) of
+our study spanned over five orders of magnitude. The
+spatial resolution was fine enough to cover the spatial
+scales of dispersal for this species (meters to kilometers
+[Reed et al. 2006a, Alberto et al. 2010]), while the extent
+was large enough to examine the spatial structure of
+large-scale environmental controls that are known to
+influence giant kelp populations (Graham et al. 2007).
+The temporal resolution and extent were sufficient to
+capture intra-annual as well as interannual variation in
+kelp biomass. Between 2000 and 2011 we identified a twostep decrease in synchrony with distance: an initial
+exponential decrease between 50 m and 1.3 km, followed
+by a large-scale exponential decrease between 1.3 and 172
+km. The large difference in the spatial scales of these two
+patterns suggests that multiple processes are responsible
+for synchronizing giant kelp populations. Lande et al.
+(1999) demonstrated that small-scale dispersal could
+induce synchrony on much larger scales if the dispersal
+rate (roughly speaking, the fraction of the local population that disperses per unit time) is large relative to the strength of density dependence. However, only the spores
+of giant kelp disperse, so that, as a fraction of biomass,
+the dispersal rate (sensu Lande et al. 1999) is quite small.
+Since giant kelp dispersal is limited to relatively short
+distances (meters to kilometers [Reed et al. 2006a,
+Alberto et al. 2010]), and there are a variety of densitydependent processes acting at the local scale that impact the growth and mortality of giant kelp (reviewed in Schiel
+and Foster 2006), we do not think that dispersal is
+playing a major role in long-range synchrony.
+Grazing by sea urchins and local processes that
+influence recruitment of giant kelp likely explain some
+of the initial exponential decrease in kelp canopy
+biomass synchrony between 50 m and 1.3 km. Synchrony in both urchin abundance and kelp recruitment was
+positive and significant at small scales, but declined
+rapidly on spatial scales similar to the initial exponential
+decrease in kelp synchrony (Fig. 3c, d). Grazing may
+induce synchrony in kelp populations by causing
+mortality that is spatially autocorrelated at local scales.
+The processes controlling recruitment include dispersal
+limitation of planktonic spores, bottom irradiance,
+sedimentation, competition, and grazing. Fertilization
+in giant kelps occurs after dispersal and requires dense
+spore settlement (.1 spore/mm2), thereby limiting the
+effective dispersal distance in giant kelp (Reed et al.
+1991). Reed et al. (2006b) performed a series of empirical
+and modeling studies of spore dispersal and estimated
+that the scale of dispersal in giant kelp is on the order of
+meters to kilometers. This result agrees with theoretical
+diffusive models of dispersal that show exponential
+decreases in spatial autocorrelation with distance on
+spatial scales similar to the scale of average dispersal
+(Bjørnstad et al. 1999b, Okubo and Levin 2002: Chapter
+5). While we were not able to quantify the spatial
+autocorrelation of local environmental factors such as
+bottom irradiance, sedimentation, and the effects of
+competition, many of these features vary on small scales
+and are important determinants of recruitment success for giant kelp (reviewed in Graham et al. 2007). It was
+not possible for us to separate the roles of dispersal,
+local environmental variability, and grazing in synchronizing kelp populations at small scales using these
+observational data; manipulative studies are needed to
+address this issue.
+
+We hypothesize that the large-scale decrease in giant
+kelp synchrony is primarily due to large-scale environmental controls (i.e., the Moran effect), particularly wave disturbance. The Moran effect predicts that the synchrony
+of populations controlled by large-scale environmental
+perturbations should decline in an identical or parallel
+manner to the synchrony of the environmental variables
+(Moran 1953). The length scale of this large-scale decrease
+(74 km when calculated as the distance where the NCF
+reaches its regional mean synchrony level) corresponded
+to the length scale of the wave height NCF (61 km;
+compare Fig. 2 to Fig. 3b). In addition, the double
+exponential and exponential models of the kelp and wave
+height NCFs flattened at similar length scales, 172 km and
+120 km, respectively. The most probable mechanism by
+which wave disturbance influences kelp synchrony is by
+causing spatially correlated mortality on scales corresponding to the scales of wave height autocorrelation.
+
+However, large wave events may also induce spatially
+correlated recruitment and growth of kelp populations.
+Wave disturbance can clear space and create light
+conditions that promote the recruitment and juvenile
+growth of a new cohort of giant kelp (Graham et al.
+1997). Synchrony in changes in SST, a proxy for
+nutrients, also declined with distance over large scales,
+and so may be contributing to the large-scale decline in
+kelp synchrony. Nutrient levels can strongly influence
+giant kelp growth rates (Jackson 1977, Gerard 1982), and
+prolonged low-nutrient conditions, such as those associated with El Nin˜o events, can cause regional-scale
+mortality events (Dayton and Tegner 1984). However,
+SST synchrony did not demonstrate an exponential
+decline, and SST was highly autocorrelated over the
+entire study area; we therefore hypothesize that wavedriven disturbance plays a larger role than nutrients in
+setting the spatial scale of regional kelp synchrony. These
+results are consistent with those of other studies that have
+found nutrient availability and wave disturbance to be
+important in accounting for regional differences in the
+dynamics of giant kelp (Dayton et al. 1999, Edwards
+2004, Reed et al. 2011). Sea urchins, the major grazer of
+kelp, did show some positive synchrony in population
+dynamics at scales of up to 60 km (Fig. 3c), and so urchins
+could also play a role in large-scale kelp synchrony.
+The stepwise pattern in the kelp biomass NCF was
+significant in each of the 11 years of the study (Table 1 and
+Appendix D: Fig. D1), demonstrating that this pattern is
+evident on annual as well as interannual time scales. It is
+important to note that the NCF created from the entire
+time series (2000–2011; Fig. 2) represents the long-term
+pattern in synchrony, and that this decadal-scale pattern
+in unlikely to be observed in a given year. The relatively
+high variability in both the magnitude of synchrony at
+large spatial scales and the length scale of synchrony for
+the annual kelp correlation functions (Table 1 and
+Appendix D: Fig. D1) indicates that much of the temporal
+variability in patterns of giant kelp synchrony occurs on
+the larger spatial scales that appear to be regulated by
+environmental factors. However, we were unable to
+explain the variability in the length scale of giant kelp
+using the length scale of SST or wave height. The lack of a
+significant relationship between these variables may be
+partly due to the complexity of the annual kelp correlation
+functions. This complexity makes it difficult to quantify
+the length scale of kelp synchrony. The annual kelp
+correlation functions do not all follow a double exponential decline, and the point where the NCF reaches the
+mean level of synchrony did not fully capture the shape of
+the NCF (Appendix D: Fig. D1). Also, the relationship
+between the length scale of kelp synchrony and its driving
+factors is probably complex and nonlinear on short time
+scales. For instance, a single large storm event can induce
+large-scale synchrony in kelp populations by removing all
+the kelp in a very large region (Edwards 2004). The
+relationship between annual maximum wave height and
+kelp mortality saturates at high wave heights (Cavanaugh
+et al. 2011), and so as long as the wave heights across a
+given region are all above a certain threshold, mortality
+will be high and consistent across that entire region, even
+if there is spatial variability in wave height across the
+region. Over longer time periods the effect of these shortterm discrepancies in scale are likely averaged out by repeated cycles of disturbance and recovery.
+
+It is especially important to understand how multiple
+processes synchronize populations for systems that
+function as metapopulations (see Reed et al. 2006a for
+a discussion of giant kelp as a metapopulation). The
+metapopulation concept refers to a collection of local
+populations linked by limited dispersal, and has been
+used to describe a wide variety of terrestrial (Hanski and
+Gilpin 1997) and marine (Kritzer and Sale 2006 )
+ecosystems. Synchrony is especially important in these
+systems because metapopulation theory predicts that
+higher levels of synchrony in local population dynamics
+will lead to a higher probability of extinction of the
+metapopulation (Heino et al. 1997, Liebhold et al.
+2004). If local subpopulations fluctuate together, then
+they will tend to go extinct at the same time. On the
+other hand, if spatial synchrony is low, then abundant
+subpopulations can contribute propagules that recolonize neighboring extinct patches, thereby increasing the
+persistence of the metapopulation. For example, in an
+analysis of wintering North American birds, Koenig
+(2001) found a significant positive relationship between
+spatial autocorrelation at short distances and the length
+of extinctions of resident species. However, theoretical
+studies have also shown that the degree to which spatial
+synchrony impacts metapopulation persistence is highly
+dependent on the spatial distribution of the subpopulations (Adler and Nuemberger 1994). Johst and Drechsler (2003) modeled metapopulations of various spatial configurations and found that increased habitat clustering increased metapopulation persistence in both static and dynamic landscapes. More empirical work is needed
+to understand how the spatial distribution of subpopulations, the length scale of dispersal, and the length
+scale of synchrony interact to control extinction risk in
+real-world metapopulations.

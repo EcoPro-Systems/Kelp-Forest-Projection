@@ -74,7 +74,6 @@ if __name__ == "__main__":
     abs_err_ols_test = np.abs(y_test - y_ols_test).mean()
     print(f"Avg. Absolute Error (OLS) Test: {abs_err_ols_test:.3f} m^2")
 
-
     # standardize the input data
     Xp_train = X_train[:, :-1]
     Xp_train = (Xp_train - Xp_train.mean(0)) / Xp_train.std(0)
@@ -180,7 +179,6 @@ if __name__ == "__main__":
     ax[1].grid(True,ls='--',alpha=0.5)
     ax[1].set_ylim([0,666])
 
-
     # DT timeseries
     ax[2].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='black', label='binned data')
     ax[2].errorbar(utime_train_dt, mean_dt_train, yerr=std_dt_train, fmt='.', ls='none', color='blue', label=f'train (avg. err: {abs_err_dt_train:.1f} m^2)')
@@ -195,33 +193,12 @@ if __name__ == "__main__":
     ax[2].grid(True,ls='--',alpha=0.5)
     ax[2].set_ylim([0,666])
 
-    #DT Text
-#     train_representation = tree.export_text()
-#     print(train_representation)
-#     test_representation = tree.export_text(y_dt_test)
-#     print(test_representation)
-    
-    #DT tree
-#     fig = plt.figure(figsize=(25,20))
-#     _ = tree.plot_tree(rf, feature_names=features, filled=True)
-
-#mutual_information, F-test NOTE: change for loop to match # of features
+    # feature importances
     f_test, _ = f_regression(X, y)
-    
     f_test /= np.max(f_test)
 
     mi = mutual_info_regression(X, y)
     mi /= np.max(mi)
-    
-    plt.figure(figsize=(15, 5))
-    for i in range(7):
-        plt.subplot(1, 7, i + 1)
-        plt.scatter(X[:, i], y, edgecolor="black", s=20)
-        plt.xlabel("$x_{}$".format(i + 1), fontsize=14)
-        if i == 0:
-            plt.ylabel("$y$", fontsize=14)
-        plt.title("F-test={:.2f}, MI={:.2f}".format(f_test[i], mi[i]), fontsize=16)
-        print(f"{features[i]}:F-Test={f_test[i]}, MI={mi[i]}")
 
     print(f'Feature Importances: {dt.feature_importances_}')
     plt.tight_layout()

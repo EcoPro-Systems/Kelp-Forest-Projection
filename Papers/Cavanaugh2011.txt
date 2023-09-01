@@ -1,0 +1,376 @@
+Synthesizing long-term observations at
+multiple scales is vital for understanding the environmental drivers of ecosystem dynamics. We assessed
+the role of several environmental drivers in explaining
+temporal and spatial patterns in the abundance of
+giant kelp Macrocystis pyrifera in the Santa Barbara
+Channel between 1984 and 2009. We developed a
+novel method for estimating the canopy biomass of
+giant kelp from Landsat 5 Thematic Mapper satellite
+imagery, which allowed us to examine the dynamics of
+giant-kelp biomass on spatial scales ranging from 100s
+of m2 to 100s of km2 and temporal scales ranging from
+several weeks to 25 yr. Comparisons of changes in
+canopy biomass with oceanographic and climatic data
+revealed that winter losses of regional kelp canopy
+biomass were positively correlated with significant
+wave height (r2 = 0.50), while spring recoveries were
+negatively correlated with sea surface temperature
+(r2 = 0.30; used as a proxy for nutrient availability). On
+interannual timescales, regional kelp-canopy biomass
+lagged the variations in wave heights, sea surface temperatures, and the North Pacific Gyre Oscillation index
+by 3 yr, indicating that these factors affect cycles of
+kelp recruitment and mortality. Results from cluster
+analysis showed that the response of kelp biomass to
+environmental conditions varied among different subregions of the Santa Barbara Channel. The dynamics
+of kelp biomass in exposed regions were related to
+wave disturbance, while kelp dynamics in sheltered
+regions tracked sea surface temperatures more closely.
+These results depict a high level of regional heterogeneity in the biomass dynamics of this important
+foundation species.
+
+Climate-related changes in the oceans appear to be
+accelerating: oceans are becoming warmer and more
+acidic, nutrient distributions are changing, and, in
+some regions such as the Northeast Pacific, the frequency and intensity of large storms are increasing
+(e.g. Easterling et al. 2000, Behrenfeld et al. 2006,
+Doney et al. 2009). Many marine ecosystems have
+displayed dramatic responses to recent fluctuations in
+climate, and accumulating evidence suggests that
+coastal marine ecosystems are especially vulnerable to
+the effects of climate change (e.g. Harley et al. 2006,
+Przeslawski et al. 2008, Hoegh-Guldberg & Bruno
+2010). However, our understanding of how climate-
+induced changes in environmental conditions will affect
+coastal marine ecosystems is limited. Data collection is
+labor-intensive and there are relatively few long-term
+(>20 yr) studies of change in coastal marine ecosystems as compared to terrestrial systems (Rosenzweig et
+al. 2008). Increasing the number of long-term, largescale data sets of coastal ecosystems is needed to
+further our understanding of how they are likely to
+respond to future changes in climate.
+
+Among coastal primary producers, forests of giant
+kelp Macrocystis pyrifera are particularly sensitive to
+climate change (Graham et al. 2007). Giant kelp is the
+world’s largest alga and its numerous fronds extend
+vertically in the water column and form a canopy at the
+sea surface. The biomass of giant kelp is exceptionally
+dynamic; short lifespans of both fronds and entire
+plants (4 to 6 mo and 2 to 3 yr, respectively) combine
+with rapid growth (~2% of total biomass d–1) to produce a standing biomass that turns over 6 to 7 times
+yr–1 (Reed et al. 2008). Because of such rapid turnover,
+the biomass dynamics of giant kelp responds quickly
+to changes in environmental conditions.
+Giant-kelp recruitment and growth are controlled by
+abotic factors, including the availability of hard substrate, solar radiation, and the supply of nutrients, as
+well as the biotic effects of inter- and intra-species
+competition for space, light and grazing (reviewed in
+Graham et al. 2007). In southern California, growth is
+fastest in winter and spring when nutrient levels are
+high and competition for light and space is low (due to
+low algal biomass), and slowest during summer when
+nutrients are low and competition for light and space is
+high due to well-developed algal canopies (Zimmerman & Kremer 1986, Reed et al. 2008). The relatively
+low capacity of giant kelp to store nutrients (~30 d,
+Zimmerman & Kremer 1986) causes populations to
+respond rapidly to fluctuations in nutrient supply.
+Much like growth, the recruitment of giant kelp in
+southern California and elsewhere responds strongly
+to fluctuations in nutrients and light as determined by
+biotic and abiotic processes (Dayton et al. 1984, Reed &
+Foster 1984, Reed et al. 2008). Giant kelp produces
+spores throughout the year (Reed et al. 1996) and the
+recruitment of new plants typically occurs whenever
+favorable conditions of light and nutrients coincide
+(Deysher & Dean 1986).
+
+Giant-kelp mortality occurs in the form of senescence, grazing, and wave-driven disturbance (Graham
+et al. 2007). Reed et al. (2008) found that both frond
+losses and plant mortality were correlated to wave
+heights in kelp forests near Santa Barbara, California,
+although correlations were stronger at the plant level.
+High mortality can also result from prolonged con -
+ditions of low nutrients such as those associated with
+El Niño events (Dayton & Tegner 1990, Dayton et al.
+1999, Edwards 2004). The biomass dynamics of giant
+kelp reflect the interplay of these physical and bio -
+logical forcings that control patterns of recruitment,
+growth, and mortality.
+The relative importance of resource availability (light
+and nutrients) versus physical disturbance (waves)
+in controlling the biomass dynamics of giant kelp
+remains an open question. For example, Dayton et al.
+(1999) found that large-scale, low-frequency changes
+in nutrient availability had the largest effects on kelp
+populations in San Diego; however, recent analyses of
+kelp forests in central and southern California during
+2001 to 2009 (a period lacking any major nutrient-poor
+El Niño conditions) showed that wave disturbance ex -
+plained more variability in kelp biomass and production than either nutrient availability or grazing (Reed
+et al. 2008, D. C. Reed et al. unpubl.). It is clear that the
+apparent influence that each of these physical forcings
+has on kelp populations is dependent on the spatial
+and temporal scales of observation (Edwards 2004).
+While a particular kelp forest may be nutrient-limited
+at a given time, another forest in a more nutrient-rich
+region may have its dynamics controlled by wave disturbance. The vast majority of long-term kelp studies
+have been made at the local scale (<500 m2) and so it
+has been difficult to test how their conclusions apply to
+larger areas (>1 km2).
+
+In the past, aerial and satellite
+imagery have been used to examine giant kelp forests
+at regional scales; however, these studies have generally been either short-term pilot studies (e.g. Deysher
+1993, Stekoll et al. 2006) or limited to just a few years
+(e.g. Donnellan 2004, Cavanaugh et al. 2010), too short
+a period to examine interannual-to-decadal variability
+in kelp biomass dynamics. Longer time series (e.g. Parnell et al. 2010) are needed to detect long-term trends
+in kelp biomass as well as to determine how the roles
+of various environmental controls change over time.
+In the present study, we introduce a new kelp
+canopy biomass data set possessing unprecedented
+spatial and temporal resolution and extent that was
+created using multispectral imagery from the Landsat
+5 Thematic Mapper (TM) sensor. These observations
+enabled the assessment of giant-kelp canopy biomass
+at 30 m resolution across the entire Santa Barbara
+Channel every 1 to 2 mo for 25 yr (1984 to 2009). We
+compared these novel observations of giant-kelp
+forests with oceanographic and climate observations to
+assess resource- and disturbance-driven controls on
+giant-kelp biomass at multiple spatial and temporal
+scales. Our objectives were to determine (1) the relative importance of nutrients and wave disturbance
+in driving both seasonal and interannual cycles of
+regional kelp biomass in the Santa Barbara Channel
+and (2) how the roles of these forcing processes vary
+spatially within the channel. We hypothesized that the
+negative effects of wave disturbance and nutrient
+limitation on giant-kelp biomass vary greatly in space
+and time due to the highly dynamic environmental
+conditions of the Santa Barbara Channel. We showed
+that kelp biomass was significantly negatively related
+to wave heights and sea surface temperatures (SST;
+a proxy for nutrient levels) at seasonal timescales.
+Interannual relationships were more complex as kelp
+biomass lagged wave heights, SST, and the North
+Pacific Gyre Oscillation (NPGO) climate index by 3 yr.
+We also demonstrated that these dependencies varied
+between distinct subregions within the Santa Barbara
+Channel.
+
+Both SST and wave height displayed the pronounced
+seasonal cycles characteristic of this region (Fig. 4B,C).
+SST typically reached its annual minimum between
+February and March and its maximum between
+August and October, and we can infer that nitrate
+showed the opposite pattern. Significant wave height
+maxima occurred in the winter months, corresponding
+with the timing of increased storm activity in the North
+Pacific. Between 1987 and 2009, the annual maximum
+winter (December to February) wave height averaged
+4.9 m while the annual maximum summer (June to
+August) wave height averaged 3.26 m. During our study
+period, annual mean significant wave heights increased
+significantly at the pace of 0.02 m yr–1 (F1, 22 = 25.9, p <
+0.001). This positive trend in wave height agrees with
+other observations of increasing wave heights in the
+Northeast Pacific over the last 60 yr (Bromirski et al.
+2003, Ruggiero et al. 2010).
+
+Our Landsat 5 TM data set represents the first highresolution, local- to regional-scale assessment of giantkelp canopy biomass on monthly-to-decadal time scales.
+This data set is itself a significant accomplishment as it
+provides a novel view into kelp-forest dynamics across
+a wide range of scales. Previous studies have demonstrated the feasibility of measuring kelp canopy cover
+and biomass with aerial and satellite imagery (Jensen
+et al. 1980, Deysher 1993, Stekoll et al. 2006, Cavan -
+augh et al. 2010); however, these studies have not had
+the extended temporal coverage that is presented
+here. Parnell et al. (2010) examined annual-to-decadal
+variability in giant-kelp cover near San Diego using
+aerial surveys, but they used maximum annual canopy
+area and so did not measure seasonal variability. While
+Landsat provides unmatched temporal resolution and
+coverage, it has a coarser spatial resolution than the
+sensors used in some of these previous studies (30 m
+with Landsat, as compared to ~1 m in Stekoll et al.
+2006 and 10 m in Cavanaugh et al. 2010). In addition,
+Landsat has a relatively low radiometric resolution,
+which limits its ability to differentiate small changes in
+reflectance between pixels. One consequence of the
+reduced spatial and radiometric resolution of Landsat
+is higher levels of uncertainty when comparing satellite data to transect-scale diver-measured biomass (the
+r2 between Landsat and diver-measured canopy biomass was 0.64, compared to 0.77 for Cavanaugh et al.
+2010 and 0.84 for Stekoll et al. 2006). Nevertheless, the
+Landsat-measured and diver-measured canopy biomass relationship was still strong and highly significant and provides a path for assessing regional satellite canopy biomass variations. As the availability of
+imagery with higher spatial and radiometric resolutions increases, more accurate remotely sensed time
+series of kelp biomass can be developed using techniques similar to the one we have presented here.
+However, not all species of kelp are amenable to
+remote sensing by this method, which relies on nearinfrared reflectance that is rapidly attenuated by water.
+Consequently, the usefulness of satellite imagery in
+studying the dynamics of marine vegetation is at present limited to species that produce a dense, floating
+canopy of an appropriate spatial scale.
+
+There is an upper limit on the amount of kelp that the
+region can support that is based simply on the availability of suitable habitat. However, it seems difficult to
+identify a regional equilibrium for giant-kelp canopy
+due to its highly dynamic nature. If the global extent of
+kelp is changing, then it will likely be difficult to detect
+in regions such as the Santa Barbara Channel that
+are at the center of the giant kelp’s hemispherical
+range. While we did not observe a long-term directional trend in kelp canopy biomass, we did find that
+regional-scale kelp biomass oscillated on cycles with
+periods of 1 and 12–13 yr. The annual cycles were driven by losses related to winter storm activity and, to a
+lesser extent, recovery linked to nutrient levels (Fig. 5).
+While physical storm-driven mortality was direct and
+immediate, the effect of nutrients on kelp growth were
+likely delayed and complicated by a number of other
+factors, including the availability of light and unoccupied hard substrate, and spore settlement and recruitment; hence, a weaker relationship was observed.
+While these winter losses and spring recoveries characterized the annual cycle in general, there was substantial variability in the amplitude and timing of these
+cycles among years.
+
+Interannual relationships between kelp canopy biomass and physical drivers were less clear. Recovery of
+kelp populations can be extremely rapid. Thus annual
+means and maximums can be decoupled from the
+previous winter’s wave disturbance. This may help
+explain why past studies using annual observations
+made in the summer or fall failed to find a relationship
+between waves and kelp population metrics (Tegner
+et al. 1996). The longer period cycles in kelp biomass
+corresponded to the NPGO, waves, and nutrient levels
+(as inferred from SST), but lagged these variables by
+3 yr (Fig. 6). This 3 yr lag is somewhat counterintuitive
+in light of the rapid turnover of the fronds that create
+kelp canopies. We suspect that the lagged relationships are related to the recruitment and mortality of
+entire plants. While losses of fronds on extant plants
+occur continuously throughout the year, mortality of
+entire plants occurs more episodically and is related to
+large wave events (>1 m in Reed et al. 2008). Exceptionally large wave events can clear space and allow
+for dramatic spikes in recruitment (Graham et al.
+1997). Previous work has shown that environmental
+conditions at the time of recruitment and juvenile
+growth of kelp cohorts can have long-lasting effects onpopulation dynamics and community structure (Tegner et al. 1997, Dayton et al. 1999). For example, Tegner et al. (1997) compared succession after 2 large disturbances under contrasting oceanographic regimes
+and found that nutrient-rich conditions led to high densities and competitive dominance of giant kelp that
+lasted for the life of the cohort (~5 yr). This result
+agrees with the lagged negative relationship we found
+between SST (and by extension, nutrients) and kelp
+canopy biomass. Together, large waves and high nutrient levels in a given year promote the recruitment and
+growth of a new cohort of giant-kelp plants (Fig. 10).
+This cohort matures over the next 2 to 3 yr, developing
+high levels of canopy biomass in the absence of severe
+storms. We found that severe storms with long-period
+wave events >5.5 m occurred at an average frequency
+of 1 every 2 to 4 yr, thus allowing populations to ex -
+pand their areal extents until the cycle is repeated or
+all available habitat is utilized.
+
+Many studies have linked massive declines in kelp
+populations to severe El Niño conditions and have
+observed rapid recovery of kelp populations during
+nutrient-rich La Niña events (Dayton & Tegner 1990,
+Dayton et al. 1992, 1999, Edwards 2004). In addition,
+Parnell et al. (2010) found that the response of kelp
+populations to El Niño events is modulated by lowfrequency changes in the PDO: the importance of
+nutrient control in the San Diego area increased after
+the PDO switched to a warm phase in the late 1970s.
+However, the relationship between kelp and the
+NPGO has largely been neglected. We observed that
+strong El Niño events in 1987, 1997, and 2003 coincided with large regional mortality events (Fig. 4);
+however, the long (12 to 13 yr) period cycles in regional
+kelp biomass were better correlated with the NPGO,
+again at a 3 yr lag. The NPGO is driven by regional
+variations in wind-driven upwelling and horizontal
+advection and corresponds closely with correlates of
+ecosystem productivity such as nutrient levels and
+chlorophyll concentrations (Di Lorenzo et al. 2008).
+Therefore, the NPGO appears to influence decadal
+variations in kelp canopy biomass though large-scale,
+low-frequency changes in nutrient availability that in
+turn affect recruitment and growth of giant kelp.
+
+While no long-term trends were evident in the kelp
+time series, we did see a statistically significant longterm increase in mean and maximum significant wave
+heights over our study period. Other studies have
+observed similar trends in the Eastern Pacific (Bro -
+mirski et al. 2003, Ruggiero et al. 2010), and many climate models predict that the frequency and possibly
+the intensity of large storms will continue to increase in
+this region (Easterling et al. 2000, Meehl et al. 2000,
+2007). This has the potential to increase the effects of
+wave events on the coastlines of southern California,
+leading to higher annual winter losses. Reed et al.
+(2008) found that biomass at the start of the growth
+year (after winter storm disturbances) explained 63%
+of the annual net primary productivity of giant kelp at
+3 sites along the mainland shore of the Santa Barbara
+Channel. Therefore, in creased winter-time wave
+losses would likely lead to decreased annual produc -
+tivity by giant kelp in this region. These types of
+threats to the productivity of habitat structuring kelps
+are not rest ricted to our study area; Wernberg et al. (2010) demonstrated how
+increases in wave disturbance and ocean
+temperatures can act synergistically to
+reduce the resilience of populations of the
+subsurface canopy-forming kelp Ecklonia
+radiata in Australia. In addition, the implications of in creased levels of physical disturbance span trophic levels as repeated
+kelp loss due to waves has been linked to
+lower diversity and complexity of kelpforest food webs (Byrnes et al. 2011).
+
+Our results indicate that Point Conception marks a
+major biogeographic boundary for the seasonal dy -
+namics of giant-kelp forests in California. Changes in
+kelp biomass along the exposed coastline north of
+Point Conception were well-correlated with wave
+height, but not SST as high storm mortalities were
+observed each winter. This created a pronounced and
+predictable seasonal cycle with lower interannual variability than the more sheltered subregions to the south
+(Fig. 9). The high variation in canopy biomass ob -
+served in October and November (e.g. long boxes in
+Fig. 9A) reflect variability in the timing of the onset of
+the winter storm season. Relatively high nutrient conditions in this subregion likely allowed for consistent
+spring and summer recovery each year (Jackson 1987).
+This result agrees with those of Donnellan (2004), who
+found that seasonal canopy dynamics of exposed central Californian kelp beds were highly regular and predictable. The subregions containing the Santa Barbara
+Channel Islands represented a combination of more
+complex exposure and nutrient conditions. Seasonality
+of kelp biomass in Subregion B was similar to that of
+the exposed Subregion A, but Subregion B displayed a
+higher variability in the timing of annual minimums
+that was likely due to the higher variability of exposures contained in this subregion. Subregion B showed
+consistent spring recovery each year, probably reflecting the fact that biomass dynamics of this subregion
+are rarely limited by nutrients. Like the coastline north
+of Point Conception, the south sides of the 2 westernmost Channel Islands are typically bathed in nutrientrich water (Otero & Siegel 2004, McPhee-Shaw et al.
+2007).
+
+Previous studies have shown fluctuations in kelp
+abundance on cycles of 3 to 5 yr and have suggested
+that these fluctuations result from seasonal forcings
+such as wave disturbance (Dayton et al. 1984, Graham
+et al. 1997). Nisbet & Bence (1989) developed a family
+of 2-stage kelp population models (juvenile and adults)
+that reproduced 3 to 5 yr cycles as well as shorterperiod 1 yr cycles. Their models were based on the
+idea that population dynamics are driven by recruitment events, which are in turn controlled by tem -
+perature, bottom irradiance, and unknown stochastic
+factors. Their models predicted that larger seasonal
+fluctuations in surface irradiance and adult mortality,
+such as those driven by wave disturbance, should lead
+to more regular annual recruitment as mortality of
+adults each year frees up space and resources (i.e.
+light) for new recruits. On a regional scale, we found
+that exposed coastlines experienced more regular
+annual cycles of winter mortality and spring recovery
+than did sheltered regions. Our observation of greater
+regularity of the annual cycles in exposed regions is in
+contrast to that observed by Graham et al. (1997) in
+central California and may reflect differences in the
+spatial scales over which kelp was measured in the 2
+studies (i.e. m2 in Graham et al. 2007 vs. km2 in the
+present study). The dynamics of giant kelp at fieldtransect scales do not always reflect dynamics at the
+forest or regional scales (Cavanaugh et al. 2010).
+The present work represents the most spatially and
+temporally comprehensive analysis of the drivers of
+giant-kelp biomass to date. We have shown that there
+is a large amount of regional heterogeneity in the
+response of kelp biomass to different environmental
+factors, demonstrating that conclusions drawn from
+local studies cannot always be applied to regional
+scales. The roles of environmental drivers of kelp biomass also vary in time, making it difficult to predict the
+response of this system to future changes in environmental conditions. Continued large-scale and longterm observations are needed to better our understanding of how ecosystems may behave differently in
+a future climate.
