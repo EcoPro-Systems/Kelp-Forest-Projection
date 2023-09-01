@@ -75,6 +75,22 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 - Get future temperature data + make predictions using best regressor
 - Look into EcoStress SST temperatures
 
+## Set up
+
+1) Clone repo + set up conda environment
+
+2) Download larges files from git lfs: 
+    - `git lfs install` 
+    - `git lfs pull`
+
+2) Download `kelp_interpolated_data.pkl` from https://hub.jpl-cmda.org in `shared/notebooks/Kelp_Biomass/kelp_interpolated_data.pkl`
+
+`https://hub.jpl-cmda.org/user/kpearson/files/shared/notebooks/Kelp_Biomass/kelp_interpolated_data.pkl?_xsrf=2%7C75f3aa5d%7C9fd77b367d80741f6afba122cb1ec188%7C1693607828`
+
+3) Make the kelp_metrics file
+    - `python kelp_metrics.py`
+
+
 ## Figures
 
 The scripts above will be able to create figures like this:

@@ -7,6 +7,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
+
 if __name__ == "__main__":
     # argparse for input filepath
     parser = argparse.ArgumentParser()
@@ -27,11 +28,16 @@ if __name__ == "__main__":
 
     # inputs: time, periodic_time, lon, lat, temp -> kelp
     y = data['kelp']
-    # construction features
+
+    # calculate daylight duration as input feature
+    dude()
+
+    # construct features
     features = [
         time, # days, 0-365*20
-        np.sin(2*np.pi*time/365), # -1 - 1
-        np.cos(2*np.pi*time/365), # -1 - 1
+        #np.sin(2*np.pi*time/365), # -1 - 1
+        #np.cos(2*np.pi*time/365), # -1 - 1
+        data['sunlight'],
         data['lat'], # 25-45
         data['lon'], # -130 - -115
         data['temp'], 

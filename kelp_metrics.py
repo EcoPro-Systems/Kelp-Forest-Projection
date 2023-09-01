@@ -3,6 +3,48 @@ import numpy as np
 import xarray as xr
 from tqdm import tqdm
 from statsmodels.regression.linear_model import OLS
+import os
+import zipfile
+import datetime
+
+import astropy.units as u
+from astropy.coordinates import EarthLocation, AltAz, get_sun
+from astropy.time import Time
+import numpy as np
+
+def calculate_day_length(latitude, longitude, dates):
+
+    durations = np.zeros(len(dates))
+    for i,date in enumerate(dates):
+        location = EarthLocation(lat=latitude*u.deg, lon=longitude*u.deg)
+        times = Time(date)
+        
+        # Calculate the altitude of the Sun at various times during the day
+        times_span = times + np.linspace(-12, 12, 1000)*u.hour
+        altaz_frame = AltAz(obstime=times_span, location=location)
+        sun_altitudes = get_sun(times_span).transform_to(altaz_frame).alt
+        
+        # Find sunrise and sunset times by looking for altitude crossings
+        sunrise_idx = np.where(sun_altitudes > 0)[0][0]
+        sunset_idx = np.where(sun_altitudes > 0)[0][-1]
+        
+        sunrise_time = times_span[sunrise_idx]
+        sunset_time = times_span[sunset_idx]
+        
+        durations[i] = (sunset_time - sunrise_time).to(u.day).value
+    
+    return durations
+
+# if __name__ == "__main__":
+#     # Example usage:
+#     latitude = 40.7128  # Latitude of New York City
+#     longitude = -74.0060  # Longitude of New York City
+#     date = np.datetime64("2023-09-01")  # Date in numpy.datetime64 format
+    
+#     day_length = calculate_day_length(latitude, longitude, date)
+#     print(f"Day length on {date} at ({latitude}, {longitude}): {day_length}")
+
+
 
 # make function to extract kelp data and temperatures
 def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
@@ -33,9 +75,10 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
         'dtemp_temp_lag':[], # temperature one quarter before 
         'dtemp_temp_lag2':[],# temperature two quarter before 
         'kelp':[],           # total kelp area
-        'temp':[],           # temperature
-        'temp_lag':[],       # temperature one quarter before
-        'temp_lag2':[],      # temperature two quarters before
+        'temp':[],           # temperature [K]
+        'temp_lag':[],       # temperature one quarter before [K]
+        'temp_lag2':[],      # temperature two quarters before [K]
+        'sunlight':[],       # daylight duration [day]
         'time':[],           # time
         'dtime':[],          # time of difference
         'lat':[],            # latitude
@@ -75,6 +118,10 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
         # save latitude and longitude
         kelp_data['lat'].extend(d['lat']*np.ones(len(d['kelp_area'][~bad_mask])))
         kelp_data['lon'].extend(d['long']*np.ones(len(d['kelp_area'][~bad_mask])))
+
+        # calculate daylight duration
+        daylight_duration = calculate_day_length(d['lat'], d['long'], d['kelp_time'][~bad_mask])
+        kelp_data['sunlight'].extend(daylight_duration)
 
         # use linear interpolation
         elevation = bathymetry.interp(lat=d['lat'],lon=d['long']).elevation.values
@@ -157,9 +204,17 @@ if __name__ == "__main__":
     #lower_lat = 37
     #upper_lat = 50
 
-    # if using noaa dem: limit: 31-37
+    # check if data file exists or unzip it
+    if not os.path.exists('Data/crm_socal_1as_vers2.nc'):
+        # if running for first time
+        with zipfile.ZipFile('Data/crm_socal_1as_vers2.nc.zip', 'r') as zip_ref:
+            zip_ref.extractall('Data/')
+
+    # load bathymetry data
     bathymetry = xr.open_dataset('Data/crm_socal_1as_vers2.nc')
     bathymetry = bathymetry.rename({'Band1':'elevation'})
+
+    # if using noaa dem: limit: ~31-36
     lower_lat = 31
     upper_lat = 36
 
