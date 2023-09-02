@@ -15,8 +15,9 @@ import numpy as np
 def calculate_day_length(latitude, longitude, dates):
 
     durations = np.zeros(len(dates))
+    location = EarthLocation(lat=latitude*u.deg, lon=longitude*u.deg)
+
     for i,date in enumerate(dates):
-        location = EarthLocation(lat=latitude*u.deg, lon=longitude*u.deg)
         times = Time(date)
         
         # Calculate the altitude of the Sun at various times during the day

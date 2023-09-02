@@ -15,7 +15,7 @@ conda create -n kelp python=3.10
 conda activate kelp
 conda install ipython jupyter pandas matplotlib scipy scikit-learn
 conda install -c conda-forge xarray dask netCDF4 bottleneck
-pip install tqdm statsmodels astral
+pip install tqdm statsmodels astropy
 ```
 
 # Datasets
