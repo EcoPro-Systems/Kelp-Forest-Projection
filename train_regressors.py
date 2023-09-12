@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
-
+from sklearn.feature_selection import mutual_info_regression
 
 if __name__ == "__main__":
     # argparse for input filepath
@@ -30,19 +30,31 @@ if __name__ == "__main__":
     y = data['kelp']
 
     # calculate daylight duration as input feature
-    dude()
+    print(len(time))
 
     # construct features
     features = [
         time, # days, 0-365*20
-        #np.sin(2*np.pi*time/365), # -1 - 1
-        #np.cos(2*np.pi*time/365), # -1 - 1
-        data['sunlight'],
+        np.sin(2*np.pi*time/365), # -1 - 1
+        np.cos(2*np.pi*time/365), # -1 - 1
+        #data['sunlight'],
         data['lat'], # 25-45
         data['lon'], # -130 - -115
         data['temp'], 
         data['temp_lag'],
         np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
+    ]
+
+    feature_names = [
+        'time',
+        'sin(time)',
+        'cos(time)',
+        #'sunlight',
+        'lat',
+        'lon',
+        'temp',
+        'temp_lag',
+        'bias'
     ]
 
     X = np.array(features).T
@@ -53,6 +65,15 @@ if __name__ == "__main__":
     y = y[~nanmask]
     time = time[~nanmask]
     time_dt = time_dt[~nanmask]
+
+    # compute correlation coefficient
+    for i in range(X.shape[1]-1):
+        print(f'Correlation Coefficient {feature_names[i]}: {np.corrcoef(X[:,i], y)[0,1]:.3f}')
+
+    # compute mutual information
+    mi = mutual_info_regression(X[:,:-1], y)
+    for i in range(X.shape[1]-1):
+        print(f'Mutual Information {feature_names[i]}: {mi[i]:.3f}')
 
     # sort data in time
     si = np.argsort(time)
@@ -87,7 +108,7 @@ if __name__ == "__main__":
     Xp_test = (Xp_test - Xp_test.mean(0)) / Xp_test.std(0)
 
     # create multi-layer perceptron regressor
-    mlp = MLPRegressor(hidden_layer_sizes=(30,8,4), activation='relu', solver='adam', max_iter=20, verbose=True, alpha=0.01)
+    mlp = MLPRegressor(hidden_layer_sizes=(8,8,8), activation='relu', solver='adam', max_iter=50, verbose=False, alpha=0.0001, learning_rate='adaptive', early_stopping=True)
     y_mlp_train = mlp.fit(Xp_train, y_train).predict(Xp_train)
     abs_err_mlp_train = np.abs(y_train - y_mlp_train).mean()
     print(f"Avg. Absolute Error (MLP) train: {abs_err_mlp_train:.3f} m^2")
@@ -95,9 +116,11 @@ if __name__ == "__main__":
     abs_err_mlp_test = np.abs(y_test - y_mlp_test).mean()
     print(f"Avg. Absolute Error (MLP) test: {abs_err_mlp_test:.3f} m^2")
 
-
     # fit data with decision tree regressor
     dt = RandomForestRegressor(max_depth=3, min_samples_split=2, min_samples_leaf=2, random_state=0)
+    # remove bias from input data
+    X_train = X_train[:, :-1]
+    X_test = X_test[:, :-1]
     y_dt_train = dt.fit(X_train, y_train).predict(X_train)
     abs_err_dt_train = np.abs(y_train - y_dt_train).mean()
     print(f"Avg. Absolute Error (RF) train: {abs_err_dt_train:.3f} m^2")
@@ -105,6 +128,9 @@ if __name__ == "__main__":
     abs_err_dt_test = np.abs(y_test - y_dt_test).mean()
     print(f"Avg. Absolute Error (RF) test: {abs_err_dt_test:.3f} m^2")
 
+    # print out the feature importances
+    for i in range(X.shape[1]):
+        print(f'Feature Importances {feature_names[i]}: {dt.feature_importances_[i]:.3f}')
 
     # get unique times and bin data
     utime = np.unique(time)
@@ -199,14 +225,6 @@ if __name__ == "__main__":
     ax[2].grid(True,ls='--',alpha=0.5)
     ax[2].set_ylim([0,666])
 
-    # feature importances
-    f_test, _ = f_regression(X, y)
-    f_test /= np.max(f_test)
-
-    mi = mutual_info_regression(X, y)
-    mi /= np.max(mi)
-
-    print(f'Feature Importances: {dt.feature_importances_}')
     plt.tight_layout()
     plt.savefig(args.file_path.replace('.pkl', '_regressors.png'))
     plt.show()

@@ -46,7 +46,6 @@ def calculate_day_length(latitude, longitude, dates):
 #     print(f"Day length on {date} at ({latitude}, {longitude}): {day_length}")
 
 
-
 # make function to extract kelp data and temperatures
 def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
     """
