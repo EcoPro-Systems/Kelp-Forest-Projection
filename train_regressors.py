@@ -35,9 +35,9 @@ if __name__ == "__main__":
     # construct features
     features = [
         time, # days, 0-365*20
-        np.sin(2*np.pi*time/365), # -1 - 1
-        np.cos(2*np.pi*time/365), # -1 - 1
-        #data['sunlight'],
+        #np.sin(2*np.pi*time/365), # -1 - 1
+        #np.cos(2*np.pi*time/365), # -1 - 1
+        data['sunlight'],
         data['lat'], # 25-45
         data['lon'], # -130 - -115
         data['temp'], 
@@ -47,9 +47,9 @@ if __name__ == "__main__":
 
     feature_names = [
         'time',
-        'sin(time)',
-        'cos(time)',
-        #'sunlight',
+        #'sin(time)',
+        #'cos(time)',
+        'sunlight',
         'lat',
         'lon',
         'temp',
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     Xp_test = (Xp_test - Xp_test.mean(0)) / Xp_test.std(0)
 
     # create multi-layer perceptron regressor
-    mlp = MLPRegressor(hidden_layer_sizes=(8,8,8), activation='relu', solver='adam', max_iter=50, verbose=False, alpha=0.0001, learning_rate='adaptive', early_stopping=True)
+    mlp = MLPRegressor(hidden_layer_sizes=(10,10,10), activation='relu', solver='adam', max_iter=60, verbose=True, alpha=0.0001, learning_rate='adaptive')
     y_mlp_train = mlp.fit(Xp_train, y_train).predict(Xp_train)
     abs_err_mlp_train = np.abs(y_train - y_mlp_train).mean()
     print(f"Avg. Absolute Error (MLP) train: {abs_err_mlp_train:.3f} m^2")
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     print(f"Avg. Absolute Error (RF) test: {abs_err_dt_test:.3f} m^2")
 
     # print out the feature importances
-    for i in range(X.shape[1]):
+    for i in range(X.shape[1]-1):
         print(f'Feature Importances {feature_names[i]}: {dt.feature_importances_[i]:.3f}')
 
     # get unique times and bin data

@@ -21,7 +21,7 @@ def calculate_day_length(latitude, longitude, dates):
         times = Time(date)
         
         # Calculate the altitude of the Sun at various times during the day
-        times_span = times + np.linspace(-12, 12, 1000)*u.hour
+        times_span = times + np.linspace(-12, 12, 24*60)*u.hour
         altaz_frame = AltAz(obstime=times_span, location=location)
         sun_altitudes = get_sun(times_span).transform_to(altaz_frame).alt
         
@@ -47,7 +47,7 @@ def calculate_day_length(latitude, longitude, dates):
 
 
 # make function to extract kelp data and temperatures
-def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
+def extract_kelp_metrics(data, bathymetry, sunlight, lowerBound, upperBound):
     """
     Extract various metrics like correlation coefficients and slopes from kelp data and differences in temperature
 
@@ -119,9 +119,20 @@ def extract_kelp_metrics(data, bathymetry, lowerBound, upperBound):
         kelp_data['lat'].extend(d['lat']*np.ones(len(d['kelp_area'][~bad_mask])))
         kelp_data['lon'].extend(d['long']*np.ones(len(d['kelp_area'][~bad_mask])))
 
+        # too slow to sample daylight duration for every data point
+        #daylight_duration = calculate_day_length(d['lat'], d['long'], d['kelp_time'][~bad_mask])
+    
+        # change year on every date to 2023 to match sunlight grid for interpolation
+        kelp_time = d['kelp_time'][~bad_mask]
+        kelp_time = np.array([np.datetime64(str(d)[:10]) for d in kelp_time])
+        kelp_time = np.array([f'2023-{str(d)[5:]}' for d in kelp_time])
+        kelp_time = np.array([np.datetime64(d) for d in kelp_time])
+        kelp_time = kelp_time.astype('datetime64[ns]')
+        
         # calculate daylight duration
-        daylight_duration = calculate_day_length(d['lat'], d['long'], d['kelp_time'][~bad_mask])
-        kelp_data['sunlight'].extend(daylight_duration)
+        if len(kelp_time) > 0:
+            daylight_duration = sunlight.interp(time=kelp_time, lat=d['lat'], lon=d['long']).daylight_duration.values
+            kelp_data['sunlight'].extend(daylight_duration)
 
         # use linear interpolation
         elevation = bathymetry.interp(lat=d['lat'],lon=d['long']).elevation.values
@@ -218,8 +229,66 @@ if __name__ == "__main__":
     lower_lat = 31
     upper_lat = 36
 
-    kelp_data = extract_kelp_metrics(data, bathymetry, lower_lat, upper_lat)
+    # create a grid for computing daylight
+    sunlight_file = f'Data/sunlight_{lower_lat}_{upper_lat}.nc'
+    if os.path.exists(sunlight_file):
+        sunlight = xr.open_dataset(sunlight_file)
+    else:
+        print("Computing daylight duration...")
 
-    #save to pkl file
+        # find all unique dates and lat/lon limit
+        dates = data[0]['kelp_time']
+
+        lats = []; lons = []
+        # loop over all locations and extract lat/long
+        for d in data:
+            lats.append(d['lat'])
+            lons.append(d['long'])
+        # convert to numpy array
+        lats = np.array(lats)
+        lons = np.array(lons)
+
+        # mask data based on lat limit
+        mask = (lats >= lower_lat) & (lats < upper_lat)
+        lats = lats[mask]
+        lons = lons[mask]
+
+        # create a grid of lat/long
+        lat_list = np.linspace(lats.min(), lats.max(), 50)
+        lon_list = np.linspace(lons.min(), lons.max(), 50)
+        lat_grid, lon_grid = np.meshgrid(lat_list, lon_list)
+
+        # ignore the year and find unique dates
+        dates = np.unique(np.array([np.datetime64(str(d)[:10]) for d in dates]))
+        # dates = array(['1984-02-15', '1984-05-15', '1984-08-15', '1984-11-15'])
+        
+        # ignore year and find unique dates as string
+        dates_str = np.unique(np.array([str(d)[5:] for d in dates]))
+        
+        # add the year 2023 to each date
+        dates_str = np.array([f'2023-{d}' for d in dates_str])
+
+        # convert to datetime
+        dates = np.array([np.datetime64(d) for d in dates_str])
+
+        # create a grid of daylight duration
+        sunlight = np.zeros((len(dates), len(lat_list), len(lon_list)))
+
+        # loop over all dates
+        for j in tqdm(range(len(lat_list))):
+            for k in range(len(lon_list)):
+                # calculate daylight duration
+                sunlight[:,j,k] = calculate_day_length(lat_list[j], lon_list[k], dates)
+
+        # convert to xarray so we can interpolate
+        sunlight = xr.DataArray(sunlight, dims=['time', 'lat', 'lon'], coords={'time':dates, 'lat':lat_list, 'lon':lon_list}, name='daylight_duration')
+        
+        # save grid to netcdf file
+        sunlight.to_netcdf(sunlight_file)
+
+    # extract kelp metrics
+    kelp_data = extract_kelp_metrics(data, bathymetry, sunlight, lower_lat, upper_lat)
+
+    # save to pkl file
     with open(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl", "wb") as f:
         pickle.dump(kelp_data, f)
