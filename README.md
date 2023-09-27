@@ -69,11 +69,11 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 
 ## To Do
 - Lag correlation plot for change in kelp
-- Create table of F-test, Mutual Info, Correlation Coefficient and RF importance scores
-- Hyperparameter tuning for regressors
 - Test elevation as input feature
 - Get future temperature data + make predictions using best regressor
 - Look into EcoStress SST temperatures
+- Annualize data
+- Update CMDA server
 
 ## Set up
 
