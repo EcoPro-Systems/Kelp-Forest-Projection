@@ -37,6 +37,7 @@ if __name__ == "__main__":
         time, # days, 0-365*20
         #np.sin(2*np.pi*time/365), # -1 - 1
         #np.cos(2*np.pi*time/365), # -1 - 1
+        #data['elevation'],
         data['sunlight'],
         data['lat'], # 25-45
         data['lon'], # -130 - -115
@@ -47,8 +48,7 @@ if __name__ == "__main__":
 
     feature_names = [
         'time',
-        #'sin(time)',
-        #'cos(time)',
+        #'elevation',
         'sunlight',
         'lat',
         'lon',
@@ -60,11 +60,15 @@ if __name__ == "__main__":
     X = np.array(features).T
 
     # remove nans
-    nanmask = np.isnan(data['temp_lag'])
+    nanmask = np.isnan(data['temp_lag']) | np.isnan(data['elevation'])
     X = X[~nanmask]
     y = y[~nanmask]
     time = time[~nanmask]
     time_dt = time_dt[~nanmask]
+
+    # remove elevation
+    #X = X[:, [0,2,3,4,5,6,7]]
+    #feature_names.pop(1)
 
     # compute correlation coefficient
     for i in range(X.shape[1]-1):
@@ -228,3 +232,32 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig(args.file_path.replace('.pkl', '_regressors.png'))
     plt.show()
+
+    """
+With Elevation Data
+    
+Feature Importances time: 0.059
+Feature Importances elevation: 0.000
+Feature Importances sunlight: 0.739
+Feature Importances lat: 0.000
+Feature Importances lon: 0.004
+Feature Importances temp: 0.000
+Feature Importances temp_lag: 0.198
+
+Correlation Coefficient time: -0.032
+Correlation Coefficient elevation: 0.040
+Correlation Coefficient sunlight: 0.304
+Correlation Coefficient lat: 0.116
+Correlation Coefficient lon: -0.164
+Correlation Coefficient temp: 0.005
+Correlation Coefficient temp_lag: -0.313
+
+Mutual Information time: 0.155
+Mutual Information elevation: 0.013
+Mutual Information sunlight: 0.184
+Mutual Information lat: 0.098
+Mutual Information lon: 0.103
+Mutual Information temp: 0.391
+Mutual Information temp_lag: 0.422
+    """
+
