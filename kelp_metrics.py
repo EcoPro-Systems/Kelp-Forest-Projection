@@ -13,6 +13,10 @@ from astropy.time import Time
 import numpy as np
 
 def calculate_day_length(latitude, longitude, dates):
+    #     # Example usage:
+    #     latitude = 40.7128  # Latitude of New York City
+    #     longitude = -74.0060  # Longitude of New York City
+    #     date = np.datetime64("2023-09-01")  # Date in numpy.datetime64 format
 
     durations = np.zeros(len(dates))
     location = EarthLocation(lat=latitude*u.deg, lon=longitude*u.deg)
@@ -35,15 +39,6 @@ def calculate_day_length(latitude, longitude, dates):
         durations[i] = (sunset_time - sunrise_time).to(u.day).value
     
     return durations
-
-# if __name__ == "__main__":
-#     # Example usage:
-#     latitude = 40.7128  # Latitude of New York City
-#     longitude = -74.0060  # Longitude of New York City
-#     date = np.datetime64("2023-09-01")  # Date in numpy.datetime64 format
-    
-#     day_length = calculate_day_length(latitude, longitude, date)
-#     print(f"Day length on {date} at ({latitude}, {longitude}): {day_length}")
 
 
 # make function to extract kelp data and temperatures

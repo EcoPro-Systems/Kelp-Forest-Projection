@@ -8,11 +8,11 @@ from tqdm import tqdm
 from scipy.interpolate import interp1d
 
 # load the Kelp biomass
-kelp_file = "Data/LandsatKelpBiomass_2022_Q4_withmetadata.nc"
+kelp_file = "/home/jovyan/shared/data/ecopro/KelpForest/LandsatKelpBiomass_2022_Q4_withmetadata.nc"
 kelp = xr.open_dataset(kelp_file)
 
 # load the monthly SST data
-mur_dir = "Data/"
+mur_dir = "/home/jovyan/shared/data/ecopro/MUR/"
 mur_files = glob.glob(os.path.join(mur_dir, "*MUR*.nc"))
 
 data = []
@@ -36,21 +36,21 @@ for i in tqdm(range(kelp.latitude.shape[0])):
 
     data.append(location_data)
 
-print("reading in SST data...")
+print("interpolating SST data...")
 # open files for sea surface temperatures
 for mf in tqdm(mur_files): 
     ds = xr.open_dataset(mf)
 
     # extract SST for each kelp location
-    for i in tqdm(range(kelp.latitude.shape[0])): # for each kelp location
+    for i in range(kelp.latitude.shape[0]): # for each kelp location
 
         # get temp at closest point
-        temp = ds['monthly_mean_sst'].sel(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i], method='nearest')
-        temp_std = ds['monthly_std_sst'].sel(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i], method='nearest')
+        #temp = ds['monthly_mean_sst'].sel(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i], method='nearest')
+        #temp_std = ds['monthly_std_sst'].sel(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i], method='nearest')
 
         # linear interpolation
-        #temp = ds.interp(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i]).monthly_mean_sst.values[0]
-        #temp_std = ds.interp(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i]).monthly_std_sst.values[0]
+        temp = ds.interp(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i]).monthly_mean_sst.values[0]
+        temp_std = ds.interp(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i]).monthly_std_sst.values[0]
 
         # save data
         data[i]['mur_temp'].append(temp)
@@ -58,7 +58,6 @@ for mf in tqdm(mur_files):
         data[i]['mur_time'].append(ds.time.values[0])
 
     ds.close()
-
 
 print("interpolating SST data onto kelp time grid...")
 # Then for each kelp location interpolate SST onto same time grid as kelp data
