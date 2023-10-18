@@ -35,18 +35,6 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 4) Train a regression model (includes OLS, MLP and RF)
     - `python train_regressors.py`
 
-| Variable | Correlation Coefficient | Mutual Information | Feature Importance |
-| -------- | ----------------------- | ------------------ | ------------------ |
-| Time             |  -0.032 | 0.155 | 0.059 |
-| Elevation [m]    | 0.040   | 0.013 | 0.000 |
-| Sunlight [day]   | 0.304   | 0.184 | 0.739 |
-| Latitude         | 0.116   | 0.098 | 0.000 |
-| Longitude        | -0.164  | 0.103 | 0.004 |
-| Temperature      | 0.005   | 0.391 | 0.000 |
-| Temperature Lag  | -0.313  | 0.422 | 0.198 |
-
-Even though the parameters individually may be correlated to the amount of kelp, the random forest regression model suggests only the amount of sunlight, temperature from the previous quarter and time are important for making a prediction.
-
 ## Analysis Scripts
 
 The python scripts can be run locally and the jupyter notebooks are meant to be run on the [CMDA server](https://hub.jpl-cmda.org).
@@ -117,13 +105,27 @@ Signficant p-vals are less than ~0.05-0.1, where smaller values are more signifi
 - Simple to calculate and interpret
 - Less sensitive to outliers compared to Pearson correlation
 
-
-### Regression analysis:
+### Linear Regression analysis:
 - Fits a straight line model to the data 
 - Tests if slope coefficient is significantly different than zero
 - Slope significantly greater than zero indicates increasing trend
 - Slope significantly less than zero indicates decreasing trend
 
+# Machine Learning
+
+We test three different regression algorithms to predict the abundance of kelp: ordinary least-squares, multi-layer perceptron and random forest. The regressors are trained using the features from `kelp_metrics.pkl` and the target variable is the abundance of kelp. The regressors are trained using the `regressors_train.py` script.
+
+| Variable | Correlation Coefficient | Mutual Information | Feature Importance |
+| -------- | ----------------------- | ------------------ | ------------------ |
+| Time             |  -0.032 | 0.155 | 0.059 |
+| Elevation [m]    | 0.040   | 0.013 | 0.000 |
+| Sunlight [day]   | 0.304   | 0.184 | 0.739 |
+| Latitude         | 0.116   | 0.098 | 0.000 |
+| Longitude        | -0.164  | 0.103 | 0.004 |
+| Temperature      | 0.005   | 0.391 | 0.000 |
+| Temperature Lag  | -0.313  | 0.422 | 0.198 |
+
+Even though the parameters individually may be correlated to the amount of kelp, the random forest regression model suggests only the amount of sunlight, temperature from the previous quarter and time are important for making a prediction.
 
 # Datasets
 
