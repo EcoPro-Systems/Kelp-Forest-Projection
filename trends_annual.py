@@ -127,18 +127,18 @@ if __name__ == "__main__":
                 yearly_kelp, yerr=yearly_std, fmt='o', ls='-', color='black', label='Yearly Mean')
     ax[0].plot(years.astype('datetime64[Y]'), y_ols, ls='-', color='red', label=f'OLS fit (slope: {coeffs[0]:.3f} m^2/year)')
     #ax[0].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='red',alpha=0.25, label='Quarterly Mean')
-    ax[0].set_xlabel("Time")
+    ax[0].set_xlabel("Year")
     ax[0].tick_params(axis='x', rotation=45)
     ax[0].set_ylabel("Kelp Area [m^2]")
     ax[0].grid(True,ls='--',alpha=0.5)
-    ax[0].set_ylim([0,666])
+    ax[0].set_ylim([0,500])
     ax[0].legend(loc='best')
 
     ax[1].set_title("Annual Trends (avg. over 31-36N, 115-130W)")
     ax[1].errorbar(years.astype('datetime64[Y]'),
                    yearly_sst-273.15, yerr=yearly_sst_std, fmt='o', ls='-', color='black', label='Yearly Mean')
     ax[1].plot(years.astype('datetime64[Y]'), y_sst-273.15, ls='-', color='red', label=f'OLS fit (slope: {coeffs_sst[0]:.3f} C/year)')
-    ax[1].set_xlabel("Time")
+    ax[1].set_xlabel("Year")
     # rotate tick labels 45 deg
     ax[1].tick_params(axis='x', rotation=45)
     ax[1].set_ylabel("Sea Surface Temperature [C]")
