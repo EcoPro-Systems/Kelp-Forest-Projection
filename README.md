@@ -111,7 +111,7 @@ Signficant p-vals are less than ~0.05-0.1, where smaller values are more signifi
 - Slope significantly greater than zero indicates increasing trend
 - Slope significantly less than zero indicates decreasing trend
 
-# Machine Learning
+# Predictions with Machine Learning
 
 We test three different regression algorithms to predict the abundance of kelp: ordinary least-squares, multi-layer perceptron and random forest. The regressors are trained using the features from `kelp_metrics.pkl` and the target variable is the abundance of kelp. The regressors are trained using the `regressors_train.py` script.
 
