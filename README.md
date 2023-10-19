@@ -50,8 +50,9 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | `plot_lag_correlation.py` `plot_lag_correlation_change.py` | Create lag correlation plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 | ![](Data/kelp_metrics_31_36_lag_correlation.png) | ![](Data/kelp_metrics_31_36_lag_correlation_change.png) |
 | `trends_annual.py` | Calculate the annual trends for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
-| ![]() | ![](Data/kelp_metrics_31_36_annual.png) | 
-| `trends_seasonal.py` | Calculate the seasonal trends (quarterly) for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
+| ![]() | ![](Data/kelp_metrics_31_36_annual.png) |
+| `trends_quarterly.py` | Calculate the seasonal trends (quarterly) for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
+| ![]() | ![](Data/kelp_metrics_31_36_quarterly.png) | 
 | `regressors_optimize.py` | Hyperparameter optimization for regression algorithms using scikit-learn | 
 | `regressors_train.py` | Train various regression models to predict the abundance of Kelp using ordinary least-squares, multi-layer perceptron and random forest with features from `kelp_metrics.pkl`. |
 | ![]() | ![](Data/kelp_metrics_31_36_regressors.png) |
