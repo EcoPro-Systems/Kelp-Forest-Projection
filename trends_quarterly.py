@@ -120,6 +120,10 @@ if __name__ == "__main__":
     coeffs_sst_kelp = res.params
     y_sst_kelp = np.dot(X, coeffs_sst_kelp)
 
+    # temperature at which y = 0
+    T0 = -coeffs_sst_kelp[1]/coeffs_sst_kelp[0]
+    print("T0: ", T0-273.15)
+
     # plot the data
     fig, ax = plt.subplots(1, 3, figsize=(12, 5))
     ax[0].errorbar(quarterly_time, quarterly_kelp, 
