@@ -70,6 +70,14 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 
 Signficant p-vals are less than ~0.05-0.1, where smaller values are more significant. These values are measured in the `trends_annual.py` script.
 
+| Quarterly P-vals| SST vs. Kelp | Time vs. SST | Time vs. Kelp |
+|-----------------|--------------|--------------|---------------|
+| Pearsonr        | 0.000        | 0.033        | 0.166         |
+| Kendalltau      | 0.009        | 0.051        | 0.213         |
+| Spearmanr       | 0.003        | 0.041        | 0.202         | 
+| Mann.Kendall    | 0.009        | 0.051        | 0.213         |
+| Linregress      | 0.000        | 0.033        | 0.166         |
+
 ### Pearson's correlation:
 - Measures the linear relationship between two continuous variables 
 - Produces a correlation coefficient (r) from -1 to +1
@@ -127,6 +135,7 @@ We test three different regression algorithms to predict the abundance of kelp: 
 | Temperature Lag  | -0.313  | 0.422 | 0.198 |
 
 Even though the parameters individually may be correlated to the amount of kelp, the random forest regression model suggests only the amount of sunlight, temperature from the previous quarter and time are important for making a prediction.
+
 
 # Datasets
 

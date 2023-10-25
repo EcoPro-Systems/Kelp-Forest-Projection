@@ -176,5 +176,5 @@ if __name__ == "__main__":
     plt.show()
 
     # stats for raw trend
-    # stats_time_kelp = correlation_tests(x = time, y = data['kelp'])
-    # stats_time_sst = correlation_tests(x = time, y = data['temp'])
+    #stats_time_kelp = correlation_tests(x = time, y = data['kelp'])
+    #stats_time_sst = correlation_tests(x = time, y = data['temp'])
