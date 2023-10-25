@@ -86,15 +86,22 @@ if __name__ == "__main__":
     
     # loop over each quarter and compute the mean and std
     for i, t in enumerate(utime):
-        mask = time == t
-        quarterly_kelp[i] = np.mean(data['kelp'][mask])
+        mask = (time == t) & (~np.isnan(data['temp_lag']))
+        quarterly_kelp[i] = np.nanmean(data['kelp'][mask])
         quarterly_kelp_std[i] = np.std(data['kelp'][mask])
-        quarterly_sst[i] = np.mean(data['temp'][mask])
-        quarterly_sst_std[i] = np.std(data['temp'][mask])
+        quarterly_sst[i] = np.nanmean(data['temp_lag'][mask])
+        quarterly_sst_std[i] = np.std(data['temp_lag'][mask])
+
+    # remove first quarter for lag nan
+    quarterly_kelp = quarterly_kelp[1:]
+    quarterly_kelp_std = quarterly_kelp_std[1:]
+    quarterly_sst = quarterly_sst[1:]
+    quarterly_sst_std = quarterly_sst_std[1:]
 
     # float presentation of time
     starting_year = int(f"{time_dt.min().astype('datetime64[Y]')}")
     quarterly_time = starting_year + utime/365.
+    quarterly_time = quarterly_time[1:]
 
     # measure a seasonal trend line with OLS
     X = np.array([quarterly_time, np.ones(len(quarterly_time))]).T
@@ -147,7 +154,7 @@ if __name__ == "__main__":
     ax[2].legend(loc='best')
 
     plt.tight_layout()
-    plt.savefig(args.file_path.replace('.pkl', '_quarterly.png'))
+    plt.savefig(args.file_path.replace('.pkl', '_quarterly_lag.png'))
 
     # return p-vals for each correlation test
     alpha=0.05

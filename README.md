@@ -52,7 +52,7 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | `trends_annual.py` | Calculate the annual trends for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
 | ![]() | ![](Data/kelp_metrics_31_36_annual.png) |
 | `trends_quarterly.py` | Calculate the seasonal trends (quarterly) for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
-| ![]() | ![](Data/kelp_metrics_31_36_quarterly.png) | 
+| Trend with previous quarter's temperature ![](Data/kelp_metrics_31_36_quarterly_lag.png) | Trend with current quarter's temperature ![](Data/kelp_metrics_31_36_quarterly.png) | 
 | `regressors_optimize.py` | Hyperparameter optimization for regression algorithms using scikit-learn | 
 | `regressors_train.py` | Train various regression models to predict the abundance of Kelp using ordinary least-squares, multi-layer perceptron and random forest with features from `kelp_metrics.pkl`. |
 | ![]() | ![](Data/kelp_metrics_31_36_regressors.png) |
@@ -77,6 +77,16 @@ Signficant p-vals are less than ~0.05-0.1, where smaller values are more signifi
 | Spearmanr       | 0.003        | 0.041        | 0.202         | 
 | Mann.Kendall    | 0.009        | 0.051        | 0.213         |
 | Linregress      | 0.000        | 0.033        | 0.166         |
+
+We see an inverse trend when the temperature is taken from the previous quarter...
+
+| Quarterly P-vals | SST_lag vs. Kelp | Time vs. SST_lag | Time vs. Kelp |
+|------------------|------------------|------------------|--------------|
+| Pearsonr         | 0.000            | 0.094            | 0.295        |
+| Kendalltau       | 0.000            | 0.092            | 0.346        |
+| Spearmanr        | 0.000            | 0.065            | 0.333        |
+| Mann.Kendall     | 0.000            | 0.092            | 0.346        |
+| Linregress       | 0.000            | 0.094            | 0.295        |
 
 ### Pearson's correlation:
 - Measures the linear relationship between two continuous variables 
