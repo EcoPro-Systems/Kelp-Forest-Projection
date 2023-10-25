@@ -134,18 +134,33 @@ One thing these tables don't show is the direction of the correction but from th
 
 We test three different regression algorithms to predict the abundance of kelp: ordinary least-squares, multi-layer perceptron and random forest. The regressors are trained using the features from `kelp_metrics.pkl` and the target variable is the abundance of kelp. The regressors are trained using the `regressors_train.py` script.
 
-| Variable | Correlation Coefficient | Mutual Information | Feature Importance |
-| -------- | ----------------------- | ------------------ | ------------------ |
-| Time             |  -0.032 | 0.155 | 0.059 |
-| Elevation [m]    | 0.040   | 0.013 | 0.000 |
-| Sunlight [day]   | 0.304   | 0.184 | 0.739 |
-| Latitude         | 0.116   | 0.098 | 0.000 |
-| Longitude        | -0.164  | 0.103 | 0.004 |
-| Temperature      | 0.005   | 0.391 | 0.000 |
-| Temperature Lag  | -0.313  | 0.422 | 0.198 |
+|                      | Correlation Coefficient | Mutual Information | Feature Importance |
+| -------------------- | ----------------------- | ------------------ | ------------------ |
+| Time                 |  -0.032 | 0.155 | 0.027 |
+| Elevation [m]        | 0.040   | 0.013 | 0.000 |
+| Sunlight [day]       | 0.304   | 0.186 | 0.690 |
+| Latitude             | 0.116   | 0.098 | 0.000 |
+| Longitude            | -0.164  | 0.103 | 0.000 |
+| Temperature          | 0.005   | 0.391 | 0.000 |
+| Temperature Lag      | -0.314  | 0.420 | 0.199 |
+| Temperature Lag 2    | -0.172  | 0.401 | 0.084 |
 
-Even though the parameters individually may be correlated to the amount of kelp, the random forest regression model suggests only the amount of sunlight, temperature from the previous quarter and time are important for making a prediction.
 
+Even though the parameters individually may be correlated to the amount of kelp, the random forest regression model suggests only the amount of sunlight, temperature from the previous quarter and time are important for making a prediction. Making another model with only these features may be more accurate than includes features like elevation, latitude, longitude, etc.
+
+|                         | Correlation Coefficient | Mutual Information | Feature Importances |
+|-------------------------|-------------------------|--------------------|---------------------|
+| Time                    | -0.042                  | 0.155              | 0.020               |
+| Sunlight [day]          | 0.304                   | 0.186              | 0.702               |
+| Temperature Lag         | -0.314                  | 0.420              | 0.194               |
+| Temperature Lag 2       | -0.172                  | 0.401              | 0.085               |
+
+Avg. Absolute Error (OLS) Train: 142.281 m^2
+Avg. Absolute Error (OLS) Test: 139.645 m^2
+Avg. Absolute Error (MLP) train: 134.895 m^2 (50)
+Avg. Absolute Error (MLP) test: 148.805 m^2
+Avg. Absolute Error (RF) train: 137.852 m^2
+Avg. Absolute Error (RF) test: 139.215 m^2
 
 # Datasets
 
@@ -186,4 +201,6 @@ NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern Califor
 
 ## To Do
 - Get future temperature data + make predictions using best regressor
-- Update CMDA server
+- Update CMDA server with scripts from github
+- Fit trend to Kelp vs. lag-temperature, estimate temperature at which kelp = 0
+- Create new regression model with time, sunlight, temp_lag and temp_lag2

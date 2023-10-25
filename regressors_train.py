@@ -39,10 +39,11 @@ if __name__ == "__main__":
         #np.cos(2*np.pi*time/365), # -1 - 1
         #data['elevation'],
         data['sunlight'],
-        data['lat'], # 25-45
-        data['lon'], # -130 - -115
-        data['temp'], 
+        #data['lat'], # 25-45
+        #data['lon'], # -130 - -115
+        #data['temp'], 
         data['temp_lag'],
+        data['temp_lag2'],
         np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
     ]
 
@@ -50,17 +51,18 @@ if __name__ == "__main__":
         'time',
         #'elevation',
         'sunlight',
-        'lat',
-        'lon',
-        'temp',
+        #'lat',
+        #'lon',
+        #'temp',
         'temp_lag',
+        'temp_lag2',
         'bias'
     ]
 
     X = np.array(features).T
 
     # remove nans
-    nanmask = np.isnan(data['temp_lag']) | np.isnan(data['elevation'])
+    nanmask = np.isnan(data['temp_lag']) | np.isnan(data['elevation']) | np.isnan(data['temp_lag2'])
     X = X[~nanmask]
     y = y[~nanmask]
     time = time[~nanmask]
@@ -112,7 +114,7 @@ if __name__ == "__main__":
     Xp_test = (Xp_test - Xp_test.mean(0)) / Xp_test.std(0)
 
     # create multi-layer perceptron regressor
-    mlp = MLPRegressor(hidden_layer_sizes=(10,10,10), activation='relu', solver='adam', max_iter=60, verbose=True, alpha=0.0001, learning_rate='adaptive')
+    mlp = MLPRegressor(hidden_layer_sizes=(10,10,10), activation='relu', solver='adam', max_iter=50, verbose=True, alpha=0.0001, learning_rate='adaptive')
     y_mlp_train = mlp.fit(Xp_train, y_train).predict(Xp_train)
     abs_err_mlp_train = np.abs(y_train - y_mlp_train).mean()
     print(f"Avg. Absolute Error (MLP) train: {abs_err_mlp_train:.3f} m^2")
@@ -259,5 +261,22 @@ Mutual Information lat: 0.098
 Mutual Information lon: 0.103
 Mutual Information temp: 0.391
 Mutual Information temp_lag: 0.422
+------------------------------------
+
+Less features:
+
+Correlation Coefficient time: -0.042
+Correlation Coefficient sunlight: 0.302
+Correlation Coefficient temp_lag: -0.314
+Correlation Coefficient temp_lag2: -0.172
+Mutual Information time: 0.155
+Mutual Information sunlight: 0.186
+Mutual Information temp_lag: 0.420
+Mutual Information temp_lag2: 0.401
+Feature Importances time: 0.020
+Feature Importances sunlight: 0.702
+Feature Importances temp_lag: 0.194
+Feature Importances temp_lag2: 0.085
     """
+
 
