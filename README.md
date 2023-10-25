@@ -78,7 +78,8 @@ Signficant p-vals are less than ~0.05-0.1, where smaller values are more signifi
 | Mann.Kendall    | 0.009        | 0.051        | 0.213         |
 | Linregress      | 0.000        | 0.033        | 0.166         |
 
-We see an inverse trend when the temperature is taken from the previous quarter...
+
+One thing these tables don't show is the direction of the correction but from the quarterly plots above we see an inverse trend between Kelp and SST from a quarter before.
 
 | Quarterly P-vals | SST_lag vs. Kelp | Time vs. SST_lag | Time vs. Kelp |
 |------------------|------------------|------------------|--------------|
