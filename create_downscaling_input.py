@@ -18,10 +18,6 @@ if __name__ == "__main__":
     latitude = data['lat'][::1000]
     longitude = data['lon'][::1000]
 
-    # add min and max lat/lon to list
-    latitude = list(latitude) + [latitude.min(), latitude.max()]
-    longitude = list(longitude) + [longitude.min(), longitude.max()]
-
     # Create a DataFrame with latitude and longitude as columns
     df = pd.DataFrame({'Latitude': latitude, 'Longitude': longitude})
 
