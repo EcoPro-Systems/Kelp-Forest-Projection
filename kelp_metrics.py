@@ -221,7 +221,7 @@ if __name__ == "__main__":
     bathymetry = bathymetry.rename({'Band1':'elevation'})
 
     # if using noaa dem: limit: ~31-36
-    lower_lat = 31
+    lower_lat = 26
     upper_lat = 36
 
     # create a grid for computing daylight
@@ -276,10 +276,17 @@ if __name__ == "__main__":
                 sunlight[:,j,k] = calculate_day_length(lat_list[j], lon_list[k], dates)
 
         # convert to xarray so we can interpolate
-        sunlight = xr.DataArray(sunlight, dims=['time', 'lat', 'lon'], coords={'time':dates, 'lat':lat_list, 'lon':lon_list}, name='daylight_duration')
+        # fix this error: AttributeError: 'DataArray' object has no attribute 'daylight_duration'
+        sunlight_xr = xr.DataArray(sunlight, dims=['time', 'lat', 'lon'], coords={'time':dates, 'lat':lat_list, 'lon':lon_list}, name='daylight_duration')
         
         # save grid to netcdf file
-        sunlight.to_netcdf(sunlight_file)
+        sunlight_xr.to_netcdf(sunlight_file)
+
+        # free up memory
+        del lat_list, lon_list, lat_grid, lon_grid, dates, dates_str, sunlight, sunlight_xr
+
+        # load file
+        sunlight = xr.open_dataset(sunlight_file)
 
     # extract kelp metrics
     kelp_data = extract_kelp_metrics(data, bathymetry, sunlight, lower_lat, upper_lat)
