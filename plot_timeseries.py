@@ -4,7 +4,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
-def sst_time_series(kelp_metrics):
+def sst_time_series(kelp_metrics, file_name):
     # create time vs temp plot
     fig, ax = plt.subplots(figsize=(10,5))
 
@@ -37,10 +37,19 @@ def sst_time_series(kelp_metrics):
     ax.set_ylim([np.min(mean_temp-273.15)-2, 
                  np.max(mean_temp-273.15)+max(std_temp)])
     plt.tight_layout()
-    return fig, ax
 
+    # save unique times, mean, and std as pickle file
+    sst_time_series = {'time': unique_times, 'mean': mean_temp, 'std': std_temp}
+    with open(file_name.replace('.png', '.pkl'), 'wb') as f:
+        pickle.dump(sst_time_series, f)
+    print(f"Saved pickle file to {file_name.replace('.png', '.pkl')}")
+    
+    # save figure
+    plt.savefig(file_name)
+    plt.close()
+    print(f"Saved figure to {file_name}")
 
-def kelp_time_series(kelp_metrics):
+def kelp_time_series(kelp_metrics, file_name):
     # create time vs temp plot
     fig, ax = plt.subplots(figsize=(10,5))
 
@@ -72,7 +81,17 @@ def kelp_time_series(kelp_metrics):
     ax.set_xlim([np.min(unique_times), np.max(unique_times)])
     ax.set_ylim([0, np.max(mean_kelp)+max(std_kelp)])
     plt.tight_layout()
-    return fig, ax
+
+    # save unique times, mean, and std as pickle file
+    kelp_time_series = {'time': unique_times, 'mean': mean_kelp, 'std': std_kelp}
+    with open(file_name.replace('.png', '.pkl'), 'wb') as f:
+        pickle.dump(kelp_time_series, f)
+    print(f"Saved pickle file to {file_name.replace('.png', '.pkl')}")
+
+    # save figure
+    plt.savefig(file_name)
+    plt.close()
+    print(f"Saved figure to {file_name}")
 
 if __name__ == "__main__":
     # argparse for input filepath
@@ -87,10 +106,5 @@ if __name__ == "__main__":
         data = pickle.load(f)
 
     # plot time series
-    fig, ax = sst_time_series(data)
-    plt.savefig(args.file_path.replace('.pkl', '_sst_timeseries.png'))
-    plt.show()
-
-    fig, ax = kelp_time_series(data)
-    plt.savefig(args.file_path.replace('.pkl', '_kelp_timeseries.png'))
-    plt.show()
+    sst_time_series(data, args.file_path.replace('.pkl', '_sst_timeseries.png'))
+    kelp_time_series(data, args.file_path.replace('.pkl', '_kelp_timeseries.png'))

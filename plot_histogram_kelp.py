@@ -24,6 +24,9 @@ def histogram_kelp(kelp_metrics):
     fig.suptitle(f"Change in Kelp Area by Season between ({lower:.1f} - {upper:.1f}N)")
     ax = ax.flatten()
 
+    # create dict for saving
+    kelp_histogram = {}
+
     for i, season in enumerate(season_names.values()):
         mask = seasons == season
         mean = np.mean(kelp_metrics['dkelp'][mask])
@@ -34,9 +37,12 @@ def histogram_kelp(kelp_metrics):
         ax[i].set_yticks([])
         ax[i].legend(loc='best')
         ax[i].grid(True, ls='--', alpha=0.5)
+
+        # save data to dict
+        kelp_histogram[season] = {'mean': mean, 'std': std}
     
     plt.tight_layout()
-    return fig, ax
+    return fig, ax, kelp_histogram
 
 if __name__ == "__main__":
     # argparse for input filepath
@@ -51,8 +57,10 @@ if __name__ == "__main__":
         data = pickle.load(f)
 
     # plot time series
-    fig, ax = histogram_kelp(data)
+    fig, ax, kdata = histogram_kelp(data)
     plt.savefig(args.file_path.replace('.pkl', '_histogram.png'))
     plt.show()
 
-    # TODO make temperature change plot
+    # save data to pickle file
+    with open(args.file_path.replace('.pkl', '_histogram.pkl'), 'wb') as f:
+        pickle.dump(kdata, f)

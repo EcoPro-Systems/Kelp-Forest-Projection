@@ -221,7 +221,7 @@ if __name__ == "__main__":
     bathymetry = bathymetry.rename({'Band1':'elevation'})
 
     # if using noaa dem: limit: ~31-36
-    lower_lat = 26
+    lower_lat = 33
     upper_lat = 36
 
     # create a grid for computing daylight
