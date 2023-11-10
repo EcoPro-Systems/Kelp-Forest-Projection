@@ -58,9 +58,9 @@ if __name__ == "__main__":
 
     # plot time series
     fig, ax, kdata = histogram_kelp(data)
-    plt.savefig(args.file_path.replace('.pkl', '_histogram.png'))
+    plt.savefig(args.file_path.replace('.pkl', '_histogram_kelp.png'))
     plt.show()
 
     # save data to pickle file
-    with open(args.file_path.replace('.pkl', '_histogram.pkl'), 'wb') as f:
+    with open(args.file_path.replace('.pkl', '_histogram_kelp.pkl'), 'wb') as f:
         pickle.dump(kdata, f)
