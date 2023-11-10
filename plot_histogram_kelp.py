@@ -39,7 +39,7 @@ def histogram_kelp(kelp_metrics):
         ax[i].grid(True, ls='--', alpha=0.5)
 
         # save data to dict
-        kelp_histogram[season] = {'mean': mean, 'std': std}
+        kelp_histogram[season] = kelp_metrics['dkelp'][mask]
     
     plt.tight_layout()
     return fig, ax, kelp_histogram
