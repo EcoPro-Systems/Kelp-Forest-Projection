@@ -17,11 +17,6 @@ if __name__ == "__main__":
     with open(args.file_path, 'rb') as f:
         data = pickle.load(f)
 
-    # filter out kelps between 27-28N
-    mask = (data['lat'] > 27) & (data['lat'] < 28)
-    data['lat'] = data['lat'][mask]
-    data['lon'] = data['lon'][mask]
-
     # # Access the latitude and longitude variables from the dataset
     # lat_lon_all = (data['lat'], data['lon'])
     # lat_lon = np.unique(lat_lon_all, axis=1) # degrees

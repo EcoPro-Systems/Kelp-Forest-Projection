@@ -49,6 +49,10 @@ The python scripts can be run locally and the jupyter notebooks are meant to be 
 | ![](Data/kelp_metrics_31_36_histogram_sst.png) | ![](Data/kelp_metrics_31_36_histogram.png) |
 | `plot_lag_correlation.py` `plot_lag_correlation_change.py` | Create lag correlation plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
 | ![](Data/kelp_metrics_31_36_lag_correlation.png) | ![](Data/kelp_metrics_31_36_lag_correlation_change.png) |
+| `overplot_timeseries.py` | Create time series plots for temperature and kelp using `kelp_metrics.pkl`, overplots 3 different regions. |
+| | ![](Data/kelp_sst_timeseries.png) | |
+| `overplot_histogram.py` | Create seasonal histograms for change in abundance and SST using `kelp_metrics.pkl`, overplots 3 different regions. |
+| ![](Data/overplot_histogram_sst.png) | ![](Data/overplot_histogram_kelp.png) |
 | `trends_annual.py` | Calculate the annual trends for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
 | ![]() | ![](Data/kelp_metrics_31_36_annual.png) |
 | `trends_quarterly.py` | Calculate the seasonal trends (quarterly) for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
