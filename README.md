@@ -134,6 +134,31 @@ One thing these tables don't show is the direction of the correction but from th
 - Slope significantly greater than zero indicates increasing trend
 - Slope significantly less than zero indicates decreasing trend
 
+# Temperature vs. Kelp Abundance per Region
+
+The largest correlations with kelp abundace are the temperatures with a one quarter lag. The kelp decreases to 0 at an average temperature of ~23.47 +- 2.11C.
+
+|  | 27 - 30N | 30 - 33N | 33 - 36N |
+|-|-|-|-|
+| Correlation coefficient | -0.16 | 0.45 | 0.32 |  
+| Correlation coefficient for One Quater Lag | -0.78 | -0.64 | -0.82 |
+| Correlation coefficient for Two Quarter Lag | 0.03 | -0.52 | -0.32 |
+||||
+| Slope of trend line (m^2/C) | -8.51 +- 6.32 | 15.70 +- 3.67 | 17.69 +- 6.27 |
+| Slope of trend line with one quater lag (m^2/C) | -42.40 +- 4.04 | -21.09 +- 3.04 | -36.10 +- 2.99 |
+| Slope of trend line with two quarters lag (m^2/C) | 1.51 +- 6.53 | -17.52 +- 3.45 | -11.58 +- 4.13 |
+||||
+| Temperature when kelp abundance is zero (C) | 45.93 +- 1682.29 | 6.37 +- 5.29 | 4.66 +- 22.76 |
+| Temperature when kelp abundance is zero using a quarter lag (C) | 23.80 +- 3.04 | 26.12 +- 5.00 | 20.40 +- 2.10 |
+| Temperature when kelp abundance is zero using 2 quarters lag (C) | -137.90 +- 1423.19 | 27.84 +- 7.83 | 31.45 +- 127.13 |
+||||
+| Year at which avg. temp reaches 23.47 +- 2.11C | 2055.37 +- 17.89 | 2070.05 +- 21.60 | 2139.78 +- 32.90 |
+
+| | | |
+|-|-|-|
+|![](Data/kelp_metrics_27_30_lag_correlation.png) | ![](Data/kelp_metrics_30_33_lag_correlation.png) | ![](Data/kelp_metrics_33_36_lag_correlation.png) |
+|![](Data/kelp_metrics_27_30_quarterly_lag.png) | ![](Data/kelp_metrics_30_33_quarterly_lag.png) | ![](Data/kelp_metrics_33_36_quarterly_lag.png) |
+
 # Predictions with Machine Learning
 
 We test three different regression algorithms to predict the abundance of kelp: ordinary least-squares, multi-layer perceptron and random forest. The regressors are trained using the features from `kelp_metrics.pkl` and the target variable is the abundance of kelp. The regressors are trained using the `regressors_train.py` script.
@@ -205,6 +230,4 @@ NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern Califor
 
 ## To Do
 - Get future temperature data + make predictions using best regressor
-- Update CMDA server with scripts from github
 - Fit trend to Kelp vs. lag-temperature, estimate temperature at which kelp = 0
-- Create new regression model with time, sunlight, temp_lag and temp_lag2

@@ -52,8 +52,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_31_36.pkl")
+                        default="Data/kelp_metrics_27_30.pkl")
     args = parser.parse_args()
+
+    region = f"{args.file_path.split('_')[2]}-{args.file_path.split('_')[3]}N"
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
@@ -108,11 +110,34 @@ if __name__ == "__main__":
     res = sm.OLS(quarterly_kelp, X).fit()
     coeffs = res.params
     y_kelp = np.dot(X, coeffs)
+    # print slope +- error
+    print(f"Slope of trend line: {coeffs[0]:.2f} +- {res.bse[0]:.2f} m^2/year")
+    # monte carlo to find year at which kelp reaches 0
+    qtimes = []
+    for i in range(10000):
+        # sample from normal distribution
+        kelp = np.random.normal(loc=0, scale=quarterly_kelp_std)
+        # calculate time at which kelp is equal to 0
+        qtime = (kelp - coeffs[1])/coeffs[0]
+        qtimes.append(qtime)
+    #print(f"Time at which kelp reaches 0: {np.mean(qtimes):.2f} +- {np.std(qtimes):.2f} years")
 
     # measure yearly trend line for SST
     res = sm.OLS(quarterly_sst, X).fit()
     coeffs_sst = res.params
     y_sst = np.dot(X, coeffs_sst)
+    # print slope +- error
+    print(f"Slope of trend line: {coeffs_sst[0]:.2f} +- {res.bse[0]:.2f} C/year")
+    # monte carlo to find year at which temp reaches 23.47 +- 2.11C
+    qtimes = []
+    for i in range(10000):
+        # sample from normal distribution
+        sst = np.random.normal(loc=23.47+273.15, scale=2.11)
+        # calculate time at which sst is equal to sst
+        qtime = (sst - coeffs_sst[1])/coeffs_sst[0]
+        qtimes.append(qtime)
+    print(f"Time at which SST reaches 23.47 +- 2.11C: {np.mean(qtimes):.2f} +- {np.std(qtimes):.2f} years")
+
 
     # measure yearly trend between sst and kelp
     X = np.array([quarterly_sst, np.ones(len(quarterly_sst))]).T
@@ -137,7 +162,7 @@ if __name__ == "__main__":
     ax[0].set_ylim([0,500])
     ax[0].legend(loc='best')
 
-    ax[1].set_title("Annual Trends (avg. over 31-36N, 115-130W)")
+    ax[1].set_title(f"Annual Trends (avg. over {region})")
     ax[1].errorbar(quarterly_time, quarterly_sst-273.15, 
                    yerr=quarterly_sst_std, fmt='o', ls='-', color='black', label='Quarterly Mean')
     ax[1].plot(quarterly_time, y_sst-273.15, ls='-', color='red', label=f'OLS fit (slope: {coeffs_sst[0]:.3f} C/year)')
@@ -185,7 +210,3 @@ if __name__ == "__main__":
         print(f"{passed_metrics} out of {len(correlation_stats[key])} metrics passed\n")
 
     plt.show()
-
-    # stats for raw trend
-    #stats_time_kelp = correlation_tests(x = time, y = data['kelp'])
-    #stats_time_sst = correlation_tests(x = time, y = data['temp'])

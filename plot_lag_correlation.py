@@ -40,7 +40,6 @@ def lag_correlation(kelp_metrics):
     mean_temp_lag2 = np.array(mean_temp_lag2)
     std_temp_lag2 = np.array(std_temp_lag2)
 
-
     fig, ax = plt.subplots(figsize=(7,6))
     ax.plot(mean_temp-273.15, mean_kelp,  'o', color='black', markersize=4)
     # plot x-axis errorbar
@@ -52,7 +51,22 @@ def lag_correlation(kelp_metrics):
     m,b = res.params[0], res.params[1]
     x = np.linspace(np.min(mean_temp-273.15), np.max(mean_temp-273.15), 100)
     corrcoeff = np.corrcoef(mean_temp-273.15, mean_kelp)[0,1]
+    print(f"Correlation coefficient: {corrcoeff:.2f}")
     ax.plot(x, m*x+b, 'k-',alpha=0.75,lw=2,label=f'Temperature ($r={corrcoeff:.2f}$)')
+    print(f"Slope of trend line: {m:.2f} +- {res.bse[0]:.2f} m^2/C")
+    # estimate x when y = 0
+    x0 = -b/m
+    # perform monte carlo simulation to estimate error in x0
+    x0s = []
+    for i in range(1000):
+        # sample from normal distribution
+        m_sample = np.random.normal(m, res.bse[0])
+        b_sample = np.random.normal(b, res.bse[1])
+        # estimate x when y = 0
+        x0_sample = -b_sample/m_sample
+        x0s.append(x0_sample)
+    print(f"Temperature when kelp area is zero: {x0:.2f} +- {np.std(x0s):.2f}C")
+
 
     # temp lagged by one quarter
     ax.plot(mean_temp_lag[1:]-273.15, mean_kelp[1:],  'o', color='red', markersize=4)
@@ -65,10 +79,22 @@ def lag_correlation(kelp_metrics):
     m,b = res.params[0], res.params[1]
     x = np.linspace(np.min(mean_temp_lag[1:]-273.15), np.max(mean_temp_lag[1:]-273.15), 100)
     corrcoeff = np.corrcoef(mean_temp_lag[1:]-273.15, mean_kelp[1:])[0,1]
+    print(f"Correlation coefficient: {corrcoeff:.2f}")
     ax.plot(x, m*x+b, 'r-',alpha=0.75,lw=2,label=r'Temperature Lagged by One Quarter ($r=%.2f$)'%corrcoeff)
+    print(f"Slope of trend line: {m:.2f} +- {res.bse[0]:.2f} m^2/C")
     # estimate x when y = 0
     x0 = -b/m
-    print(f"Quarter lagged temperature when kelp area is zero: {x0:.2f}C")
+    # perform monte carlo simulation to estimate error in x0
+    x0s = []
+    for i in range(1000):
+        # sample from normal distribution
+        m_sample = np.random.normal(m, res.bse[0])
+        b_sample = np.random.normal(b, res.bse[1])
+        # estimate x when y = 0
+        x0_sample = -b_sample/m_sample
+        x0s.append(x0_sample)
+    print(f"One Quarter lagged temperature when kelp area is zero: {x0:.2f} +- {np.std(x0s):.2f}C")
+
 
     # temp lagged by two quarters
     ax.plot(mean_temp_lag2[2:]-273.15, mean_kelp[2:],  'o', color='blue', markersize=4)
@@ -81,9 +107,21 @@ def lag_correlation(kelp_metrics):
     m,b = res.params[0], res.params[1]
     x = np.linspace(np.min(mean_temp_lag2[2:]-273.15), np.max(mean_temp_lag2[2:]-273.15), 100)
     corrcoeff = np.corrcoef(mean_temp_lag2[2:]-273.15, mean_kelp[2:])[0,1]
+    print(f"Correlation coefficient: {corrcoeff:.2f}")
     ax.plot(x, m*x+b, 'b-',alpha=0.75,lw=2,label=r'Temperature Lagged by Two Quarters ($r=%.2f$)'%corrcoeff)
+    print(f"Slope of trend line: {m:.2f} +- {res.bse[0]:.2f} m^2/C")
+    # estimate x when y = 0
     x0 = -b/m
-    print(f"Two Quarter lagged temperature when kelp area is zero: {x0:.2f}C")
+    # perform monte carlo simulation to estimate error in x0
+    x0s = []
+    for i in range(1000):
+        # sample from normal distribution
+        m_sample = np.random.normal(m, res.bse[0])
+        b_sample = np.random.normal(b, res.bse[1])
+        # estimate x when y = 0
+        x0_sample = -b_sample/m_sample
+        x0s.append(x0_sample)
+    print(f"Two Quarter lagged temperature when kelp area is zero: {x0:.2f} +- {np.std(x0s):.2f}C")
 
     ax.set_ylabel(r'Kelp Area $[m^2]$', fontsize=14)
     ax.set_xlabel('Sea Surface Temperature [C]', fontsize=14)
@@ -99,14 +137,32 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_31_36.pkl")
+                        default="Data/kelp_metrics_33_36.pkl")
     args = parser.parse_args()
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
         data = pickle.load(f)
 
+    # print lat values from file name
+    print(f"Latitude Range: {args.file_path.split('_')[-2].split('.')[0]} - {args.file_path.split('_')[-1].split('.')[0]}")
+
     # plot time series
     fig, ax = lag_correlation(data)
     plt.savefig(args.file_path.replace('.pkl', '_lag_correlation.png'))
     plt.show()
+
+    # | 23.80 +- 3.04 | 26.12 +- 5.00 | 20.40 +- 2.10 |
+    # perform a monte carlo simulation to estimate the average temperature
+    Ts = []
+    for i in range(1000):
+        # sample from normal distribution
+        mean_temp_sample = np.random.normal(23.80, 3.04)
+        mean_temp_lag_sample = np.random.normal(26.12, 5.00)
+        mean_temp_lag2_sample = np.random.normal(20.40, 2.10)
+        # estimate average temperature
+        T = (mean_temp_sample + mean_temp_lag_sample + mean_temp_lag2_sample) / 3.0
+        Ts.append(T)
+    print(f"Average Temperature: {np.mean(Ts):.2f} +- {np.std(Ts):.2f}C")
+    # max
+    
