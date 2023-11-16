@@ -185,13 +185,6 @@ Even though the parameters individually may be correlated to the amount of kelp,
 | Temperature Lag         | -0.314                  | 0.420              | 0.194               |
 | Temperature Lag 2       | -0.172                  | 0.401              | 0.085               |
 
-Avg. Absolute Error (OLS) Train: 142.281 m^2
-Avg. Absolute Error (OLS) Test: 139.645 m^2
-Avg. Absolute Error (MLP) train: 134.895 m^2 (50)
-Avg. Absolute Error (MLP) test: 148.805 m^2
-Avg. Absolute Error (RF) train: 137.852 m^2
-Avg. Absolute Error (RF) test: 139.215 m^2
-
 # Datasets
 
 We use various data sets including kelp biomass, sea surface temperature, and digital elevation models.
