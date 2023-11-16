@@ -149,7 +149,7 @@ The largest correlations with kelp abundace are the temperatures with a one quar
 | Slope of trend line with two quarters lag (m^2/C) | 1.51 +- 6.53 | -17.52 +- 3.45 | -11.58 +- 4.13 |
 ||||
 | Temperature when kelp abundance is zero (C) | 45.93 +- 1682.29 | 6.37 +- 5.29 | 4.66 +- 22.76 |
-| Temperature when kelp abundance is zero using a quarter lag (C) | 23.80 +- 3.04 | 26.12 +- 5.00 | 20.40 +- 2.10 |
+| Temperature when kelp abundance is zero using a quarter lag (C) (T0) | 23.80 +- 3.04 | 26.12 +- 5.00 | 20.40 +- 2.10 |
 | Temperature when kelp abundance is zero using 2 quarters lag (C) | -137.90 +- 1423.19 | 27.84 +- 7.83 | 31.45 +- 127.13 |
 ||||
 | Year at which avg. temp reaches 23.47 +- 2.11C | 2055.37 +- 17.89 | 2070.05 +- 21.60 | 2139.78 +- 32.90 |
