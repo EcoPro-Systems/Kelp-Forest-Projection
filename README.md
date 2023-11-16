@@ -153,6 +153,7 @@ The largest correlations with kelp abundace are the temperatures with a one quar
 | Temperature when kelp abundance is zero using 2 quarters lag (C) | -137.90 +- 1423.19 | 27.84 +- 7.83 | 31.45 +- 127.13 |
 ||||
 | Year at which avg. temp reaches 23.47 +- 2.11C | 2055.37 +- 17.89 | 2070.05 +- 21.60 | 2139.78 +- 32.90 |
+| Year at which avg. temp reaches T0 | 2058.10 +- 26.06 | 2097.48 +- 51.18 | 2091.29 +- 32.72 |
 
 | | | |
 |-|-|-|
