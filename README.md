@@ -37,12 +37,13 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 
 ## Analysis Scripts
 
-The python scripts can be run locally and the jupyter notebooks are meant to be run on the [CMDA server](https://hub.jpl-cmda.org).
+
 
 | Script Name | Description | 
 | ----------- | ----------- |
-| `create_interpolated_sst.py`, `create_interpolated_sst.ipynb` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
-| `kelp_metrics.py`, `Kelp_Metrics.ipynb` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
+| `create_interpolated_sst.py` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
+| `create_interpolated_sst_sim.py` | Interpolate the simulated monthly SST data onto the same grid as the kelp data(quarterly) and create a new file called: `kelp_interpolated_data_sim.pkl`  ![](Data/kelp_timeseries_sim.png) |
+| `kelp_metrics.py` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
 | `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. 
 | ![](Data/kelp_metrics_31_36_sst_timeseries.png) | ![](Data/kelp_metrics_31_36_kelp_timeseries.png) |
 | `plot_histogram_sst.py` `plot_histogram_kelp.py`   | Create seasonal histograms for change in abundance using `kelp_metrics.pkl`, averages over the entire region. |
@@ -223,5 +224,6 @@ NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern Califor
 
 
 ## To Do
-- Get future temperature data + make predictions using best regressor
-- Fit trend to Kelp vs. lag-temperature, estimate temperature at which kelp = 0
+- Compute sunlight for projection data
+- Run projection data through regressors
+- Compare MUR SST to projection SST within region'

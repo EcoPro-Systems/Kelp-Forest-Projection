@@ -18,8 +18,13 @@ if __name__ == "__main__":
         data = pickle.load(f)
 
     # # Access the latitude and longitude variables from the dataset
-    # lat_lon_all = (data['lat'], data['lon'])
-    # lat_lon = np.unique(lat_lon_all, axis=1) # degrees
+    lat_lon_all = (data['lat'], data['lon'])
+    lat_lon = np.unique(lat_lon_all, axis=1) # degrees
+
+    # save unique values to csv
+    df = pd.DataFrame({'Latitude': lat_lon[0], 'Longitude': lat_lon[1]})
+    df.to_csv(args.file_path.replace('.pkl', '.csv').replace("metrics","locations_unique"), index=False)
+    print(f"Saved CSV file to {args.file_path.replace('.pkl', '.csv').replace('metrics','locations_unique')}")
 
     # # print set of unique lat/lon values
     # print("Unique Lat/Lon Values:")
@@ -49,5 +54,5 @@ if __name__ == "__main__":
     df = pd.DataFrame({'Latitude': lat, 'Longitude': lon})
 
     # Save the DataFrame to a CSV file
-    df.to_csv(args.file_path.replace('.pkl', '.csv').replace("metrics","locations"), index=False)
-    print(f"Saved CSV file to {args.file_path.replace('.pkl', '.csv').replace('metrics','locations')}")
+    df.to_csv(args.file_path.replace('.pkl', '.csv').replace("metrics","locations_gridded"), index=False)
+    print(f"Saved CSV file to {args.file_path.replace('.pkl', '.csv').replace('metrics','locations_gridded')}")
