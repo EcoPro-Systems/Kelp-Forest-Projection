@@ -59,7 +59,7 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | | Trend with previous quarter's temperature ![](Data/kelp_metrics_27_37_quarterly_lag.png) | 
 | `regressors_optimize.py` | Hyperparameter optimization for regression algorithms using scikit-learn | 
 | `regressors_train.py` | Train various regression models to predict the abundance of Kelp using ordinary least-squares, multi-layer perceptron and random forest with features from `kelp_metrics.pkl`. |
-| ![]() | ![](Data/kelp_metrics_31_36_regressors.png) |
+| ![]() | ![](Data/kelp_metrics_27_37_regressors.png) |
 | `regressors_predict.py` | ![](Data/kelp_OLS_sim_27_37_ssp126_BGL_regressors.png) |
 
 # Tests for statistical significance
