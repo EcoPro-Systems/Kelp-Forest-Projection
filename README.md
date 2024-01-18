@@ -62,6 +62,7 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | ![]() | ![](Data/kelp_metrics_27_37_regressors.png) |
 | `regressors_predict.py` | ![](Data/kelp_OLS_sim_27_37_ssp126_BGL_regressors.png) |
 
+
 # Tests for statistical significance
 
 | Annual P-Vals | SST vs. Kelp | Time vs. SST | Time vs. Kelp |
@@ -223,6 +224,7 @@ NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern Califor
 
 
 ## To Do
-- Compute T0 for N/S region, 3 regions is too noisy in middle
-- Change from mean kelp prediction to max kelp prediction (2 output MLP or OLS?)
-- maximum area in each location vs time series, annual max?
+- Projection results at each location
+- netcdf file of projection file (every location)
+- Compute T0 for N/S region
+- Update tables

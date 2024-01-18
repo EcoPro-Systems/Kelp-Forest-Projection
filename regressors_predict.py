@@ -4,6 +4,9 @@ import numpy as np
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
+from scipy.spatial import cKDTree
+import xarray as xr
+from tqdm import tqdm
 
 if __name__ == "__main__":
     # argparse for input filepath
@@ -75,7 +78,7 @@ if __name__ == "__main__":
 
     # construct features
     features = [
-        time_sim, # days, 0-365*20
+        time_sim, # days
         data_sim['sunlight'],
         data_sim['temp_lag'],
         data_sim['temp_lag2'],
@@ -91,6 +94,7 @@ if __name__ == "__main__":
     ]
 
     X_test = np.array(features).T
+
 
     # remove nans
     nanmask_test = np.isnan(data_sim['temp_lag']) | np.isnan(data_sim['temp_lag2'])
@@ -239,3 +243,57 @@ if __name__ == "__main__":
     plt.savefig(file_name)
     print(f"Saved {file_name}")
     plt.close()
+
+
+    # create nearest neighbor algorithm to map time, lat, lon to kelp
+    tree = cKDTree(np.array([time_sim, data_sim['lat'][~nanmask_test], data_sim['lon'][~nanmask_test]]).T)
+    def predict_kelp(time, lat, lon):
+        dist, idx = tree.query(np.array([time, lat, lon]).T)
+        X_test = np.array([time, data_sim['sunlight'][idx], data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
+        return np.dot(X_test, coeffs)    
+
+    # days since min date
+    times = np.unique(data_sim['time']).astype('datetime64[D]')
+    times = times - np.min(time)
+    times = times.astype(int)
+
+    lat = data_sim['lat']
+    lon = data_sim['lon']
+    # find unique lat/lon pairs
+    latlon = np.array([lat, lon]).T
+    latlon = np.unique(latlon, axis=0)
+
+    kelp = np.zeros((len(times), len(latlon)))
+    for i, t in tqdm(enumerate(times)):
+        for j, ll in enumerate(latlon):
+            kelp[i,j] = predict_kelp(t, ll[0], ll[1])
+
+    # create xarray dataset
+    # use xarray to save the data in the format
+    # Coordinates:
+    # * time        (time) datetime64[ns] 1984-02-15 1984-05-15 ... 2022-11-15
+    # Dimensions without coordinates: station
+    # Data variables: (12/13)
+    #     latitude    (station) float64 ...
+    #     longitude   (station) float64 ...
+    #     year        (time) int32 1984 1984 1984 1984 1985 ... 2022 2022 2022 2022
+    #     quarter     (time) int16 1 2 3 4 1 2 3 4 1 2 3 4 ... 1 2 3 4 1 2 3 4 1 2 3 4
+    #     biomass     (time, station) float64 ...
+
+
+    ds = xr.Dataset(
+        data_vars = {
+            'latitude': (['station'], latlon[:,0]),
+            'longitude': (['station'], latlon[:,1]),
+            'year': (['time'], times // 365 + 1984),
+            'quarter': (['time'], times % 365 // 91 + 1),
+            'biomass': (['time', 'station'], kelp)
+        },
+        coords = {
+            'time': times
+        }
+    )
+    ds.to_netcdf(args.file_path_sim.replace('.pkl', '_regressors.nc'))
+
+    # email peter how to get:
+    # how to get four ecopro projections before mid-feb
