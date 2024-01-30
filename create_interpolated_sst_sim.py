@@ -52,10 +52,14 @@ if __name__ == "__main__":
     parser.add_argument('-c', '--climate_scenario', type=str,
                         help='climate scenario (ssp126, ssp585)',
                         default="ssp126")
+    # climate model (CanESM5/GFDL-ESM4)
+    parser.add_argument('-m', '--climate_model', type=str,
+                        help='climate model (CanESM5/GFDL-ESM4)',
+                        default="CanESM5")
     # std vs BGL downscaling
     parser.add_argument('-d', '--downscaling', type=str,
                         help='downscaling method (std, BGL)',
-                        default="std")
+                        default="BGL")
     args = parser.parse_args()
 
     # load the Kelp biomass
@@ -69,7 +73,7 @@ if __name__ == "__main__":
     projected_times = np.array(projected_times)
 
     # load the monthly SST data from climate simulation
-    sim_data = xr.open_dataset(f"Data/tos_Omon_GFDL-ESM4_{args.climate_scenario}_r1i1p1f1_gr_2002-2100.downscaled_{args.downscaling}.unique.nc", decode_times=False)
+    sim_data = xr.open_dataset(f"Data/tos_Omon_{args.climate_model}_{args.climate_scenario}_r1i1p1f1_gr_2002-2100.downscaled_{args.downscaling}.unique.nc", decode_times=False)
 
     # Dimensions:  (index: 339690, time: 972)
     # Coordinates:
@@ -178,5 +182,5 @@ if __name__ == "__main__":
     ax.set_ylabel('SST')
     ax.legend()
     plt.tight_layout()
-    plt.savefig(f'Data/kelp_timeseries_{args.climate_scenario}_{args.downscaling}.png', dpi=300)
+    plt.savefig(f'Data/kelp_timeseries_{args.climate_model}_{args.climate_scenario}_{args.downscaling}.png', dpi=300)
     plt.close()

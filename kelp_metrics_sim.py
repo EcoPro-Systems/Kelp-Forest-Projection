@@ -173,7 +173,11 @@ if __name__ == "__main__":
     # std vs BGL downscaling
     parser.add_argument('-d', '--downscaling', type=str,
                         help='downscaling method (std, BGL)',
-                        default="std")
+                        default="BGL")
+    # climate model (CanESM5/GFDL-ESM4)
+    parser.add_argument('-m', '--climate_model', type=str,
+                        help='climate model (CanESM5/GFDL-ESM4)',
+                        default="CanESM5")
     # upper lat limit
     parser.add_argument('-u', '--upper_lat', type=float,
                         help='upper latitude limit',
@@ -274,5 +278,5 @@ if __name__ == "__main__":
     kelp_data = extract_kelp_metrics(data, bathymetry, sunlight, lower_lat, upper_lat)
 
     # save to pkl file
-    with open(f"Data/kelp_metrics_sim_{lower_lat:.0f}_{upper_lat:.0f}_{args.climate_scenario}_{args.downscaling}.pkl", 'wb') as f:
+    with open(f"Data/kelp_metrics_sim_{lower_lat:.0f}_{upper_lat:.0f}_{args.climate_model}_{args.climate_scenario}_{args.downscaling}.pkl", 'wb') as f:
         pickle.dump(kelp_data, f)
