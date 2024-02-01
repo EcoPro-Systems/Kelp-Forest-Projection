@@ -159,7 +159,18 @@ Follow these steps to create a new linear regression model from Kelp Watch + MUR
 |---|---|
 | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors_nosunlight.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) |
 
-In order to run without the sunlight feature search for `# SUNLIGHT` in `regressors_predict.py` and comment out the lines
+
+The sunlight feature can be toggled through the command line when running `regressors_predict.py`
+
+### Varying the Climate model
+
+These plots show various projections without the sunlight feature
+
+| CanESM5 | GFDL-ESM4 |
+| --- | --- |
+| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) |
+| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) |
+
 
 # Datasets
 

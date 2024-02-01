@@ -21,6 +21,10 @@ if __name__ == "__main__":
     parser.add_argument('-m', '--model', type=str, 
                         help='model type (OLS or MLP)',
                         default="OLS")
+    # sunlight bool
+    parser.add_argument('-s', '--sunlight', type=bool, 
+                        help='use sunlight as feature',
+                        default=False)
     args = parser.parse_args()
 
     # load data from disk
@@ -40,21 +44,38 @@ if __name__ == "__main__":
     print(len(time))
 
     # construct features
-    features = [
-        time, # days, 0-365*20
-        data['sunlight'], # SUNLIGHT
-        data['temp_lag']-273.15,
-        data['temp_lag2']-273.15,
-        np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
-    ]
 
-    feature_names = [
-        'time',
-        'sunlight', # SUNLIGHT
-        'temp_lag',
-        'temp_lag2',
-        'bias'
-    ]
+    if args.sunlight:
+        features = [
+            time, # days, 0-365*20
+            data['sunlight'], # SUNLIGHT
+            data['temp_lag']-273.15,
+            data['temp_lag2']-273.15,
+            np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
+        ]
+
+        feature_names = [
+            'time',
+            'sunlight', # SUNLIGHT
+            'temp_lag',
+            'temp_lag2',
+            'bias'
+        ]
+    else:
+        features = [
+            time, # days, 0-365*20
+            data['temp_lag']-273.15,
+            data['temp_lag2']-273.15,
+            np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
+        ]
+
+        feature_names = [
+            'time',
+            'temp_lag',
+            'temp_lag2',
+            'bias'
+        ]
+
 
     X = np.array(features).T
 
@@ -76,22 +97,38 @@ if __name__ == "__main__":
     time_sim = time_sim.astype(int)
     time_sim_dt = data_sim['time'] # datetime format
 
-    # construct features
-    features = [
-        time_sim, # days
-        data_sim['sunlight'], # SUNLIGHT
-        data_sim['temp_lag'],
-        data_sim['temp_lag2'],
-        np.ones(len(time_sim)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
-    ]
+    if args.sunlight:
 
-    feature_names = [
-        'time',
-        'sunlight', # SUNLIGHT
-        'temp_lag',
-        'temp_lag2',
-        'bias'
-    ]
+        # construct features
+        features = [
+            time_sim, # days
+            data_sim['sunlight'], # SUNLIGHT
+            data_sim['temp_lag'],
+            data_sim['temp_lag2'],
+            np.ones(len(time_sim)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
+        ]
+
+        feature_names = [
+            'time',
+            'sunlight', # SUNLIGHT
+            'temp_lag',
+            'temp_lag2',
+            'bias'
+        ]
+    else:
+        features = [
+            time_sim, # days
+            data_sim['temp_lag'],
+            data_sim['temp_lag2'],
+            np.ones(len(time_sim)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
+        ]
+
+        feature_names = [
+            'time',
+            'temp_lag',
+            'temp_lag2',
+            'bias'
+        ]
 
     X_test = np.array(features).T
 
@@ -204,8 +241,9 @@ if __name__ == "__main__":
     lon = float(args.file_path_sim.split('_')[4].split('.')[0])
     # extract type of model from fs
     climate_model = args.file_path_sim.split('_')[-2]
+    climate_sim = args.file_path_sim.split('_')[-3]
     scaling = args.file_path_sim.split('_')[-1].split('.')[0]
-    fig.suptitle(f"Kelp Projections at {lat:.0f}-{lon:.0f} N using {climate_model.upper()} {scaling.upper()}", fontsize=16)
+    fig.suptitle(f"Kelp Projections at {lat:.0f}-{lon:.0f} N using {climate_sim} {climate_model.upper()} {scaling.upper()}", fontsize=16)
     ax[0].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='black', label='Kelp Watch Data',alpha=0.90)
     ax[0].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label='Projections')
     ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-', color='limegreen', label=rf'{args.model.upper()} Model (avg. err: {abs_err_ols_train:.1f} m$^2$)')
@@ -213,7 +251,7 @@ if __name__ == "__main__":
     #ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-',alpha=0.33, color='blue')
     ax[0].legend(loc='upper left')
     #ax[0].set_xlabel("Time")
-    ax[0].set_ylabel(r"Kelp Area [m$^2$]")
+    ax[0].set_ylabel(r"Average Kelp Area per Station [m$^2$]")
     ax[0].grid(True,ls='--',alpha=0.5)
     ax[0].set_ylim([0,666])
     ax[0].set_xlim([np.min(utime_dt), np.max(utime_dt)])
@@ -223,19 +261,19 @@ if __name__ == "__main__":
     ax[1].set_ylim([0,666])
     ax[1].grid(True,ls='--',alpha=0.5)
     ax[1].set_xlabel("Time")
-    ax[1].set_ylabel(r"Kelp Area [m$^2$]")
+    ax[1].set_ylabel(r"Average Kelp Area per Station [m$^2$]")
     ax[1].legend(loc='upper left')
     ax[1].set_xlim([np.min(utime_test_dt), np.max(utime_test_dt)])
 
     # plot temperature time series for each location
-    ax[2].plot(utime_test_dt, mean_sst_test, 'c-', label=f'{climate_model.upper()} {scaling.upper()}')
+    ax[2].plot(utime_test_dt, mean_sst_test, 'c-', label=f'{climate_sim} {climate_model.upper()} {scaling.upper()}')
     ax[2].plot(utime_train_dt, mean_sst_train-273.15, 'k-', label=f'JPL MUR')
     ax[2].set_xlabel('Time')
     ax[2].set_ylabel('Sea Surface Temperature [C]')
     ax[2].legend()
     ax[2].grid(True,ls='--',alpha=0.5)
     ax[2].set_xlim([np.min(utime_test_dt), np.max(utime_test_dt)])
-
+    ax[2].set_ylim([13,22.5])
     plt.tight_layout()
     file_name = args.file_path_sim.replace('.pkl', '_regressors.png')
     file_name = file_name.replace('metrics', args.model)
@@ -243,14 +281,16 @@ if __name__ == "__main__":
     print(f"Saved {file_name}")
     plt.close()
 
+    dude()
 
     # create nearest neighbor algorithm to map time, lat, lon to kelp
     tree = cKDTree(np.array([time_sim, data_sim['lat'][~nanmask_test], data_sim['lon'][~nanmask_test]]).T)
     def predict_kelp(time, lat, lon):
         dist, idx = tree.query(np.array([time, lat, lon]).T)
-        # SUNLIGHT
-        X_test = np.array([time, data_sim['sunlight'][idx], data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
-        #X_test = np.array([time, data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
+        if args.sunlight:
+            X_test = np.array([time, data_sim['sunlight'][idx], data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
+        else:
+            X_test = np.array([time, data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
         return np.dot(X_test, coeffs)    
 
     # days since min date
