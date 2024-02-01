@@ -157,7 +157,7 @@ Follow these steps to create a new linear regression model from Kelp Watch + MUR
 
 | Without sunlight feature | With sunlight feature |
 |---|---|
-| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors_nosunlight.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) |
+| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors_nosunlight.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) |
 
 In order to run without the sunlight feature search for `# SUNLIGHT` in `regressors_predict.py` and comment out the lines
 
