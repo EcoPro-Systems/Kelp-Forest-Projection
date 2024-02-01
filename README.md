@@ -37,7 +37,6 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 
 ## Analysis Scripts
 
-
 | Script Name | Description | 
 | ----------- | ----------- |
 | `create_interpolated_sst.py` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
@@ -60,7 +59,9 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | `regressors_optimize.py` | Hyperparameter optimization for regression algorithms using scikit-learn | 
 | `regressors_train.py` | Train various regression models to predict the abundance of Kelp using ordinary least-squares, multi-layer perceptron and random forest with features from `kelp_metrics.pkl`. |
 | ![]() | ![](Data/kelp_metrics_27_37_regressors.png) |
-| `regressors_predict.py` | ![](Data/kelp_OLS_sim_27_37_ssp126_BGL_regressors.png) |
+| `regressors_predict.py` |  Use the trained regression models to predict the abundance of Kelp using features from `kelp_metrics_sim.pkl`. |
+| | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | 
+
 
 
 # Tests for statistical significance
@@ -73,93 +74,42 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | [Mann.Kendall](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mstats.kendalltau.html) | 0.164        | 0.000        | 0.080        |
 | [Linregress](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html)  | 0.149        | 0.001        | 0.053        | 
 
-Signficant p-vals are less than ~0.05-0.1, where smaller values are more significant. These values are measured in the `trends_annual.py` script.
+Signficant trends occur when p-vals are less than ~0.05-0.1, where smaller values are more significant. These values are measured in the `trends_annual.py` script.
 
 | Quarterly P-vals| SST vs. Kelp | Time vs. SST | Time vs. Kelp |
 |-----------------|--------------|--------------|---------------|
-| Pearsonr        | 0.000        | 0.033        | 0.166         |
-| Kendalltau      | 0.009        | 0.051        | 0.213         |
-| Spearmanr       | 0.003        | 0.041        | 0.202         | 
-| Mann.Kendall    | 0.009        | 0.051        | 0.213         |
-| Linregress      | 0.000        | 0.033        | 0.166         |
+| Pearsonr        | 0.008        | 0.016        | 0.557         |
+| Kendalltau      | 0.083        | 0.016        | 0.493         |
+| Spearmanr       | 0.038        | 0.013        | 0.434         | 
+| Mann.Kendall    | 0.083        | 0.016        | 0.493         |
+| Linregress      | 0.008        | 0.016        | 0.557         |
 
 One thing these tables don't show is the direction of the correction but from the quarterly plots above we see an inverse trend between Kelp and SST from a quarter before. The trend implies some at some temperature around ~22C the kelp abundance reaches 0.
 
 | Quarterly P-vals | SST_lag vs. Kelp | Time vs. SST_lag | Time vs. Kelp |
 |------------------|------------------|------------------|--------------|
-| Pearsonr         | 0.000            | 0.094            | 0.295        |
-| Kendalltau       | 0.000            | 0.092            | 0.346        |
-| Spearmanr        | 0.000            | 0.065            | 0.333        |
-| Mann.Kendall     | 0.000            | 0.092            | 0.346        |
-| Linregress       | 0.000            | 0.094            | 0.295        |
-
-### Pearson's correlation:
-- Measures the linear relationship between two continuous variables 
-- Produces a correlation coefficient (r) from -1 to +1
-   - +1 is a perfect positive linear relationship
-   - -1 is a perfect negative linear relationship 
-- Also provides a p-value to test if the correlation is statistically significant
-
-### Kendall's tau:
-- Nonparametric test that looks at concordant and discordant pairs
-- Concordant pairs are when both values increase or decrease together 
-- Discordant pairs are when one value increases while the other decreases
-- Tau coefficient indicates the net correlation of the concordant/discordant pairs
-- Tau close to +1/-1 indicates a strong monotonic trend
-
-### Mann-Kendall: 
-- Nonparametric test specifically for monotonic upward or downward trends over time
-- Compares each data point to all subsequent points 
-- Positive differences indicate an upward trend, negative differences indicate downward 
-- Statistical test on these differences determines if the trend is significant
-
-
-### Spearman's Rank Correlation:
-- Nonparametric measure of correlation between two variables
-- Assesses monotonic relationship rather than linear 
-- Converts data values to ranks before calculating coefficient
-- Coefficient (r) ranges from -1 to +1
-- Positive r means variables increase together 
-- Negative r means one increases as other decreases
-- r near zero means little to no association
-- r of +1/-1 indicates perfect monotonic relationship
-- Tests significance of r using a hypothesis test
-- Produces a p-value to determine if correlation is significant
-- Useful for non-normal distributions or nonlinear relationships
-- Simple to calculate and interpret
-- Less sensitive to outliers compared to Pearson correlation
-
-### Linear Regression analysis:
-- Fits a straight line model to the data 
-- Tests if slope coefficient is significantly different than zero
-- Slope significantly greater than zero indicates increasing trend
-- Slope significantly less than zero indicates decreasing trend
+| Pearsonr         | 0.000            | 0.059            | 0.557        |
+| Kendalltau       | 0.000            | 0.031            | 0.493        |
+| Spearmanr        | 0.000            | 0.028            | 0.434        |
+| Mann.Kendall     | 0.000            | 0.031            | 0.493        |
+| Linregress       | 0.000            | 0.059            | 0.557        |
 
 # Temperature vs. Kelp Abundance per Region
 
-The largest correlations with kelp abundace are the temperatures with a one quarter lag. The kelp decreases to 0 at an average temperature of ~23.47 +- 2.11C.
+The largest correlations with kelp abundace are the temperatures with a one quarter lag. The kelp decreases to 0 at an average temperature of ~23-24C. 
 
-|  | 27 - 30N | 30 - 33N | 33 - 36N |
+|  | 27 - 32N | 32 - 37N | 27 - 37N |
 |-|-|-|-|
-| Correlation coefficient | -0.16 | 0.45 | 0.32 |  
-| Correlation coefficient for One Quater Lag | -0.78 | -0.64 | -0.82 |
-| Correlation coefficient for Two Quarter Lag | 0.03 | -0.52 | -0.32 |
+| Correlation coefficient for One Quater Lag | -0.80 | -0.78 | -0.83 |
 ||||
-| Slope of trend line (m^2/C) | -8.51 +- 6.32 | 15.70 +- 3.67 | 17.69 +- 6.27 |
 | Slope of trend line with one quater lag (m^2/C) | -42.40 +- 4.04 | -21.09 +- 3.04 | -36.10 +- 2.99 |
-| Slope of trend line with two quarters lag (m^2/C) | 1.51 +- 6.53 | -17.52 +- 3.45 | -11.58 +- 4.13 |
 ||||
-| Temperature when kelp abundance is zero (C) | 45.93 +- 1682.29 | 6.37 +- 5.29 | 4.66 +- 22.76 |
-| Temperature when kelp abundance is zero using a quarter lag (C) (T0) | 23.80 +- 3.04 | 26.12 +- 5.00 | 20.40 +- 2.10 |
-| Temperature when kelp abundance is zero using 2 quarters lag (C) | -137.90 +- 1423.19 | 27.84 +- 7.83 | 31.45 +- 127.13 |
+| Temperature when kelp abundance is zero using a quarter lag (C) (T0) | 23.49 +- 2.33 | 21.23 +- 3.09 | 22.36 +- 2.93 |
 ||||
-| Year at which avg. temp reaches 23.47 +- 2.11C | 2055.37 +- 17.89 | 2070.05 +- 21.60 | 2139.78 +- 32.90 |
-| Year at which avg. temp reaches T0 | 2058.10 +- 26.06 | 2097.48 +- 51.18 | 2091.29 +- 32.72 |
+| Year at which avg. temp reaches T0 | 2059.33 +- 20.50 | 2106.94 +- 51.45 | 2083.83 +- 35.07  |
+|![](Data/kelp_metrics_27_32_lag_correlation.png) | ![](Data/kelp_metrics_32_37_lag_correlation.png) | ![](Data/kelp_metrics_27_37_lag_correlation.png) |
+|![](Data/kelp_metrics_27_32_quarterly_lag.png) | ![](Data/kelp_metrics_32_37_quarterly_lag.png) | ![](Data/kelp_metrics_27_37_quarterly_lag.png) |
 
-| | | |
-|-|-|-|
-|![](Data/kelp_metrics_27_30_lag_correlation.png) | ![](Data/kelp_metrics_30_33_lag_correlation.png) | ![](Data/kelp_metrics_33_36_lag_correlation.png) |
-|![](Data/kelp_metrics_27_30_quarterly_lag.png) | ![](Data/kelp_metrics_30_33_quarterly_lag.png) | ![](Data/kelp_metrics_33_36_quarterly_lag.png) |
 
 # Predictions with Machine Learning
 
@@ -185,6 +135,31 @@ Even though the parameters individually may be correlated to the amount of kelp,
 | Sunlight [day]          | 0.304                   | 0.186              | 0.702               |
 | Temperature Lag         | -0.314                  | 0.420              | 0.194               |
 | Temperature Lag 2       | -0.172                  | 0.401              | 0.085               |
+
+
+### How to create a projection from new simulation data:
+
+Follow these steps to create a new linear regression model from Kelp Watch + MUR SST values and then project the model onto new simulation data.
+
+1) Download the temperature file to `Data/`
+
+2)	Interpolate + reformat simulation data onto same grid as Kelp
+
+    `python create_interpolated_sst_sim.py -c ssp126 -m CanESM5`
+
+3)	Estimate some spatial + timeseries metrics needed for the linear regression model
+
+    `python kelp_metrics_sim.py -c ssp126 -d BGL -l 27 -u 37 -m CanESM5`
+
+4)	Fit a linear regression model and perform a projection on 
+
+    `python regressors_predict.py -f Data/kelp_metrics_27_37.pkl -fs Data/kelp_metrics_sim_27_37_ssp126_BGL.pkl`
+
+| Without sunlight feature | With sunlight feature |
+|---|---|
+| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors_nosunlight.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) |
+
+In order to run without the sunlight feature search for `# SUNLIGHT` in `regressors_predict.py` and comment out the lines
 
 # Datasets
 
@@ -221,10 +196,3 @@ We use the [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.
 GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ice topo/bathy; 15 arc-second resolution)
 
 NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
-
-
-## To Do
-- Projection results at each location
-- netcdf file of projection file (every location)
-- Compute T0 for N/S region
-- Update tables

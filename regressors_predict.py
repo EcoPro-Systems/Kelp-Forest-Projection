@@ -16,7 +16,7 @@ if __name__ == "__main__":
                         default="Data/kelp_metrics_27_37.pkl")
     parser.add_argument('-fs', '--file_path_sim', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_sim_27_37_ssp585_BGL.pkl")
+                        default="Data/kelp_metrics_sim_27_37_CanESM5_ssp585_BGL.pkl")
     #model type
     parser.add_argument('-m', '--model', type=str, 
                         help='model type (OLS or MLP)',
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # construct features
     features = [
         time, # days, 0-365*20
-        data['sunlight'],
+        data['sunlight'], # SUNLIGHT
         data['temp_lag']-273.15,
         data['temp_lag2']-273.15,
         np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     feature_names = [
         'time',
-        'sunlight',
+        'sunlight', # SUNLIGHT
         'temp_lag',
         'temp_lag2',
         'bias'
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # construct features
     features = [
         time_sim, # days
-        data_sim['sunlight'],
+        data_sim['sunlight'], # SUNLIGHT
         data_sim['temp_lag'],
         data_sim['temp_lag2'],
         np.ones(len(time_sim)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
@@ -87,14 +87,13 @@ if __name__ == "__main__":
 
     feature_names = [
         'time',
-        'sunlight',
+        'sunlight', # SUNLIGHT
         'temp_lag',
         'temp_lag2',
         'bias'
     ]
 
     X_test = np.array(features).T
-
 
     # remove nans
     nanmask_test = np.isnan(data_sim['temp_lag']) | np.isnan(data_sim['temp_lag2'])
@@ -133,7 +132,7 @@ if __name__ == "__main__":
         # fit a linear model to the data with OLS
         # 500 - 22930.63165755
 
-        mlp = MLPRegressor(hidden_layer_sizes=(8,), max_iter=100, alpha=0.001, solver='adam', verbose=True)
+        mlp = MLPRegressor(hidden_layer_sizes=(4,), max_iter=100, alpha=0.001, solver='adam', verbose=True)
         mlp.fit(Xp, y)
         y_ols_train = mlp.predict(Xp)
         y_ols_test = mlp.predict(Xp_test)
@@ -249,7 +248,9 @@ if __name__ == "__main__":
     tree = cKDTree(np.array([time_sim, data_sim['lat'][~nanmask_test], data_sim['lon'][~nanmask_test]]).T)
     def predict_kelp(time, lat, lon):
         dist, idx = tree.query(np.array([time, lat, lon]).T)
+        # SUNLIGHT
         X_test = np.array([time, data_sim['sunlight'][idx], data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
+        #X_test = np.array([time, data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
         return np.dot(X_test, coeffs)    
 
     # days since min date
@@ -264,6 +265,7 @@ if __name__ == "__main__":
     latlon = np.unique(latlon, axis=0)
 
     kelp = np.zeros((len(times), len(latlon)))
+    print(len(times), len(latlon))
     for i, t in tqdm(enumerate(times)):
         for j, ll in enumerate(latlon):
             kelp[i,j] = predict_kelp(t, ll[0], ll[1])
@@ -280,7 +282,6 @@ if __name__ == "__main__":
     #     quarter     (time) int16 1 2 3 4 1 2 3 4 1 2 3 4 ... 1 2 3 4 1 2 3 4 1 2 3 4
     #     biomass     (time, station) float64 ...
 
-
     ds = xr.Dataset(
         data_vars = {
             'latitude': (['station'], latlon[:,0]),
@@ -294,6 +295,3 @@ if __name__ == "__main__":
         }
     )
     ds.to_netcdf(args.file_path_sim.replace('.pkl', '_regressors.nc'))
-
-    # email peter how to get:
-    # how to get four ecopro projections before mid-feb

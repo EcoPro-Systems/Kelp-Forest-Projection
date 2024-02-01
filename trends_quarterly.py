@@ -53,9 +53,12 @@ if __name__ == "__main__":
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
                         default="Data/kelp_metrics_27_37.pkl")
+    parser.add_argument('-t', '--temp_key', type=str,
+                        help='key for temperature data (temp, temp_lag, temp_lag2)',
+                        default='temp_lag')
     args = parser.parse_args()
 
-    region = f"{args.file_path.split('_')[2]}-{args.file_path.split('_')[3]}N"
+    region = f"{args.file_path.split('_')[2]}-{args.file_path.split('_')[3]}N".replace('.pkl','')
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
@@ -88,22 +91,22 @@ if __name__ == "__main__":
     
     # loop over each quarter and compute the mean and std
     for i, t in enumerate(utime):
-        mask = (time == t) & (~np.isnan(data['temp_lag']))
+        mask = (time == t) & (~np.isnan(data[args.temp_key]))
         quarterly_kelp[i] = np.nanmean(data['kelp'][mask])
         quarterly_kelp_std[i] = np.std(data['kelp'][mask])
-        quarterly_sst[i] = np.nanmean(data['temp_lag'][mask])
-        quarterly_sst_std[i] = np.std(data['temp_lag'][mask])
+        quarterly_sst[i] = np.nanmean(data[args.temp_key][mask]) 
+        quarterly_sst_std[i] = np.std(data[args.temp_key][mask])
 
     # remove first quarter for lag nan
-    quarterly_kelp = quarterly_kelp[1:]
-    quarterly_kelp_std = quarterly_kelp_std[1:]
-    quarterly_sst = quarterly_sst[1:]
-    quarterly_sst_std = quarterly_sst_std[1:]
+    quarterly_kelp = quarterly_kelp[2:]
+    quarterly_kelp_std = quarterly_kelp_std[2:]
+    quarterly_sst = quarterly_sst[2:]
+    quarterly_sst_std = quarterly_sst_std[2:]
 
     # float presentation of time
     starting_year = int(f"{time_dt.min().astype('datetime64[Y]')}")
     quarterly_time = starting_year + utime/365.
-    quarterly_time = quarterly_time[1:]
+    quarterly_time = quarterly_time[2:]
 
     # measure a seasonal trend line with OLS
     X = np.array([quarterly_time, np.ones(len(quarterly_time))]).T
@@ -111,7 +114,7 @@ if __name__ == "__main__":
     coeffs = res.params
     y_kelp = np.dot(X, coeffs)
     # print slope +- error
-    print(f"Slope of kelp line: {coeffs[0]:.2f} +- {res.bse[0]:.2f} m^2/year")
+    print(f"\nSlope of kelp line: {coeffs[0]:.2f} +- {res.bse[0]:.2f} m^2/year")
     # monte carlo to find year at which kelp reaches 0
     qtimes = []
     for i in range(10000):
@@ -128,6 +131,8 @@ if __name__ == "__main__":
     y_sst = np.dot(X, coeffs_sst)
     # print slope +- error
     print(f"Slope of sst line: {coeffs_sst[0]:.2f} +- {res.bse[0]:.2f} C/year")
+    # print correlation coefficient
+    print(f"Correlation coefficient: {np.corrcoef(quarterly_sst, quarterly_kelp)[0,1]:.2f} of {args.temp_key} and Kelp")
 
     # measure yearly trend between sst and kelp
     X = np.array([quarterly_sst, np.ones(len(quarterly_sst))]).T
