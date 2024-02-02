@@ -102,13 +102,16 @@ The largest correlations with kelp abundace are the temperatures with a one quar
 |-|-|-|-|
 | Correlation coefficient for One Quater Lag | -0.80 | -0.78 | -0.83 |
 ||||
-| Slope of trend line with one quater lag (m^2/C) | -42.40 +- 4.04 | -21.09 +- 3.04 | -36.10 +- 2.99 |
+| Slope of trend line with one quater lag (m^2/C) | -40.15 +- 4.04 | -29.90 +- 3.04 | -35.39 +- 2.99 |
 ||||
 | Temperature when kelp abundance is zero using a quarter lag (C) (T0) | 23.49 +- 2.33 | 21.23 +- 3.09 | 22.36 +- 2.93 |
 ||||
 | Year at which avg. temp reaches T0 | 2059.33 +- 20.50 | 2106.94 +- 51.45 | 2083.83 +- 35.07  |
 |![](Data/kelp_metrics_27_32_lag_correlation.png) | ![](Data/kelp_metrics_32_37_lag_correlation.png) | ![](Data/kelp_metrics_27_37_lag_correlation.png) |
 |![](Data/kelp_metrics_27_32_quarterly_lag.png) | ![](Data/kelp_metrics_32_37_quarterly_lag.png) | ![](Data/kelp_metrics_27_37_quarterly_lag.png) |
+
+The temperature at which the kelp abundance reaches 0 is different by 0.58 sigma. It's unclear if the northern kelp is more resilient to temperature changes than the southern kelp. We're assuming they're the same species of giant kelp. The range of temperatures can vary from about 14-23C between ~27-37N along the coast of California. The kelp seems to be responding well to the temperature changes in the simulation data. The temperature fluctuations vary by about 8C in the simulation data and 7C in the JPL Mur observations. The kelp seems to be responding well to the temperature changes in the simulation data which only go up to ~22C
+
 
 
 # Predictions with Machine Learning
@@ -155,22 +158,37 @@ Follow these steps to create a new linear regression model from Kelp Watch + MUR
 
     `python regressors_predict.py -f Data/kelp_metrics_27_37.pkl -fs Data/kelp_metrics_sim_27_37_ssp126_BGL.pkl`
 
-| Without sunlight feature | With sunlight feature |
+The sunlight feature can be toggled through the command line when running `regressors_predict.py`. Below are a few results using different regression models and different climate models.
+-  OLS - Ordinary Least Squares
+-  MLP - Multi-Layer Perceptron
+
+| Without sunlight feature (OLS) | With sunlight feature (OLS) |
 |---|---|
-| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors_nosunlight.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) |
+| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_sunlight_regressors.png) |
+| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_sunlight_regressors.png) |
+| ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_sunlight_regressors.png) |
+| ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_sunlight_regressors.png) |
 
 
-The sunlight feature can be toggled through the command line when running `regressors_predict.py`
+| Without sunlight feature (MLP) | With sunlight feature (MLP) |
+|---|---|
+| ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp126_BGL_sunlight_regressors.png) |
+| ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp585_BGL_sunlight_regressors.png) |
+| ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp126_BGL_sunlight_regressors.png) |
+| ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp585_BGL_sunlight_regressors.png) |
+
+In all cases, when including sunlight as a feature, it gets a slightly better training error on our data but imposes this large negative slope compared to just the temperature-only model.
 
 ### Varying the Climate model
 
-These plots show various projections without the sunlight feature
+These plots show various projections without the sunlight feature. These plots use no sunlight feature and are made with the linear regression model. Within our region of interest we're assuming the same species of giant kelp. The range of temperatures can vary from about 14-23C between ~27-37N along the coast of California. The kelp seems to be responding well to the temperature changes in the simulation data. The temperature fluctuations vary by about 8C in the simulation data and 9C in the JPL Mur observations. Even projecting with the worst-case emission scenario the kelp remains relatively unphased by the temperature fluctations. The simulation data maxes out at a temperature around 22C while the measurements the regression model was trained on max out at 23C.
 
 | CanESM5 | GFDL-ESM4 |
 | --- | --- |
 | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) |
 | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) |
 
+There is a little to no difference between the projections from the two climate models. The kelp seems to be responding well to the temperature changes in every climate scenario. I think this speaks to the resilience of the plant. The model used for these is ordinary least squards.
 
 # Datasets
 

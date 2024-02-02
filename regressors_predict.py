@@ -21,10 +21,10 @@ if __name__ == "__main__":
     parser.add_argument('-m', '--model', type=str, 
                         help='model type (OLS or MLP)',
                         default="OLS")
-    # sunlight bool
-    parser.add_argument('-s', '--sunlight', type=bool, 
-                        help='use sunlight as feature',
-                        default=False)
+    # sunlight bool default false
+    parser.add_argument('-s', '--sunlight', action='store_true',
+                        help='use sunlight as input feature')
+    
     args = parser.parse_args()
 
     # load data from disk
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         # fit a linear model to the data with OLS
         # 500 - 22930.63165755
 
-        mlp = MLPRegressor(hidden_layer_sizes=(4,), max_iter=100, alpha=0.001, solver='adam', verbose=True)
+        mlp = MLPRegressor(hidden_layer_sizes=(4,2), max_iter=150, alpha=0.001, solver='adam', verbose=True)
         mlp.fit(Xp, y)
         y_ols_train = mlp.predict(Xp)
         y_ols_test = mlp.predict(Xp_test)
@@ -277,6 +277,8 @@ if __name__ == "__main__":
     plt.tight_layout()
     file_name = args.file_path_sim.replace('.pkl', '_regressors.png')
     file_name = file_name.replace('metrics', args.model)
+    if args.sunlight:
+        file_name = file_name.replace('regressors', 'sunlight_regressors')
     plt.savefig(file_name)
     print(f"Saved {file_name}")
     plt.close()
