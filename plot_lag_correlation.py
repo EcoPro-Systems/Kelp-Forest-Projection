@@ -151,3 +151,6 @@ if __name__ == "__main__":
     fig, ax = lag_correlation(data)
     plt.savefig(args.file_path.replace('.pkl', '_lag_correlation.png'))
     plt.show()
+
+
+    # TODO monte carlo the results to get a best-fit line and error bars

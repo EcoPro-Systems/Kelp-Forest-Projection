@@ -1,12 +1,14 @@
 import pickle
 import argparse
 import numpy as np
-import statsmodels.api as sm
-import matplotlib.pyplot as plt
-from sklearn.neural_network import MLPRegressor
-from scipy.spatial import cKDTree
 import xarray as xr
 from tqdm import tqdm
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+from scipy.spatial import cKDTree
+from scipy.interpolate import interp1d
+from sklearn.neural_network import MLPRegressor
+from create_interpolated_sst_sim import NearestNeighbor
 
 if __name__ == "__main__":
     # argparse for input filepath
@@ -16,7 +18,7 @@ if __name__ == "__main__":
                         default="Data/kelp_metrics_27_37.pkl")
     parser.add_argument('-fs', '--file_path_sim', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_sim_27_37_CanESM5_ssp585_BGL.pkl")
+                        default="Data/kelp_metrics_sim_27_37_GFDL-ESM4_ssp585_BGL.pkl")
     #model type
     parser.add_argument('-m', '--model', type=str, 
                         help='model type (OLS or MLP)',
@@ -26,6 +28,12 @@ if __name__ == "__main__":
                         help='use sunlight as input feature')
     
     args = parser.parse_args()
+
+    # extract climate model, scenario, and scaling from file_path_sim
+    parts = args.file_path_sim.split('_')
+    climate_scenario = parts[-2] # ssp585
+    climate_model = parts[-3] # GFDL-ESM4
+    scaling = parts[-1].split('.')[0]
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
@@ -47,30 +55,34 @@ if __name__ == "__main__":
 
     if args.sunlight:
         features = [
-            time, # days, 0-365*20
+            #time, # days, 0-365*20
             data['sunlight'], # SUNLIGHT
+            data['temp'] - 273.15,
             data['temp_lag']-273.15,
             data['temp_lag2']-273.15,
             np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
         ]
 
         feature_names = [
-            'time',
+            #'time',
             'sunlight', # SUNLIGHT
+            'temp',
             'temp_lag',
             'temp_lag2',
             'bias'
         ]
     else:
         features = [
-            time, # days, 0-365*20
+            #time, # days, 0-365*20
+            data['temp'] - 273.15,
             data['temp_lag']-273.15,
             data['temp_lag2']-273.15,
             np.ones(len(time)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
         ]
 
         feature_names = [
-            'time',
+            #'time',
+            'temp',
             'temp_lag',
             'temp_lag2',
             'bias'
@@ -101,30 +113,34 @@ if __name__ == "__main__":
 
         # construct features
         features = [
-            time_sim, # days
+            #time_sim, # days
             data_sim['sunlight'], # SUNLIGHT
+            data_sim['temp'],
             data_sim['temp_lag'],
             data_sim['temp_lag2'],
             np.ones(len(time_sim)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
         ]
 
         feature_names = [
-            'time',
+            #'time',
             'sunlight', # SUNLIGHT
+            'temp',
             'temp_lag',
             'temp_lag2',
             'bias'
         ]
     else:
         features = [
-            time_sim, # days
+            #time_sim, # days
+            data_sim['temp'],
             data_sim['temp_lag'],
             data_sim['temp_lag2'],
             np.ones(len(time_sim)) # w_1 * x_1 + w_2 * x_2 + ... + w_n * x_n + b
         ]
 
         feature_names = [
-            'time',
+            #'time',
+            'temp',
             'temp_lag',
             'temp_lag2',
             'bias'
@@ -133,11 +149,11 @@ if __name__ == "__main__":
     X_test = np.array(features).T
 
     # remove nans
-    nanmask_test = np.isnan(data_sim['temp_lag']) | np.isnan(data_sim['temp_lag2'])
+    nanmask_test = np.isnan(data_sim['temp_lag']) | np.isnan(data_sim['temp_lag2']) | np.isnan(data_sim['temp'])
     X_test = X_test[~nanmask_test]
     time_sim = time_sim[~nanmask_test]
     time_sim_dt = time_sim_dt[~nanmask_test]
-    print(len(time_sim))
+    print(f"Samples: {len(X)} Train, {len(X_test)} Test")
 
     # # compute correlation coefficient
     # for i in range(X.shape[1]-1):
@@ -157,7 +173,9 @@ if __name__ == "__main__":
 
     if args.model.lower() == 'ols':
         # fit a linear model to the data with OLS
-        res = sm.OLS(y, X).fit()
+        #res = sm.OLS(y, X).fit()
+        # add some regularization
+        res = sm.OLS(y, X).fit_regularized(alpha=0.001, L1_wt=0.1)
         coeffs = res.params
         y_ols_train = np.dot(X, coeffs)
         y_ols_test = np.dot(X_test, coeffs)
@@ -232,6 +250,22 @@ if __name__ == "__main__":
     slope_test, intercept_test = np.polyfit(utime_test, mean_ols_test, 1)
     print(f"Slope: {slope_test:.5f} C / year")
 
+    # slope between lag_temperature and kelp
+    #slope_kelp, intercept_kelp = np.polyfit(np.roll(mean_sst_train-273.15, 1)[1:], mean_ols_train[1:], 1)
+    # mur trend
+    slope_kelp, intercept_kelp = np.polyfit(np.roll(mean_sst_train-273.15, 1)[1:], bmean[1:], 1)
+
+    print(f"Slope: {slope_kelp:.5f} m^2 / C")
+
+    # mean_sst_test
+    kelp_projection = mean_sst_test * slope_kelp  + intercept_kelp
+    kelp_train = (mean_sst_train-273.15) * slope_kelp + intercept_kelp
+
+    # MSE kelp + ols
+    mse_kelp = np.mean(np.abs(bmean - mean_ols_train))
+    mse_projection = np.mean(np.abs(bmean - kelp_projection[:72]))
+    mse_test = np.mean(np.abs(bmean - mean_ols_test[:72]))
+    mse_train = np.mean(np.abs(bmean - kelp_train))
 
     # plot the data
     fig, ax = plt.subplots(3, 1, figsize=(11, 10))
@@ -240,24 +274,24 @@ if __name__ == "__main__":
     lat = float(args.file_path_sim.split('_')[3])
     lon = float(args.file_path_sim.split('_')[4].split('.')[0])
     # extract type of model from fs
-    climate_model = args.file_path_sim.split('_')[-2]
-    climate_sim = args.file_path_sim.split('_')[-3]
-    scaling = args.file_path_sim.split('_')[-1].split('.')[0]
-    fig.suptitle(f"Kelp Projections at {lat:.0f}-{lon:.0f} N using {climate_sim} {climate_model.upper()} {scaling.upper()}", fontsize=16)
+    fig.suptitle(f"Kelp Projections at {lat:.0f}-{lon:.0f} N using {climate_model} {climate_scenario.upper()} {scaling.upper()}", fontsize=16)
     ax[0].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='black', label='Kelp Watch Data',alpha=0.90)
-    ax[0].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label='Projections')
-    ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-', color='limegreen', label=rf'{args.model.upper()} Model (avg. err: {abs_err_ols_train:.1f} m$^2$)')
 
-    #ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-',alpha=0.33, color='blue')
+    #ax[0].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label=f'Projections (avg. err: {mse_test:.1f} m$^2$)',alpha=0.9)
+    #ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-', color='limegreen', label=rf'{args.model.upper()} Model (avg. err: {abs_err_ols_train:.1f} m$^2$)')
+    ax[0].plot(utime_test_dt[1:], kelp_projection[:-1], ls='-', color='limegreen', label=f'Climate Model (avg. err: {mse_projection:.1f} m$^2$)')
+    ax[0].plot(utime_train_dt[1:], kelp_train[:-1],  ls='-', color='red', label=f'MUR Model (avg. err: {mse_train:.1f} m$^2$)')
     ax[0].legend(loc='upper left')
-    #ax[0].set_xlabel("Time")
     ax[0].set_ylabel(r"Average Kelp Area per Station [m$^2$]")
     ax[0].grid(True,ls='--',alpha=0.5)
     ax[0].set_ylim([0,666])
     ax[0].set_xlim([np.min(utime_dt), np.max(utime_dt)])
 
-    ax[1].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label='Projections',alpha=0.9)
-    ax[1].plot(utime_train_dt, mean_ols_train,  ls='-', color='limegreen', label=f'{args.model.upper()} Model')
+    #ax[1].plot(utime_dt, bmean, ls='-', color='black', label='Kelp Watch Data',alpha=0.90)
+    #ax[1].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label='Projections',alpha=0.9)
+    #ax[1].plot(utime_train_dt, mean_ols_train,  ls='-', color='limegreen', label=f'{args.model.upper()} Model')
+    ax[1].plot(utime_train_dt[1:], kelp_train[:-1], ls='-', color='red', label=f'MUR Model')
+    ax[1].plot(utime_test_dt[1:], kelp_projection[:-1], ls='-', color='limegreen', label=f'Climate Model')
     ax[1].set_ylim([0,666])
     ax[1].grid(True,ls='--',alpha=0.5)
     ax[1].set_xlabel("Time")
@@ -266,7 +300,7 @@ if __name__ == "__main__":
     ax[1].set_xlim([np.min(utime_test_dt), np.max(utime_test_dt)])
 
     # plot temperature time series for each location
-    ax[2].plot(utime_test_dt, mean_sst_test, 'c-', label=f'{climate_sim} {climate_model.upper()} {scaling.upper()}')
+    ax[2].plot(utime_test_dt, mean_sst_test, 'c-', label=f'{climate_model} {climate_scenario.upper()} {scaling.upper()}')
     ax[2].plot(utime_train_dt, mean_sst_train-273.15, 'k-', label=f'JPL MUR')
     ax[2].set_xlabel('Time')
     ax[2].set_ylabel('Sea Surface Temperature [C]')
@@ -283,21 +317,20 @@ if __name__ == "__main__":
     print(f"Saved {file_name}")
     plt.close()
 
-    dude()
+    # TODO create a fill between region for projection uncertainties
+    # TODO add slopes to the plot
 
     # create nearest neighbor algorithm to map time, lat, lon to kelp
-    tree = cKDTree(np.array([time_sim, data_sim['lat'][~nanmask_test], data_sim['lon'][~nanmask_test]]).T)
-    def predict_kelp(time, lat, lon):
-        dist, idx = tree.query(np.array([time, lat, lon]).T)
-        if args.sunlight:
-            X_test = np.array([time, data_sim['sunlight'][idx], data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
-        else:
-            X_test = np.array([time, data_sim['temp_lag'][idx], data_sim['temp_lag2'][idx], 1])
-        return np.dot(X_test, coeffs)    
+    sim_lat = data_sim['lat'][~nanmask_test]
+    sim_lon = data_sim['lon'][~nanmask_test]
+    sim_sunlight = data_sim['sunlight'][~nanmask_test]
+    sim_temp = data_sim['temp'][~nanmask_test]
+    sim_temp_lag = data_sim['temp_lag'][~nanmask_test]
+    sim_temp_lag2 = data_sim['temp_lag2'][~nanmask_test]
 
     # days since min date
-    times = np.unique(data_sim['time']).astype('datetime64[D]')
-    times = times - np.min(time)
+    times_dt = np.unique(data_sim['time']).astype('datetime64[D]')
+    times = times_dt - np.min(times_dt)
     times = times.astype(int)
 
     lat = data_sim['lat']
@@ -306,11 +339,51 @@ if __name__ == "__main__":
     latlon = np.array([lat, lon]).T
     latlon = np.unique(latlon, axis=0)
 
-    kelp = np.zeros((len(times), len(latlon)))
+    temp = np.zeros((len(times), len(latlon)))
+
+    try:
+        # faster to interpolate from netcdf file then to use KDTree
+        sim_data = xr.open_dataset(f"Data/tos_Omon_{climate_model}_{climate_scenario}_r1i1p1f1_gr_2002-2100.downscaled_{scaling}.unique.nc", decode_times=False)
+        sim_times =  np.datetime64('1900-01-16T12:00:00') + np.array(sim_data.time.values, dtype='timedelta64[h]')
+        sim_sst = NearestNeighbor(sim_data.lat.values, sim_data.lon.values, sim_data.sst.values)
+        sim_data.close()
+
+        sim_times_day = sim_times.astype('datetime64[D]')
+        sim_times_day = sim_times_day - np.min(times_dt)
+        sim_times_day = sim_times_day.astype(int)
+    
+        # interpolate temperatures
+        for j, ll in tqdm(enumerate(latlon)):
+            sim_temps = sim_sst(ll[0], ll[1])
+
+            # second order interpolation
+            f_temp = interp1d(sim_times_day, sim_temps, kind='quadratic', fill_value='extrapolate')
+            temp[:,j] = f_temp(times)
+
+    except Exception as ex:
+        print(ex)
+        print("Using KDTree to interpolate temperature")
+        # nearest neighbor interpolation
+        tree_temp = cKDTree(np.array([time_sim, sim_lat, sim_lon]).T)
+        def predict_temp(time, lat, lon):
+            dist, idx = tree_temp.query(np.array([time, lat, lon]).T)
+            return sim_temp[idx]
+
+        for i, t in tqdm(enumerate(times)):
+            for j, ll in enumerate(latlon):
+                temp[i,j] = predict_temp(t, ll[0], ll[1])
+
+    # use temperature to predict kelp
     print(len(times), len(latlon))
-    for i, t in tqdm(enumerate(times)):
-        for j, ll in enumerate(latlon):
-            kelp[i,j] = predict_kelp(t, ll[0], ll[1])
+    kelp = np.zeros((len(times), len(latlon)))
+    # loop over locations
+    for j, ll in tqdm(enumerate(latlon)):
+        # create lagged temperature
+        temp_lag = np.roll(temp[:,j], 1)
+        # average data from different years but same quarter
+        temp_lag[0] = (temp[0,j] + temp[4,j] )/ 2
+        # predict kelp
+        kelp[:, j] = slope_kelp * temp[:,j] + intercept_kelp
 
     # create xarray dataset
     # use xarray to save the data in the format
@@ -323,17 +396,22 @@ if __name__ == "__main__":
     #     year        (time) int32 1984 1984 1984 1984 1985 ... 2022 2022 2022 2022
     #     quarter     (time) int16 1 2 3 4 1 2 3 4 1 2 3 4 ... 1 2 3 4 1 2 3 4 1 2 3 4
     #     biomass     (time, station) float64 ...
+    #     temp        (time, station) float64 ...
 
     ds = xr.Dataset(
         data_vars = {
             'latitude': (['station'], latlon[:,0]),
             'longitude': (['station'], latlon[:,1]),
-            'year': (['time'], times // 365 + 1984),
-            'quarter': (['time'], times % 365 // 91 + 1),
-            'biomass': (['time', 'station'], kelp)
+            'year': (['time'], times_dt.astype('datetime64[Y]').astype(int)),
+            'quarter': (['time'], times_dt.astype('datetime64[M]').astype(int) % 12 // 3 + 1),
+            'biomass': (['time', 'station'], kelp),
+            'temp': (['time', 'station'], temp),
+            'slope': (['feature'], [slope_kelp]),
+            'intercept': (['feature'], [intercept_kelp]),
         },
         coords = {
-            'time': times
+            'time': times_dt
         }
     )
+
     ds.to_netcdf(args.file_path_sim.replace('.pkl', '_regressors.nc'))

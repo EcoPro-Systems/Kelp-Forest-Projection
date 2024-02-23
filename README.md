@@ -4,6 +4,8 @@ An ecological forecasting model for monitoring the biomass availability in kelp 
 
 ![](Figures/kelp_forest.jpg)
 
+![](Data/overplot_GFDL-ESM4_BGL.png)
+
 ## Installation + Setup
 
 1) Clone repo + setup a conda environment
@@ -61,7 +63,8 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | ![]() | ![](Data/kelp_metrics_27_37_regressors.png) |
 | `regressors_predict.py` |  Use the trained regression models to predict the abundance of Kelp using features from `kelp_metrics_sim.pkl`. |
 | | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | 
-
+| `overplot_projection.py` | Overplot the projections from the regression models using features from `kelp_metrics_sim.pkl`. |
+| | ![](Data/overplot_GFDL-ESM4_BGL.png) |
 
 
 # Tests for statistical significance
@@ -157,38 +160,6 @@ Follow these steps to create a new linear regression model from Kelp Watch + MUR
 4)	Fit a linear regression model and perform a projection on 
 
     `python regressors_predict.py -f Data/kelp_metrics_27_37.pkl -fs Data/kelp_metrics_sim_27_37_ssp126_BGL.pkl`
-
-The sunlight feature can be toggled through the command line when running `regressors_predict.py`. Below are a few results using different regression models and different climate models.
--  OLS - Ordinary Least Squares
--  MLP - Multi-Layer Perceptron
-
-| Without sunlight feature (OLS) | With sunlight feature (OLS) |
-|---|---|
-| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_sunlight_regressors.png) |
-| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_sunlight_regressors.png) |
-| ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_sunlight_regressors.png) |
-| ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_sunlight_regressors.png) |
-
-
-| Without sunlight feature (MLP) | With sunlight feature (MLP) |
-|---|---|
-| ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp126_BGL_sunlight_regressors.png) |
-| ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_CanESM5_ssp585_BGL_sunlight_regressors.png) |
-| ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp126_BGL_sunlight_regressors.png) |
-| ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) | ![](Data/kelp_mlp_sim_27_37_GFDL-ESM4_ssp585_BGL_sunlight_regressors.png) |
-
-In all cases, when including sunlight as a feature, it gets a slightly better training error on our data but imposes this large negative slope compared to just the temperature-only model.
-
-### Varying the Climate model
-
-These plots show various projections without the sunlight feature. These plots use no sunlight feature and are made with the linear regression model. Within our region of interest we're assuming the same species of giant kelp. The range of temperatures can vary from about 14-23C between ~27-37N along the coast of California. The kelp seems to be responding well to the temperature changes in the simulation data. The temperature fluctuations vary by about 8C in the simulation data and 9C in the JPL Mur observations. Even projecting with the worst-case emission scenario the kelp remains relatively unphased by the temperature fluctations. The simulation data maxes out at a temperature around 22C while the measurements the regression model was trained on max out at 23C.
-
-| CanESM5 | GFDL-ESM4 |
-| --- | --- |
-| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp126_BGL_regressors.png) |
-| ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp585_BGL_regressors.png) | ![](Data/kelp_OLS_sim_27_37_GFDL-ESM4_ssp585_BGL_regressors.png) |
-
-There is a little to no difference between the projections from the two climate models. The kelp seems to be responding well to the temperature changes in every climate scenario. I think this speaks to the resilience of the plant. The model used for these is ordinary least squards.
 
 # Datasets
 
