@@ -301,7 +301,7 @@ if __name__ == "__main__":
 
     # plot temperature time series for each location
     ax[2].plot(utime_test_dt, mean_sst_test, 'c-', label=f'{climate_model} {climate_scenario.upper()} {scaling.upper()}')
-    ax[2].plot(utime_train_dt, mean_sst_train-273.15, 'k-', label=f'JPL MUR')
+    ax[2].plot(utime_train_dt, mean_sst_train-273.15, 'k-', label=f'JPL MUR Data')
     ax[2].set_xlabel('Time')
     ax[2].set_ylabel('Sea Surface Temperature [C]')
     ax[2].legend()
