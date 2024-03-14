@@ -57,7 +57,7 @@ def kelp_time_series(kelp_metrics, file_name):
     upper = np.max(kelp_metrics['lat'])
 
     # set up plot axes
-    ax.set_ylabel(r'Kelp Area [$m^2$]', fontsize=14)
+    ax.set_ylabel(r'Area per Station [$m^2$]', fontsize=14)
     ax.set_xlabel('Time [year]', fontsize=14)
     ax.set_title(f"Quarterly Averages of Kelp between ({lower:.1f} - {upper:.1f}N)", fontsize=16)
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_31_36.pkl")
+                        default="Data/kelp_metrics_27_37.pkl")
     args = parser.parse_args()
 
     # load data from disk

@@ -137,7 +137,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_33_36.pkl")
+                        default="Data/kelp_metrics_27_37.pkl")
     args = parser.parse_args()
 
     # load data from disk

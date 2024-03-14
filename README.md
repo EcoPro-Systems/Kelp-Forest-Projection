@@ -44,6 +44,8 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | `create_interpolated_sst.py` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
 | `create_interpolated_sst_sim.py` | Interpolate the simulated monthly SST data onto the same grid as the kelp data(quarterly) and create a new file called: `kelp_interpolated_data_sim.pkl`  ![](Data/kelp_timeseries_sim.png) |
 | `kelp_metrics.py` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
+| `plot_map.py`  | Create a map of the kelp locations and sea surface temperatures. | 
+|  | ![](Data/kelp_temp_map.png) |
 | `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. 
 | ![](Data/kelp_metrics_27_37_sst_timeseries.png) | ![](Data/kelp_metrics_27_37_kelp_timeseries.png) |
 | `plot_histogram_sst.py` `plot_histogram_kelp.py`   | Create seasonal histograms for change in abundance using `kelp_metrics.pkl`, averages over the entire region. |
