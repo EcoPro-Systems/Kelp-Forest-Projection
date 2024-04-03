@@ -1,4 +1,4 @@
-import pickle
+import joblib
 import argparse
 import numpy as np
 import xarray as xr
@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # convert datetime64[ns] to days since min date 
     time = data['time'].astype('datetime64[D]')
@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
     # load simulation data from disk
     with open(args.file_path_sim, 'rb') as f:
-        data_sim = pickle.load(f)
+        data_sim = joblib.load(f)
 
     # convert datetime64[ns] to days since min date 
     time_sim = data_sim['time'].astype('datetime64[D]')

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
-import pickle
+import joblib
 
 # create histogram of kelp area change for each season
 def histogram_kelp(kelp_metrics):
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # plot time series
     fig, ax, kdata = histogram_kelp(data)
@@ -63,4 +63,4 @@ if __name__ == "__main__":
 
     # save data to pickle file
     with open(args.file_path.replace('.pkl', '_histogram_kelp.pkl'), 'wb') as f:
-        pickle.dump(kdata, f)
+        joblib.dump(kdata, f)

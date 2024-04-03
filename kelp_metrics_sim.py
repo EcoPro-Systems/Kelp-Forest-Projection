@@ -1,4 +1,4 @@
-import pickle
+import joblib
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
     # load data
     with open(f'Data/kelp_interpolated_sst_{args.climate_scenario}_{args.downscaling}.pkl', 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # check if data file exists or unzip it
     if not os.path.exists('Data/crm_socal_1as_vers2.nc'):
@@ -279,4 +279,4 @@ if __name__ == "__main__":
 
     # save to pkl file
     with open(f"Data/kelp_metrics_sim_{lower_lat:.0f}_{upper_lat:.0f}_{args.climate_model}_{args.climate_scenario}_{args.downscaling}.pkl", 'wb') as f:
-        pickle.dump(kelp_data, f)
+        joblib.dump(kelp_data, f)

@@ -1,4 +1,4 @@
-import pickle
+import joblib
 import argparse
 import numpy as np
 import statsmodels.api as sm
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # convert datetime64[ns] to days since min date 
     time = data['time'].astype('datetime64[D]')

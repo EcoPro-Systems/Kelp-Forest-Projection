@@ -1,11 +1,9 @@
 # script to read in monthly SST temperatures and interpolate them onto the same time grid as the kelp data
-import os
-import glob
-import pickle
 import argparse
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
+from joblib import dump
 from scipy.interpolate import interp1d
 from scipy.spatial import cKDTree
 
@@ -167,7 +165,8 @@ if __name__ == "__main__":
 
     # save data
     with open(f'Data/kelp_interpolated_sst_{args.climate_scenario}_{args.downscaling}.pkl', 'wb') as f:
-        pickle.dump(data, f)
+        dump(data, f)
+
 
     # make plot
     import matplotlib.pyplot as plt

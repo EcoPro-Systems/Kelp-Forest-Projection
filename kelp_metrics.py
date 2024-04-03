@@ -1,4 +1,4 @@
-import pickle
+import joblib
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
@@ -231,7 +231,7 @@ if __name__ == "__main__":
 
     # load data
     with open('Data/kelp_interpolated_data.pkl', 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # check if data file exists or unzip it
     if not os.path.exists('Data/crm_socal_1as_vers2.nc'):
@@ -320,4 +320,4 @@ if __name__ == "__main__":
 
     # save to pkl file
     with open(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl", "wb") as f:
-        pickle.dump(kelp_data, f)
+        joblib.dump(kelp_data, f)

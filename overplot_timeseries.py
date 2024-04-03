@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pickle
+import joblib
 from itertools import cycle
 
 kelp_files = [
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     for file in kelp_files:
         ncolor = next(colors)
         with open(file, 'rb') as f:
-            data = pickle.load(f)
+            data = joblib.load(f)
         parts = file.split('_')
         #ax[0].errorbar(data['time'], data['mean'], yerr=data['std'], fmt='-', markersize=4, capsize=2, label=f"{parts[2]}-{parts[3]}N", color=ncolor, alpha=0.9)
         ax[0].plot(data['time'], data['mean'], color=ncolor, alpha=0.9, label=f"{parts[2]}-{parts[3]}N")
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     for file in sst_files:
         ncolor = next(colors)
         with open(file, 'rb') as f:
-            data = pickle.load(f)
+            data = joblib.load(f)
         parts = file.split('_')
         ax[1].errorbar(data['time'], data['mean']-273.15, yerr=data['std'], fmt='-', markersize=4, capsize=2, label=f"{parts[2]}-{parts[3]}N", color=ncolor, alpha=0.9)
         ax[1].set_ylabel(r'Temperature [$^\circ$C]', fontsize=14)

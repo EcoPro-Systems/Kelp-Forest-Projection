@@ -1,5 +1,5 @@
 import os
-import pickle
+import joblib
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # plot time series
     fig, ax = lag_correlation(data)

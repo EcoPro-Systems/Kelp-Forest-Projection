@@ -1,5 +1,5 @@
 import os
-import pickle
+import joblib
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -41,7 +41,7 @@ def sst_time_series(kelp_metrics, file_name):
     # save unique times, mean, and std as pickle file
     sst_time_series = {'time': unique_times, 'mean': mean_temp, 'std': std_temp}
     with open(file_name.replace('.png', '.pkl'), 'wb') as f:
-        pickle.dump(sst_time_series, f)
+        joblib.dump(sst_time_series, f)
     print(f"Saved pickle file to {file_name.replace('.png', '.pkl')}")
     
     # save figure
@@ -85,7 +85,7 @@ def kelp_time_series(kelp_metrics, file_name):
     # save unique times, mean, and std as pickle file
     kelp_time_series = {'time': unique_times, 'mean': mean_kelp, 'std': std_kelp}
     with open(file_name.replace('.png', '.pkl'), 'wb') as f:
-        pickle.dump(kelp_time_series, f)
+        joblib.dump(kelp_time_series, f)
     print(f"Saved pickle file to {file_name.replace('.png', '.pkl')}")
 
     # save figure
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # plot time series
     sst_time_series(data, args.file_path.replace('.pkl', '_sst_timeseries.png'))

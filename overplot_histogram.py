@@ -1,4 +1,4 @@
-import pickle
+from joblib import load
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -18,7 +18,7 @@ files = [
 for pkl in files:
     
     # load data
-    data = pickle.load(open(pkl,'rb'))
+    data = load(pkl)
     
     # extract latitude region from name
     parts = pkl.split('_')
@@ -99,7 +99,7 @@ files = [
 for pkl in files:
     
     # load data
-    data = pickle.load(open(pkl,'rb'))
+    data = load(pkl,'rb')
     print(data.keys())
     
     # extract latitude region from name

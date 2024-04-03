@@ -1,11 +1,11 @@
 # script to read in monthly SST temperatures and interpolate them onto the same time grid as the kelp data
 import os
 import glob
-import pickle
 import numpy as np
 import xarray as xr
 from tqdm import tqdm
 from scipy.interpolate import interp1d
+from joblib import dump
 
 # load the Kelp biomass
 kelp_file = "/home/jovyan/shared/data/ecopro/KelpForest/LandsatKelpBiomass_2022_Q4_withmetadata.nc"
@@ -77,4 +77,4 @@ for ii in tqdm(range(0,kelp.latitude.shape[0])): # for each kelp location
 
 # save data
 with open(f'kelp_interpolated_data.pkl', 'wb') as f:
-    pickle.dump(data, f)
+    dump(data, f)

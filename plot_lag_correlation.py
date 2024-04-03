@@ -1,5 +1,5 @@
 import os
-import pickle
+import joblib
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
     # load data from disk
     with open(args.file_path, 'rb') as f:
-        data = pickle.load(f)
+        data = joblib.load(f)
 
     # print lat values from file name
     print(f"Latitude Range: {args.file_path.split('_')[-2].split('.')[0]} - {args.file_path.split('_')[-1].split('.')[0]}")
