@@ -49,7 +49,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--file_path', type=str, 
                         help='path to input metrics file', 
-                        default="Data/kelp_metrics_31_36.pkl")
+                        default="Data/kelp_metrics_27_37.pkl")
     args = parser.parse_args()
 
     # load data from disk
@@ -59,6 +59,7 @@ if __name__ == "__main__":
     # plot time series
     fig, ax, kdata = histogram_kelp(data)
     plt.savefig(args.file_path.replace('.pkl', '_histogram_kelp.png'))
+    print(f"Saved histogram to {args.file_path.replace('.pkl', '_histogram_kelp.png')}")
     plt.close()
 
     # save data to pickle file
