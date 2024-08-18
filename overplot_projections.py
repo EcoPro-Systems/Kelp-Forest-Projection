@@ -43,7 +43,7 @@ if __name__ == "__main__":
     std_year_temp = []
     for y in np.unique(years):
         mask = years == y
-        mean_year_kelp.append(np.percentile(data['kelp'][mask],59))
+        mean_year_kelp.append(np.percentile(data['kelp'][mask],70))
         #mean_year_kelp.append(np.mean(data['kelp'][mask]))
         std_year_kelp.append(data['kelp'][mask].std())
         #mean_year_temp.append((np.median(data['temp'][mask])+np.mean(data['temp'][mask]))/2)
@@ -169,13 +169,13 @@ if __name__ == "__main__":
     results = model.fit()
     new_label = rf"Kelp Watch Data ({results.params[1]:.2f} +- {results.bse[1]:.2f} m$^2$/year)*$t$ +" + f" ({results.params[0]:.2f} +- {results.bse[0]:.2f} m$^2$)"
     ax[0].plot(uyears, mean_year_kelp, '.-', color='k', alpha=0.9, label=new_label)
-    ax[0].set_ylim([0,350])
+    ax[0].set_ylim([0,100])
     ax[1].set_ylim([13.5,22.5])
     # add a second y-axis for percent change from np.mean(mean_year_kelp)
     ax2 = ax[0].twinx()
     ax2.set_ylabel('Percent Change from Mean', fontsize=14)
     ax2.plot(uyears, 100*(mean_year_kelp-np.mean(mean_year_kelp))/np.mean(mean_year_kelp), 'k--', alpha=0.5)
-    ax2.set_ylim([(0-np.mean(mean_year_kelp))/np.mean(mean_year_kelp)*100, (350-np.mean(mean_year_kelp))/np.mean(mean_year_kelp)*100])
+    ax2.set_ylim([(0-np.mean(mean_year_kelp))/np.mean(mean_year_kelp)*100, (100-np.mean(mean_year_kelp))/np.mean(mean_year_kelp)*100])
 
     # set xticks
     ax[1].set_xlabel('Time [year]', fontsize=14)

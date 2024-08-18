@@ -1,4 +1,3 @@
-# script to read in monthly SST temperatures and interpolate them onto the same time grid as the kelp data
 import os
 import glob
 import numpy as np
@@ -7,74 +6,142 @@ from tqdm import tqdm
 from scipy.interpolate import interp1d
 from joblib import dump
 
-# load the Kelp biomass
-kelp_file = "/home/jovyan/shared/data/ecopro/KelpForest/LandsatKelpBiomass_2022_Q4_withmetadata.nc"
-kelp = xr.open_dataset(kelp_file)
+r_earth = 6371.0 # km
 
-# load the monthly SST data
-mur_dir = "/home/jovyan/shared/data/ecopro/MUR/"
-mur_files = glob.glob(os.path.join(mur_dir, "*MUR*.nc"))
+def process_location(lat, lon, kelp):
+    # average kelp area within 0.01 degrees of the lat/lon
 
-data = []
-
-print("reading in kelp data...")
-# for each kelp location
-for i in tqdm(range(kelp.latitude.shape[0])):
-
-    # create a dictionary to store data
     location_data = {
-        'lat': kelp.latitude.values[i],
-        'long': kelp.longitude.values[i],
+        'lat': lat,
+        'long': lon,
         'mur_time': [],
-        'mur_temp': [], # Monthly averaged 0.01-degree MUR SST
+        'mur_temp': [],
         'mur_temp_std': [],
-        'kelp_area': kelp.area.values[:,i],
+        'kelp_area': [], # m^2 per km^2
         'kelp_time': kelp.time.values,
-        # kelp_temp - temperatures interpolated to kelp_time
-        # kelp_temp_std - standard deviation of temperatures interpolated to kelp_time
     }
 
-    data.append(location_data)
+    mask = (kelp.latitude >= lat - 0.005) & (kelp.latitude < lat + 0.005) & \
+           (kelp.longitude >= lon - 0.005) & (kelp.longitude < lon + 0.005)
 
-print("interpolating SST data...")
-# open files for sea surface temperatures
-for mf in tqdm(mur_files): 
-    ds = xr.open_dataset(mf)
+    if not kelp.time.values.size:  # Check if 'kelp_time' is empty
+        return None
 
-    # extract SST for each kelp location
-    for i in range(kelp.latitude.shape[0]): # for each kelp location
+    if not np.any(mask) or np.all(np.isnan(kelp.area.values[:, mask])):
+        return None
+    
+    # calculate the area of the grid cell adjust for latitude
+    scale_factor = r_earth * np.pi / 180.0  * np.abs(np.cos(np.deg2rad(lat))) # km per degree
+    area = (scale_factor * 0.01 * 1000)**2 # meters squared
+    location_data['kelp_area'] = np.nansum(kelp.area.values[:, mask],axis=1) # meters per area
+    # normalize kelp area [m^2] to [km^2]
+    location_data['kelp_area'] = location_data['kelp_area'] / area * 1000**2 # m^2 per km^2
 
-        # get temp at closest point
-        #temp = ds['monthly_mean_sst'].sel(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i], method='nearest')
-        #temp_std = ds['monthly_std_sst'].sel(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i], method='nearest')
+    return location_data
 
-        # linear interpolation
-        temp = ds.interp(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i]).monthly_mean_sst.values[0]
-        temp_std = ds.interp(lat=kelp.latitude.values[i], lon=kelp.longitude.values[i]).monthly_std_sst.values[0]
+def interpolate_data(data):
+    data['mur_time'] = np.array(data['mur_time'])
+    data['mur_temp'] = np.array(data['mur_temp'])
 
-        # save data
-        data[i]['mur_temp'].append(temp)
-        data[i]['mur_temp_std'].append(temp_std)
-        data[i]['mur_time'].append(ds.time.values[0])
+    fn_temp = interp1d(data['mur_time'].astype(float), data['mur_temp'], kind='linear', fill_value=np.nan, bounds_error=False)
+    data['kelp_temp'] = fn_temp(data['kelp_time'].astype(float))
 
+    fn_temp_std = interp1d(data['mur_time'].astype(float), data['mur_temp_std'], kind='linear', fill_value=np.nan, bounds_error=False)
+    data['kelp_temp_std'] = fn_temp_std(data['kelp_time'].astype(float))
+    return data
+
+#kelp_file = "/home/jovyan/efs/data/KelpForest/LandsatKelpBiomass_2022_Q4_withmetadata.nc"
+kelp_file = "Data/LandsatKelpBiomass_2023_Q3_withmetadata.nc"
+kelp = xr.open_dataset(kelp_file)
+
+#mur_dir = "/home/jovyan/efs/data/MUR"
+mur_dir = "SST"
+mur_files = glob.glob(os.path.join(mur_dir, "*MUR*.nc"))
+
+print("Reading and processing data...")
+data = []
+ds = xr.open_dataset(mur_files[0])
+lat_grid = ds.lat.values
+lon_grid = ds.lon.values
+ds.close()
+
+# Find the minimum and maximum latitude and longitude values from the kelp dataset
+min_lat, max_lat = kelp.latitude.min().values, kelp.latitude.max().values
+min_lon, max_lon = kelp.longitude.min().values, kelp.longitude.max().values
+
+# Filter the lat_grid and lon_grid arrays to include only the values within the kelp's latitude and longitude range
+lat_mask = (lat_grid >= min_lat) & (lat_grid <= max_lat)
+lon_mask = (lon_grid >= min_lon) & (lon_grid <= max_lon)
+lat_grid = lat_grid[lat_mask]
+lon_grid = lon_grid[lon_mask]
+
+print("Extracting kelp data...")
+for i in tqdm(enumerate(lat_grid), total=len(lat_grid)):
+    lat = i[1]
+    for j,lon in enumerate(lon_grid):
+        location_data = process_location(lat, lon, kelp)
+        if location_data is not None:
+            data.append(location_data)
+
+# loop over temperature files and add to data
+print("Reading SST data...")
+for file in tqdm(mur_files):
+    ds = xr.open_dataset(file)
+    for i, location in enumerate(data):
+        lat, lon = location['lat'], location['long']
+        location['mur_temp'].append(ds.sel(lat=lat, lon=lon).monthly_mean_sst.values)
+        location['mur_temp_std'].append(ds.sel(lat=lat, lon=lon).monthly_std_sst.values)
+        location['mur_time'].append(ds.time.values[0])
     ds.close()
 
-print("interpolating SST data onto kelp time grid...")
-# Then for each kelp location interpolate SST onto same time grid as kelp data
-for ii in tqdm(range(0,kelp.latitude.shape[0])): # for each kelp location
-    # cast as numpy arrays
-    data[ii]['mur_time'] = np.array(data[ii]['mur_time'])
-    data[ii]['mur_temp'] = np.array(data[ii]['mur_temp'])
+# convert to numpy arrays
+for location in data:
+    location['mur_temp'] = np.array(location['mur_temp'])
+    location['mur_temp_std'] = np.array(location['mur_temp_std'])
+    location['mur_time'] = np.array(location['mur_time'])
 
-    # interpolate mur data to kelp time grid
-    fn_temp = interp1d(data[ii]['mur_time'].astype(float), data[ii]['mur_temp'], kind='linear', fill_value=np.nan, bounds_error=False)
-    data[ii]['kelp_temp'] = fn_temp(data[ii]['kelp_time'].astype(float))
+# remove second axis on tmp and tmp_std
+for location in data:
+    location['mur_temp'] = np.squeeze(location['mur_temp'])
+    location['mur_temp_std'] = np.squeeze(location['mur_temp_std'])
 
-    # interpolate stdev of mur data to kelp time grid
-    fn_temp_std = interp1d(data[ii]['mur_time'].astype(float), data[ii]['mur_temp_std'], kind='linear', fill_value=np.nan, bounds_error=False)
-    data[ii]['kelp_temp_std'] = fn_temp_std(data[ii]['kelp_time'].astype(float))
+print("Interpolating SST data onto kelp time grid...")
+data = [interpolate_data(d) for d in tqdm(data)]
 
-
-# save data
-with open(f'kelp_interpolated_data.pkl', 'wb') as f:
+with open(f'kelp_averaged_data.pkl', 'wb') as f:
     dump(data, f)
+
+
+# create a plot of the map
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+
+fig = plt.figure(figsize=(10, 10))
+ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+ax.set_extent([min_lon, max_lon, min_lat, max_lat])
+
+ax.set_title(f"Kelp Locations", fontsize=20)
+
+# plot kelp locations
+for location in data:
+    ax.plot(location['long'], location['lat'], color='limegreen', marker='.', markersize=3)
+
+# draw the map
+ax.coastlines()
+ax.set_global()
+
+# color terrain
+ax.add_feature(cfeature.LAND, facecolor='lightgray')
+ax.add_feature(cfeature.OCEAN, facecolor='lightblue')
+
+# add labels on axes every 10 degrees
+ax.set_xticks(np.arange(-180, 180, 2), crs=ccrs.PlateCarree())
+ax.set_xticklabels([f'{x}°' for x in np.arange(-180, 180, 2)], fontsize=12, rotation=45)
+ax.set_yticks(np.arange(-90, 90, 2), crs=ccrs.PlateCarree())
+ax.set_yticklabels([f'{x}°' for x in np.arange(-90, 90, 2)], fontsize=12)
+
+# zoom in on the bounding box
+ax.set_extent([-128, -110, 22, 50], crs=ccrs.PlateCarree())
+ax.grid(True, color='k', alpha=0.5, linestyle='--', linewidth=0.5)
+plt.show()

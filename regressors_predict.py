@@ -284,7 +284,7 @@ if __name__ == "__main__":
     ax[0].legend(loc='upper left')
     ax[0].set_ylabel(r"Average Kelp Area per Station [m$^2$]")
     ax[0].grid(True,ls='--',alpha=0.5)
-    ax[0].set_ylim([0,666])
+    ax[0].set_ylim([0,200])
     ax[0].set_xlim([np.min(utime_dt), np.max(utime_dt)])
 
     #ax[1].plot(utime_dt, bmean, ls='-', color='black', label='Kelp Watch Data',alpha=0.90)
@@ -292,7 +292,7 @@ if __name__ == "__main__":
     #ax[1].plot(utime_train_dt, mean_ols_train,  ls='-', color='limegreen', label=f'{args.model.upper()} Model')
     ax[1].plot(utime_train_dt[1:], kelp_train[:-1], ls='-', color='red', label=f'MUR Model')
     ax[1].plot(utime_test_dt[1:], kelp_projection[:-1], ls='-', color='limegreen', label=f'Climate Model')
-    ax[1].set_ylim([0,666])
+    ax[1].set_ylim([0,200])
     ax[1].grid(True,ls='--',alpha=0.5)
     ax[1].set_xlabel("Time")
     ax[1].set_ylabel(r"Average Kelp Area per Station [m$^2$]")

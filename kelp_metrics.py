@@ -222,7 +222,7 @@ if __name__ == "__main__":
     # upper lat limit
     parser.add_argument('-u', '--upper_lat', type=int,
                         help='upper latitude limit',
-                        default=30)
+                        default=37)
     # lower lat limit
     parser.add_argument('-l', '--lower_lat', type=int,
                         help='lower latitude limit',
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     args = parser.parse_args()    
 
     # load data
-    with open('Data/kelp_interpolated_data.pkl', 'rb') as f:
+    with open('Data/kelp_averaged_data.pkl', 'rb') as f:
         data = joblib.load(f)
 
     # check if data file exists or unzip it
