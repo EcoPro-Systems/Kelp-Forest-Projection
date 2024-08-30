@@ -25,7 +25,7 @@ pip install tqdm statsmodels astropy
 docker build -t kelp .
 
 # launch a jupter lab server from the container
-./container.sh 8008
+./lab.sh 8008
 ```
 
 
