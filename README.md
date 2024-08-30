@@ -18,7 +18,20 @@ conda install -c conda-forge xarray dask netCDF4 bottleneck
 pip install tqdm statsmodels astropy
 ```
 
-2) Download larges files from git lfs: 
+2) Or if you prefer docker:
+
+```
+# build image
+docker build -t kelp .
+
+# launch a jupter lab server from the container
+./container.sh 8008
+```
+
+
+## Data Files
+
+1) Download larges files from git lfs: 
     - `git lfs install`
     - `git lfs pull`
 
