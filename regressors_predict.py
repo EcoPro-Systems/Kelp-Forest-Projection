@@ -10,33 +10,17 @@ from scipy.interpolate import interp1d
 from sklearn.neural_network import MLPRegressor
 from create_interpolated_sst_sim import NearestNeighbor
 
-if __name__ == "__main__":
-    # argparse for input filepath
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--file_path', type=str, 
-                        help='path to input metrics file', 
-                        default="Data/kelp_metrics_27_37.pkl")
-    parser.add_argument('-fs', '--file_path_sim', type=str, 
-                        help='path to input metrics file', 
-                        default="Data/kelp_metrics_sim_27_37_GFDL-ESM4_ssp585_BGL.pkl")
-    #model type
-    parser.add_argument('-m', '--model', type=str, 
-                        help='model type (OLS or MLP)',
-                        default="OLS")
-    # sunlight bool default false
-    parser.add_argument('-s', '--sunlight', action='store_true',
-                        help='use sunlight as input feature')
-    
-    args = parser.parse_args()
+
+def main(file_path, file_path_sim="Data/kelp_metrics_sim_27_37_GFDL-ESM4_ssp585_BGL.pkl", model="OLS", sunlight=False):
 
     # extract climate model, scenario, and scaling from file_path_sim
-    parts = args.file_path_sim.split('_')
+    parts = file_path_sim.split('_')
     climate_scenario = parts[-2] # ssp585
     climate_model = parts[-3] # GFDL-ESM4
     scaling = parts[-1].split('.')[0]
 
     # load data from disk
-    with open(args.file_path, 'rb') as f:
+    with open(file_path, 'rb') as f:
         data = joblib.load(f)
 
     # convert datetime64[ns] to days since min date 
@@ -53,7 +37,7 @@ if __name__ == "__main__":
 
     # construct features
 
-    if args.sunlight:
+    if sunlight:
         features = [
             #time, # days, 0-365*20
             data['sunlight'], # SUNLIGHT
@@ -100,7 +84,7 @@ if __name__ == "__main__":
 
 
     # load simulation data from disk
-    with open(args.file_path_sim, 'rb') as f:
+    with open(file_path_sim, 'rb') as f:
         data_sim = joblib.load(f)
 
     # convert datetime64[ns] to days since min date 
@@ -109,7 +93,8 @@ if __name__ == "__main__":
     time_sim = time_sim.astype(int)
     time_sim_dt = data_sim['time'] # datetime format
 
-    if args.sunlight:
+
+    if sunlight:
 
         # construct features
         features = [
@@ -171,7 +156,7 @@ if __name__ == "__main__":
     time = time[si]
     time_dt = time_dt[si]
 
-    if args.model.lower() == 'ols':
+    if model.lower() == 'ols':
         # fit a linear model to the data with OLS
         #res = sm.OLS(y, X).fit()
         # add some regularization
@@ -179,7 +164,13 @@ if __name__ == "__main__":
         coeffs = res.params
         y_ols_train = np.dot(X, coeffs)
         y_ols_test = np.dot(X_test, coeffs)
-    elif args.model.lower() == 'mlp':
+
+        # for each variable print the coefficient
+        print("Coefficients:")
+        for i, c in enumerate(coeffs):
+            print(f"{feature_names[i]:<10} : {c:.3f}")
+
+    elif model.lower() == 'mlp':
         X = X[:,:-1] # remove bias
         X_test = X_test[:,:-1]
         Xp = (X - X.mean(axis=0)) / X.std(axis=0)
@@ -271,14 +262,14 @@ if __name__ == "__main__":
     fig, ax = plt.subplots(3, 1, figsize=(11, 10))
     # lat lon limits to title
     # extract lat/lon from file_path
-    lat = float(args.file_path_sim.split('_')[3])
-    lon = float(args.file_path_sim.split('_')[4].split('.')[0])
+    lat = float(file_path_sim.split('_')[3])
+    lon = float(file_path_sim.split('_')[4].split('.')[0])
     # extract type of model from fs
     fig.suptitle(f"Kelp Projections at {lat:.0f}-{lon:.0f} N using {climate_model} {climate_scenario.upper()} {scaling.upper()}", fontsize=16)
     ax[0].errorbar(utime_dt, bmean, yerr=bstd, fmt='o', color='black', label='Kelp Watch Data',alpha=0.90)
 
     #ax[0].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label=f'Projections (avg. err: {mse_test:.1f} m$^2$)',alpha=0.9)
-    #ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-', color='limegreen', label=rf'{args.model.upper()} Model (avg. err: {abs_err_ols_train:.1f} m$^2$)')
+    #ax[0].errorbar(utime_train_dt, mean_ols_train, yerr=std_ols_train, fmt='.', ls='-', color='limegreen', label=rf'{model.upper()} Model (avg. err: {abs_err_ols_train:.1f} m$^2$)')
     ax[0].plot(utime_test_dt[1:], kelp_projection[:-1], ls='-', color='limegreen', label=f'Climate Model (avg. err: {mse_projection:.1f} m$^2$)')
     ax[0].plot(utime_train_dt[1:], kelp_train[:-1],  ls='-', color='red', label=f'MUR Model (avg. err: {mse_train:.1f} m$^2$)')
     ax[0].legend(loc='upper left')
@@ -289,7 +280,7 @@ if __name__ == "__main__":
 
     #ax[1].plot(utime_dt, bmean, ls='-', color='black', label='Kelp Watch Data',alpha=0.90)
     #ax[1].plot(utime_test_dt, mean_ols_test, ls='-', color='red', label='Projections',alpha=0.9)
-    #ax[1].plot(utime_train_dt, mean_ols_train,  ls='-', color='limegreen', label=f'{args.model.upper()} Model')
+    #ax[1].plot(utime_train_dt, mean_ols_train,  ls='-', color='limegreen', label=f'{model.upper()} Model')
     ax[1].plot(utime_train_dt[1:], kelp_train[:-1], ls='-', color='red', label=f'MUR Model')
     ax[1].plot(utime_test_dt[1:], kelp_projection[:-1], ls='-', color='limegreen', label=f'Climate Model')
     ax[1].set_ylim([0,200])
@@ -309,9 +300,9 @@ if __name__ == "__main__":
     ax[2].set_xlim([np.min(utime_test_dt), np.max(utime_test_dt)])
     ax[2].set_ylim([13,22.5])
     plt.tight_layout()
-    file_name = args.file_path_sim.replace('.pkl', '_regressors.png')
-    file_name = file_name.replace('metrics', args.model)
-    if args.sunlight:
+    file_name = file_path_sim.replace('.pkl', '_regressors.png')
+    file_name = file_name.replace('metrics', model)
+    if sunlight:
         file_name = file_name.replace('regressors', 'sunlight_regressors')
     plt.savefig(file_name)
     print(f"Saved {file_name}")
@@ -414,4 +405,27 @@ if __name__ == "__main__":
         }
     )
 
-    ds.to_netcdf(args.file_path_sim.replace('.pkl', '_regressors.nc'))
+    ds.to_netcdf(file_path_sim.replace('.pkl', '_regressors.nc'))
+
+
+if __name__ == "__main__":
+    # argparse for input filepath
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--file_path', type=str, 
+                        help='path to input metrics file', 
+                        default="Data/kelp_metrics_27_37.pkl")
+    parser.add_argument('-fs', '--file_path_sim', type=str, 
+                        help='path to input metrics file', 
+                        default="Data/kelp_metrics_sim_27_37_GFDL-ESM4_ssp585_BGL.pkl")
+    #model type
+    parser.add_argument('-m', '--model', type=str, 
+                        help='model type (OLS or MLP)',
+                        default="OLS")
+    # sunlight bool default false
+    parser.add_argument('-s', '--sunlight', action='store_true',
+                        help='use sunlight as input feature')
+    
+    args = parser.parse_args()
+
+    # run main
+    main(args.file_path, args.file_path_sim, args.model, args.sunlight)

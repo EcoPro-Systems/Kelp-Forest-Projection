@@ -38,6 +38,7 @@ class NearestNeighbor():
         else:
             return nearest_sst
 
+
 if __name__ == "__main__":
 
     # cmd line args
@@ -49,7 +50,7 @@ if __name__ == "__main__":
     # climate scenario (ssp126, ssp585)
     parser.add_argument('-c', '--climate_scenario', type=str,
                         help='climate scenario (ssp126, ssp585)',
-                        default="ssp126")
+                        default="ssp585")
     # climate model (CanESM5/GFDL-ESM4)
     parser.add_argument('-m', '--climate_model', type=str,
                         help='climate model (CanESM5/GFDL-ESM4)',
@@ -95,8 +96,9 @@ if __name__ == "__main__":
 
     print("reading in kelp data...")
     data = []
+
     # for each kelp location
-    for i in tqdm(range(kelp.latitude.shape[0])):
+    for i in tqdm(range(0,kelp.latitude.shape[0],10)): # downsamples by 10
 
         # check location is within the grid
         # if kelp.latitude.values[i] > sim_sst.lats.max() or \

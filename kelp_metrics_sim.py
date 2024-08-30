@@ -162,34 +162,13 @@ def extract_kelp_metrics(data, bathymetry, sunlight, lowerBound, upperBound):
 
     return kelp_data
 
-if __name__ == "__main__":
-
-    # cmd line args
-    parser = argparse.ArgumentParser()
-    # climate scenario (ssp126, ssp585)
-    parser.add_argument('-c', '--climate_scenario', type=str,
-                        help='climate scenario (ssp126, ssp585)',
-                        default="ssp126")
-    # std vs BGL downscaling
-    parser.add_argument('-d', '--downscaling', type=str,
-                        help='downscaling method (std, BGL)',
-                        default="BGL")
-    # climate model (CanESM5/GFDL-ESM4)
-    parser.add_argument('-m', '--climate_model', type=str,
-                        help='climate model (CanESM5/GFDL-ESM4)',
-                        default="CanESM5")
-    # upper lat limit
-    parser.add_argument('-u', '--upper_lat', type=float,
-                        help='upper latitude limit',
-                        default=30)
-    # lower lat limit
-    parser.add_argument('-l', '--lower_lat', type=float,
-                        help='lower latitude limit',
-                        default=27)
-    args = parser.parse_args()    
+def main(climate_scenario, downscaling, climate_model, upper_lat, lower_lat):
+    """
+    Main function to extract kelp metrics from climate simulation data
+    """
 
     # load data
-    with open(f'Data/kelp_interpolated_sst_{args.climate_scenario}_{args.downscaling}.pkl', 'rb') as f:
+    with open(f'Data/kelp_interpolated_sst_{climate_scenario}_{downscaling}.pkl', 'rb') as f:
         data = joblib.load(f)
 
     # check if data file exists or unzip it
@@ -207,11 +186,13 @@ if __name__ == "__main__":
     #bathymetry = xr.open_dataset('Data/GEBCO_2022_sub_ice_topo.nc')
 
     # parse lat/long limits
-    lower_lat = min(args.lower_lat, args.upper_lat)
-    upper_lat = max(args.lower_lat, args.upper_lat)
+    lower_lat = min(lower_lat, upper_lat)
+    upper_lat = max(lower_lat, upper_lat)
 
     # create a grid for computing daylight
-    sunlight_file = f'Data/sunlight_{lower_lat}_{upper_lat}.nc'
+    #sunlight_file = f'Data/sunlight_{lower_lat}_{upper_lat}.nc'
+    sunlight_file = f'Data/sunlight_27.0_37.0.nc' # TODO change back
+    
     if os.path.exists(sunlight_file):
         sunlight = xr.open_dataset(sunlight_file)
     else:
@@ -278,5 +259,34 @@ if __name__ == "__main__":
     kelp_data = extract_kelp_metrics(data, bathymetry, sunlight, lower_lat, upper_lat)
 
     # save to pkl file
-    with open(f"Data/kelp_metrics_sim_{lower_lat:.0f}_{upper_lat:.0f}_{args.climate_model}_{args.climate_scenario}_{args.downscaling}.pkl", 'wb') as f:
+    with open(f"Data/kelp_metrics_sim_{lower_lat:.0f}_{upper_lat:.0f}_{climate_model}_{climate_scenario}_{downscaling}.pkl", 'wb') as f:
         joblib.dump(kelp_data, f)
+
+if __name__ == "__main__":
+
+    # cmd line args
+    parser = argparse.ArgumentParser()
+    # climate scenario (ssp126, ssp585)
+    parser.add_argument('-c', '--climate_scenario', type=str,
+                        help='climate scenario (ssp126, ssp585)',
+                        default="ssp126")
+    # std vs BGL downscaling
+    parser.add_argument('-d', '--downscaling', type=str,
+                        help='downscaling method (std, BGL)',
+                        default="BGL")
+    # climate model (CanESM5/GFDL-ESM4)
+    parser.add_argument('-m', '--climate_model', type=str,
+                        help='climate model (CanESM5/GFDL-ESM4)',
+                        default="GFDL-ESM4")
+    # upper lat limit
+    parser.add_argument('-u', '--upper_lat', type=float,
+                        help='upper latitude limit',
+                        default=37)
+    # lower lat limit
+    parser.add_argument('-l', '--lower_lat', type=float,
+                        help='lower latitude limit',
+                        default=27)
+    args = parser.parse_args()    
+
+    main(args.climate_scenario, args.downscaling, args.climate_model, 
+         args.upper_lat, args.lower_lat)

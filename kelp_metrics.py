@@ -215,19 +215,10 @@ def extract_kelp_metrics(data, bathymetry, sunlight, lowerBound, upperBound):
     
     return kelp_data
 
-if __name__ == "__main__":
-
-    # cmd line args
-    parser = argparse.ArgumentParser()
-    # upper lat limit
-    parser.add_argument('-u', '--upper_lat', type=int,
-                        help='upper latitude limit',
-                        default=37)
-    # lower lat limit
-    parser.add_argument('-l', '--lower_lat', type=int,
-                        help='lower latitude limit',
-                        default=27)
-    args = parser.parse_args()    
+def main(lower_lat, upper_lat):
+    """
+    Main function to extract kelp metrics
+    """
 
     # load data
     with open('Data/kelp_averaged_data.pkl', 'rb') as f:
@@ -248,8 +239,8 @@ if __name__ == "__main__":
     #bathymetry = xr.open_dataset('Data/GEBCO_2022_sub_ice_topo.nc')
 
     # parse lat/lon limits
-    lower_lat = min(args.lower_lat, args.upper_lat)
-    upper_lat = max(args.lower_lat, args.upper_lat)
+    lower_lat = min(lower_lat, upper_lat)
+    upper_lat = max(lower_lat, upper_lat)
 
     # create a grid for computing daylight
     sunlight_file = f'Data/sunlight_{lower_lat}_{upper_lat}.nc'
@@ -321,3 +312,21 @@ if __name__ == "__main__":
     # save to pkl file
     with open(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl", "wb") as f:
         joblib.dump(kelp_data, f)
+
+
+if __name__ == "__main__":
+
+    # cmd line args
+    parser = argparse.ArgumentParser()
+    # upper lat limit
+    parser.add_argument('-u', '--upper_lat', type=int,
+                        help='upper latitude limit',
+                        default=37)
+    # lower lat limit
+    parser.add_argument('-l', '--lower_lat', type=int,
+                        help='lower latitude limit',
+                        default=27)
+    args = parser.parse_args()    
+
+    # run main function
+    main(args.lower_lat, args.upper_lat)
