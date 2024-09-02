@@ -78,7 +78,7 @@ docker build -t kelp .
 
 4) Download the digital elevation model data from the [NOAA](https://www.ncei.noaa.gov/products/coastal-relief-model) website. The data is stored in a netCDF file and contains the elevation in meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
 
-5) If you can't find the data files, sign up for account on our shared Jupyter Hub server and download the data from the `Data/` directory. [https://oss.ecopro.smce.nasa.gov/hub]()
+If you can't find the data files, sign up for account on our shared Jupyter Hub server and download the data from the `Data/` directory. [https://oss.ecopro.smce.nasa.gov/hub]()
 
 # Tests for statistical significance
 
@@ -209,8 +209,3 @@ We use the [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.
 GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ice topo/bathy; 15 arc-second resolution)
 
 NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
-
-## To Do
-
-- switch to joblib serialization
-- convert script to notebook for collab server
