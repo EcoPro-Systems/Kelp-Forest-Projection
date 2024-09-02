@@ -6,6 +6,8 @@ An ecological forecasting model for monitoring the biomass availability in kelp 
 
 ![](Data/overplot_GFDL-ESM4_BGL.png)
 
+Have questions about the project? We gave our documentation to a chat assistant. [Ask the chat assistant](https://hf.co/chat/assistant/66d5e5ccd4c00cc8ff445e33)
+
 ## Installation + Setup
 
 1) Clone repo + setup a conda environment
@@ -28,27 +30,9 @@ docker build -t kelp .
 ./lab.sh 8008
 ```
 
+## Example
 
-## Data Files
-
-1) Download larges files from git lfs: 
-    - `git lfs install`
-    - `git lfs pull`
-
-2) Download interpolated SST values
-    - Go to https://hub.jpl-cmda.org
-    - Navigate to `shared/notebooks/Kelp_Biomass/`
-    - Download [kelp_interpolated_data.pkl (~3GB)](https://hub.jpl-cmda.org/user/kpearson/files/shared/notebooks/Kelp_Biomass/kelp_interpolated_data.pkl)
-
-The interpolated data comes from `create_interpolated_sst.py` and interpolates the monthly SST data onto a quarterly grid to match the Kelp data. The interpolated data is saved as a pickle file and is used in `kelp_metrics.py` to calculate the lag temperatures and derivatives for a given latitude range.
-
-3) Create some metrics/features, set the `lower_lat` and `upper_lat` variables in the script to change where the metrics are calculated
-    - `python kelp_metrics.py`
-
-The metrics script will create a new file called `kelp_metrics.pkl` which contains features for our regression algorithm.
-
-4) Train a regression model (includes OLS, MLP and RF)
-    - `python train_regressors.py`
+`Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using the kelp metrics.
 
 ## Analysis Scripts
 
@@ -81,6 +65,18 @@ The metrics script will create a new file called `kelp_metrics.pkl` which contai
 | `overplot_projection.py` | Overplot the projections from the regression models using features from `kelp_metrics_sim.pkl`. |
 | | ![](Data/overplot_GFDL-ESM4_BGL.png) |
 
+
+## Data Files
+
+1) Download the kelp data from the [Kelp Watch](https://kelpwatch.org/) website. The data is stored in a netCDF file and contains the kelp canopy area in square meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+2) Download the sea surface temperature data from the [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1) website. The data is stored in a netCDF file and contains the sea surface temperature in degrees Celsius for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+3) Download the digital elevation model data from the [GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) website. The data is stored in a netCDF file and contains the elevation in meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+4) Download the digital elevation model data from the [NOAA](https://www.ncei.noaa.gov/products/coastal-relief-model) website. The data is stored in a netCDF file and contains the elevation in meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+5) If you can't find the data files, sign up for account on our shared Jupyter Hub server and download the data from the `Data/` directory. [https://oss.ecopro.smce.nasa.gov/hub]()
 
 # Tests for statistical significance
 
