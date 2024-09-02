@@ -1,12 +1,10 @@
 # Kelp Forest Monitoring
 
-An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast. 
+An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast. Have questions about the project? We gave our documentation to a chat assistant. [Ask the chat assistant](https://hf.co/chat/assistant/66d5e5ccd4c00cc8ff445e33)
 
 ![](Figures/kelp_forest.jpg)
 
 ![](Data/overplot_GFDL-ESM4_BGL.png)
-
-Have questions about the project? We gave our documentation to a chat assistant. [Ask the chat assistant](https://hf.co/chat/assistant/66d5e5ccd4c00cc8ff445e33)
 
 ## Installation + Setup
 
