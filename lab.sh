@@ -23,12 +23,13 @@ if ! docker image inspect kelp &> /dev/null; then
     exit 1
 fi
 
-# Run the Docker container with Jupyter Lab
+# Run the Docker container with Jupyter Lab and mount the Data/ directory
 echo "Navigate to http://localhost:$PORT to access the server."
 
 docker run -it --rm \
     -p $PORT:8888 \
     -v "$(pwd)":/app/work \
+    -w /app/work \
     kelp \
     conda run -n kelp jupyter lab \
     --ip=0.0.0.0 \

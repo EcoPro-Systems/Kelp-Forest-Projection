@@ -243,7 +243,7 @@ def main(lower_lat, upper_lat):
     upper_lat = max(lower_lat, upper_lat)
 
     # create a grid for computing daylight
-    sunlight_file = f'Data/sunlight_{lower_lat}_{upper_lat}.nc'
+    sunlight_file = f'Data/sunlight_27_37.nc' # TODO change later
     if os.path.exists(sunlight_file):
         sunlight = xr.open_dataset(sunlight_file)
     else:
@@ -312,6 +312,13 @@ def main(lower_lat, upper_lat):
     # save to pkl file
     with open(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl", "wb") as f:
         joblib.dump(kelp_data, f)
+
+    print(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl saved")
+    print(kelp_data.keys())
+
+    del sunlight, bathymetry, data
+
+    return kelp_data
 
 
 if __name__ == "__main__":
