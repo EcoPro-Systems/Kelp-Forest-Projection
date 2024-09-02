@@ -34,7 +34,7 @@ docker build -t kelp .
 
 ## Example
 
-`Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using the kelp metrics.
+`Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using various features like temperature, sunlight, and time. The notebook also shows how to use the trained model to predict the abundance of kelp using features from a simulation data set.
 
 ## Analysis Scripts
 
