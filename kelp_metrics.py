@@ -95,8 +95,8 @@ def extract_kelp_metrics(data, bathymetry, sunlight, lowerBound, upperBound):
         'lon':[],            # longitude
         'dlat':[],           # latitude corresponding to difference measurements
         'dlon':[],           # longitude corresponding to difference measurements
-        'elevation':[],      # elevation [m]
-        'delevation':[],     # elevation corresponding to difference measurements [m]
+        #'elevation':[],      # elevation [m]
+        #'delevation':[],     # elevation corresponding to difference measurements [m]
     }
 
     # loop over all locations
@@ -145,8 +145,8 @@ def extract_kelp_metrics(data, bathymetry, sunlight, lowerBound, upperBound):
             kelp_data['sunlight'].extend(daylight_duration)
 
         # use linear interpolation
-        elevation = bathymetry.interp(lat=d['lat'],lon=d['long']).elevation.values
-        kelp_data['elevation'].extend(elevation*np.ones(len(d['kelp_area'][~bad_mask])))
+        #elevation = bathymetry.interp(lat=d['lat'],lon=d['long']).elevation.values
+        #kelp_data['elevation'].extend(elevation*np.ones(len(d['kelp_area'][~bad_mask])))
 
         # properly estimate the difference data
         nanmask = d['kelp_area'] == 0 # mask out areas with no kelp
@@ -180,7 +180,7 @@ def extract_kelp_metrics(data, bathymetry, sunlight, lowerBound, upperBound):
         kelp_data['dlon'].extend(d['long']*np.ones(len(nandiff[nonnanmask])))
         
         # add delevation
-        kelp_data['delevation'].extend(elevation*np.ones(len(nandiff[nonnanmask])))
+        #kelp_data['delevation'].extend(elevation*np.ones(len(nandiff[nonnanmask])))
 
         # free up memory
         del nanmask, nandata, nandiff, nonnanmask, nandiff_temp, bad_mask
@@ -224,16 +224,16 @@ def main(lower_lat, upper_lat):
     with open('Data/kelp_averaged_data.pkl', 'rb') as f:
         data = joblib.load(f)
 
-    # check if data file exists or unzip it
-    if not os.path.exists('Data/crm_socal_1as_vers2.nc'):
-        # if running for first time
-        with zipfile.ZipFile('Data/crm_socal_1as_vers2.nc.zip', 'r') as zip_ref:
-            zip_ref.extractall('Data/')
+    # check if elevation data file exists or unzip it
+    # if not os.path.exists('Data/crm_socal_1as_vers2.nc'):
+    #     # if running for first time
+    #     with zipfile.ZipFile('Data/crm_socal_1as_vers2.nc.zip', 'r') as zip_ref:
+    #         zip_ref.extractall('Data/')
 
     # load bathymetry data from noaa
     # if using noaa dem: limit: ~31-36
-    bathymetry = xr.open_dataset('Data/crm_socal_1as_vers2.nc')
-    bathymetry = bathymetry.rename({'Band1':'elevation'})
+    #bathymetry = xr.open_dataset('Data/crm_socal_1as_vers2.nc')
+    #bathymetry = bathymetry.rename({'Band1':'elevation'})
 
     # load bathymetry data
     #bathymetry = xr.open_dataset('Data/GEBCO_2022_sub_ice_topo.nc')
@@ -307,7 +307,7 @@ def main(lower_lat, upper_lat):
         sunlight = xr.open_dataset(sunlight_file)
 
     # extract kelp metrics
-    kelp_data = extract_kelp_metrics(data, bathymetry, sunlight, lower_lat, upper_lat)
+    kelp_data = extract_kelp_metrics(data, None, sunlight, lower_lat, upper_lat)
 
     # save to pkl file
     with open(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl", "wb") as f:
@@ -316,7 +316,7 @@ def main(lower_lat, upper_lat):
     print(f"Data/kelp_metrics_{lower_lat}_{upper_lat}.pkl saved")
     print(kelp_data.keys())
 
-    del sunlight, bathymetry, data
+    del sunlight, data
 
     return kelp_data
 

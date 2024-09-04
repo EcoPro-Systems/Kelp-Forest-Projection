@@ -1,10 +1,11 @@
 # Kelp Forest Monitoring
 
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1LbxwNnBsqL-zboR4_Et9q6sPTX6-3dn_?usp=sharing)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-Chat_Assistant-yellow)](https://hf.co/chat/assistant/66d5e5ccd4c00cc8ff445e33)
+
+
 An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast. 
 
-Have questions about the project? We gave our documentation and code to a chat assistant so you can ask questions about the project and get answers in real-time. 
-
-### [Ask our chat assistant](https://hf.co/chat/assistant/66d5e5ccd4c00cc8ff445e33)
 
 ![](Figures/kelp_forest.jpg)
 
@@ -112,23 +113,9 @@ One thing these tables don't show is the direction of the correction but from th
 
 # Temperature vs. Kelp Abundance per Region
 
-The largest correlations with kelp abundace are the temperatures with a one quarter lag. The kelp decreases to 0 at an average temperature of ~23-24C. 
+The largest correlations with kelp abundace are the temperatures with a one quarter lag. The kelp decreases to 0 at an average temperature of ~26 C. 
 
-|  | 27 - 32N | 32 - 37N | 27 - 37N |
-|-|-|-|-|
-| Correlation coefficient for One Quater Lag | -0.80 | -0.78 | -0.83 |
-||||
-| Slope of trend line with one quater lag (m^2/C) | -40.15 +- 4.04 | -29.90 +- 3.04 | -35.39 +- 2.99 |
-||||
-| Temperature when kelp abundance is zero using a quarter lag (C) (T0) | 23.49 +- 2.33 | 21.23 +- 3.09 | 22.36 +- 2.93 |
-||||
-| Year at which avg. temp reaches T0 | 2059.33 +- 20.50 | 2106.94 +- 51.45 | 2083.83 +- 35.07  |
-|![](Data/kelp_metrics_27_32_lag_correlation.png) | ![](Data/kelp_metrics_32_37_lag_correlation.png) | ![](Data/kelp_metrics_27_37_lag_correlation.png) |
-|![](Data/kelp_metrics_27_32_quarterly_lag.png) | ![](Data/kelp_metrics_32_37_quarterly_lag.png) | ![](Data/kelp_metrics_27_37_quarterly_lag.png) |
-
-The temperature at which the kelp abundance reaches 0 is different by 0.58 sigma. It's unclear if the northern kelp is more resilient to temperature changes than the southern kelp. We're assuming they're the same species of giant kelp. The range of temperatures can vary from about 14-23C between ~27-37N along the coast of California. The kelp seems to be responding well to the temperature changes in the simulation data. The temperature fluctuations vary by about 8C in the simulation data and 7C in the JPL Mur observations. The kelp seems to be responding well to the temperature changes in the simulation data which only go up to ~22C
-
-
+TODO: re-do this analysis by running `plot_lag_correlation.py` on different regions, then compare the results.
 
 # Predictions with Machine Learning
 
