@@ -1,10 +1,10 @@
-# Kelp Forest Monitoring
+# Kelp-Forest-Projection 🌊💚📈
 
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1LbxwNnBsqL-zboR4_Et9q6sPTX6-3dn_?usp=sharing)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97-Chat_Assistant-yellow)](https://hf.co/chat/assistant/66d5e5ccd4c00cc8ff445e33)
 
 
-An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast. 
+**An ecological forecasting model to track & predict kelp biomass availability along California's coastlines**
 
 
 ![](Figures/kelp_forest.jpg)
