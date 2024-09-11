@@ -1,0 +1,250 @@
+Act as Kelp Ecology Project Assistant, an expert in marine ecology and specifically focused on kelp forests. Your primary role is to provide comprehensive, accurate, and up-to-date information on ecological projects related to kelp, helping users understand their role in maintaining healthy kelp ecosystems.
+
+1. **Knowledge Base:** Maintain a deep understanding of kelp biology, ecology, and conservation efforts worldwide. Stay current with the latest scientific research on topics such as kelp species diversity, habitat requirements, reproductive strategies, and threats to kelp forests.
+
+2. **Responsibilities:**
+   - Explain complex ecological concepts related to kelp in simple, understandable language.
+   - Provide insights into ongoing ecological projects focused on kelp restoration, monitoring, and conservation.
+   - Offer suggestions for citizen science initiatives or individual actions that support kelp ecosystems.
+   - Assist users in finding relevant resources, such as research papers, educational materials, and organization websites dedicated to kelp ecology.
+   - Address inquiries about the impact of climate change, ocean acidification, and other environmental factors on kelp forests.
+
+3. **Tone:** Maintain a friendly, patient, and encouraging tone while avoiding jargon. Assume users have varying levels of knowledge about marine ecology but share a common interest in learning more about kelp ecosystems.
+
+4. **Limitations:** Be transparent when you don't know something or if the information might not be entirely accurate without verification. In such cases, offer to research further and provide an updated response.
+
+# Kelp Forest Monitoring
+
+An ecological forecasting model for monitoring the biomass availability in kelp forests on the California coast. https://github.com/EcoPro-Systems/Kelp-Forest-Projection
+
+## Installation + Setup
+
+1) Clone repo + setup a conda environment
+
+```
+conda create -n kelp python=3.10
+conda activate kelp
+conda install ipython jupyter pandas matplotlib scipy scikit-learn
+conda install -c conda-forge xarray dask netCDF4 bottleneck
+pip install tqdm statsmodels astropy
+```
+
+2) Or if you prefer docker:
+
+```
+# build image
+docker build -t kelp .
+
+# launch a jupter lab server from the container
+./lab.sh 8008
+```
+
+## Example
+
+`Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using the kelp metrics.
+
+## Analysis Scripts
+
+| Script Name | Description | 
+| ----------- | ----------- |
+| `create_interpolated_sst.py` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
+| `create_interpolated_sst_sim.py` | Interpolate the simulated monthly SST data onto the same grid as the kelp data(quarterly) and create a new file called: `kelp_interpolated_data_sim.pkl`  ![](Data/kelp_timeseries_sim.png) |
+| `kelp_metrics.py` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
+| `plot_map.py`  | Create a map of the kelp locations and sea surface temperatures. | 
+|  | ![](Data/kelp_temp_map.png) |
+| `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. 
+| ![](Data/kelp_metrics_27_37_sst_timeseries.png) | ![](Data/kelp_metrics_27_37_kelp_timeseries.png) |
+| `plot_histogram_sst.py` `plot_histogram_kelp.py`   | Create seasonal histograms for change in abundance using `kelp_metrics.pkl`, averages over the entire region. |
+| ![](Data/kelp_metrics_27_37_histogram_sst.png) | ![](Data/kelp_metrics_27_37_histogram_kelp.png) |
+| `plot_lag_correlation.py` `plot_lag_correlation_change.py` | Create lag correlation plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. |
+| ![](Data/kelp_metrics_27_37_lag_correlation.png) | ![](Data/kelp_metrics_27_37_lag_correlation_change.png) |
+| `overplot_timeseries.py` | Create time series plots for temperature and kelp using `kelp_metrics.pkl`, overplots 3 different regions. |
+| | ![](Data/kelp_sst_timeseries.png) | |
+| `overplot_histogram.py` | Create seasonal histograms for change in abundance and SST using `kelp_metrics.pkl`, overplots 3 different regions. |
+| ![](Data/overplot_histogram_sst.png) | ![](Data/overplot_histogram_kelp.png) |
+| `trends_annual.py` | Calculate the annual trends for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
+| ![]() | ![](Data/kelp_metrics_27_37_annual.png) |
+| `trends_quarterly.py` | Calculate the seasonal trends (quarterly) for kelp abundance and temperature using `kelp_metrics.pkl`. Also, measures significance of trends with various pval estimates (e.g. pearsonr, Mann-Kendall, Kendall-Tau, ANOVA, Spearmanr, etc.) |
+| | Trend with previous quarter's temperature ![](Data/kelp_metrics_27_37_quarterly_lag.png) | 
+| `regressors_optimize.py` | Hyperparameter optimization for regression algorithms using scikit-learn | 
+| `regressors_train.py` | Train various regression models to predict the abundance of Kelp using ordinary least-squares, multi-layer perceptron and random forest with features from `kelp_metrics.pkl`. |
+| ![]() | ![](Data/kelp_metrics_27_37_regressors.png) |
+| `regressors_predict.py` |  Use the trained regression models to predict the abundance of Kelp using features from `kelp_metrics_sim.pkl`. |
+| | ![](Data/kelp_OLS_sim_27_37_CanESM5_ssp126_BGL_regressors.png) | 
+| `overplot_projection.py` | Overplot the projections from the regression models using features from `kelp_metrics_sim.pkl`. |
+| | ![](Data/overplot_GFDL-ESM4_BGL.png) |
+
+
+## Data Files
+
+1) Download the kelp data from the [Kelp Watch](https://kelpwatch.org/) website. The data is stored in a netCDF file and contains the kelp canopy area in square meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+2) Download the sea surface temperature data from the [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1) website. The data is stored in a netCDF file and contains the sea surface temperature in degrees Celsius for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+3) Download the digital elevation model data from the [GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/) website. The data is stored in a netCDF file and contains the elevation in meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+4) Download the digital elevation model data from the [NOAA](https://www.ncei.noaa.gov/products/coastal-relief-model) website. The data is stored in a netCDF file and contains the elevation in meters for each location along the coast. The data is stored in the `Data/` directory and is used to calculate the kelp metrics.
+
+5) If you can't find the data files, sign up for account on our shared Jupyter Hub server and download the data from the `Data/` directory. [https://oss.ecopro.smce.nasa.gov/hub]()
+
+# Tests for statistical significance
+
+| Annual P-Vals | SST vs. Kelp | Time vs. SST | Time vs. Kelp |
+|--------------|--------------|--------------|--------------|
+| [Pearsonr](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html)    | 0.149        | 0.001        | 0.053        |
+| [Kendalltau](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kendalltau.html)  | 0.164        | 0.000        | 0.080        |
+| [Spearmanr](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html)   | 0.198        | 0.000        | 0.058        |
+| [Mann.Kendall](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mstats.kendalltau.html) | 0.164        | 0.000        | 0.080        |
+| [Linregress](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html)  | 0.149        | 0.001        | 0.053        | 
+
+Signficant trends occur when p-vals are less than ~0.05-0.1, where smaller values are more significant. These values are measured in the `trends_annual.py` script.
+
+| Quarterly P-vals| SST vs. Kelp | Time vs. SST | Time vs. Kelp |
+|-----------------|--------------|--------------|---------------|
+| Pearsonr        | 0.008        | 0.016        | 0.557         |
+| Kendalltau      | 0.083        | 0.016        | 0.493         |
+| Spearmanr       | 0.038        | 0.013        | 0.434         | 
+| Mann.Kendall    | 0.083        | 0.016        | 0.493         |
+| Linregress      | 0.008        | 0.016        | 0.557         |
+
+One thing these tables don't show is the direction of the correction but from the quarterly plots above we see an inverse trend between Kelp and SST from a quarter before. The trend implies some at some temperature around ~22C the kelp abundance reaches 0.
+
+| Quarterly P-vals | SST_lag vs. Kelp | Time vs. SST_lag | Time vs. Kelp |
+|------------------|------------------|------------------|--------------|
+| Pearsonr         | 0.000            | 0.059            | 0.557        |
+| Kendalltau       | 0.000            | 0.031            | 0.493        |
+| Spearmanr        | 0.000            | 0.028            | 0.434        |
+| Mann.Kendall     | 0.000            | 0.031            | 0.493        |
+| Linregress       | 0.000            | 0.059            | 0.557        |
+
+# Temperature vs. Kelp Abundance per Region
+
+The largest correlations with kelp abundace are the temperatures with a one quarter lag. The kelp decreases to 0 at an average temperature of ~23-24C. 
+
+|  | 27 - 32N | 32 - 37N | 27 - 37N |
+|-|-|-|-|
+| Correlation coefficient for One Quater Lag | -0.80 | -0.78 | -0.83 |
+||||
+| Slope of trend line with one quater lag (m^2/C) | -40.15 +- 4.04 | -29.90 +- 3.04 | -35.39 +- 2.99 |
+||||
+| Temperature when kelp abundance is zero using a quarter lag (C) (T0) | 23.49 +- 2.33 | 21.23 +- 3.09 | 22.36 +- 2.93 |
+||||
+| Year at which avg. temp reaches T0 | 2059.33 +- 20.50 | 2106.94 +- 51.45 | 2083.83 +- 35.07  |
+|![](Data/kelp_metrics_27_32_lag_correlation.png) | ![](Data/kelp_metrics_32_37_lag_correlation.png) | ![](Data/kelp_metrics_27_37_lag_correlation.png) |
+|![](Data/kelp_metrics_27_32_quarterly_lag.png) | ![](Data/kelp_metrics_32_37_quarterly_lag.png) | ![](Data/kelp_metrics_27_37_quarterly_lag.png) |
+
+The temperature at which the kelp abundance reaches 0 is different by 0.58 sigma. It's unclear if the northern kelp is more resilient to temperature changes than the southern kelp. We're assuming they're the same species of giant kelp. The range of temperatures can vary from about 14-23C between ~27-37N along the coast of California. The kelp seems to be responding well to the temperature changes in the simulation data. The temperature fluctuations vary by about 8C in the simulation data and 7C in the JPL Mur observations. The kelp seems to be responding well to the temperature changes in the simulation data which only go up to ~22C
+
+
+
+# Predictions with Machine Learning
+
+We test three different regression algorithms to predict the abundance of kelp: ordinary least-squares, multi-layer perceptron and random forest. The regressors are trained using the features from `kelp_metrics.pkl` and the target variable is the abundance of kelp. The regressors are trained using the `regressors_train.py` script.
+
+|                      | Correlation Coefficient | Mutual Information | Feature Importance |
+| -------------------- | ----------------------- | ------------------ | ------------------ |
+| Time                 |  -0.032 | 0.155 | 0.027 |
+| Elevation [m]        | 0.040   | 0.013 | 0.000 |
+| Sunlight [day]       | 0.304   | 0.186 | 0.690 |
+| Latitude             | 0.116   | 0.098 | 0.000 |
+| Longitude            | -0.164  | 0.103 | 0.000 |
+| Temperature          | 0.005   | 0.391 | 0.000 |
+| Temperature Lag      | -0.314  | 0.420 | 0.199 |
+| Temperature Lag 2    | -0.172  | 0.401 | 0.084 |
+
+
+Even though the parameters individually may be correlated to the amount of kelp, the random forest regression model suggests only the amount of sunlight, temperature from the previous quarter and time are important for making a prediction. Making another model with only these features may be more accurate than includes features like elevation, latitude, longitude, etc.
+
+|                         | Correlation Coefficient | Mutual Information | Feature Importances |
+|-------------------------|-------------------------|--------------------|---------------------|
+| Time                    | -0.042                  | 0.155              | 0.020               |
+| Sunlight [day]          | 0.304                   | 0.186              | 0.702               |
+| Temperature Lag         | -0.314                  | 0.420              | 0.194               |
+| Temperature Lag 2       | -0.172                  | 0.401              | 0.085               |
+
+
+### How to create a projection from new simulation data:
+
+Follow these steps to create a new linear regression model from Kelp Watch + MUR SST values and then project the model onto new simulation data.
+
+1) Download the temperature file to `Data/`
+
+2)	Interpolate + reformat simulation data onto same grid as Kelp
+
+    `python create_interpolated_sst_sim.py -c ssp126 -m CanESM5`
+
+3)	Estimate some spatial + timeseries metrics needed for the linear regression model
+
+    `python kelp_metrics_sim.py -c ssp126 -d BGL -l 27 -u 37 -m CanESM5`
+
+4)	Fit a linear regression model and perform a projection on 
+
+    `python regressors_predict.py -f Data/kelp_metrics_27_37.pkl -fs Data/kelp_metrics_sim_27_37_ssp126_BGL.pkl`
+
+# Datasets
+
+We use various data sets including kelp biomass, sea surface temperature, and digital elevation models.
+
+## Kelp Biomass
+
+[Kelp Watch](https://kelpwatch.org/) is an online platform that provides access to satellite data on kelp canopy dynamics along the west coast of North America. Developed through a collaboration between researchers and conservation groups, Kelp Watch uses Landsat imagery to quantify seasonal giant kelp and bull kelp canopy area in 30x30m regions spanning from Baja California, Mexico to Oregon since 1984. The interactive web interface allows users to visualize, analyze, and download the kelp canopy data to support research and inform management decisions. Key applications include assessing long-term trends, impacts of disturbances like marine heatwaves, and local kelp forest dynamics. Overall, Kelp Watch makes complex satellite data more accessible to better understand and manage these valuable kelp forest ecosystems. The Kelp Watch project monitors ~500,000 locations along the west coast.
+
+Data URL: https://sbclter.msi.ucsb.edu/data/catalog/package/?package=knb-lter-sbc.74
+
+![](Figures/kelp_west_coast.png)
+
+`kelp_area_m^2` - The total emergent kelp canopy area in square meters within the selected geometry. Cells with no numerical value correspond to instances when the scene was either obstructed by clouds and/or no clear observation of the area was available and no measurement was obtained. The nan's and zeros should be filtered out in correlation estimates.
+
+
+| Quarter | Season        | Months                  | Date              |
+| ------- | ------------- | ----------------------- | ----------------- |
+| Q1      | winter        | January – March         | 02-15T00:00:00.00 |
+| Q2      | spring        | April – June            | 05-15T00:00:00.00 |
+| Q3      | summer        | July – September        | 08-15T00:00:00.00 |
+| Q4      | fall          | October – December      | 11-15T00:00:00.00 |
+
+
+## Sea Surface Temperature
+
+We use the [JPL MUR SST](https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1) data set to get the sea surface temperature data. The data for this project are monthly averages of the SST at 0.01 deg resolution. For more information see [Kalmus et al. 2022](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021EF002608)
+
+![](Figures/temperature_map.png)
+
+
+## Digital Elevation Models
+
+GEBCO - https://www.gebco.net/data_and_products/gridded_bathymetry_data/ (sub-ice topo/bathy; 15 arc-second resolution)
+
+NOAA - https://www.ncei.noaa.gov/products/coastal-relief-model (Southern California Version 2; 1 arc-second resolution)
+
+
+Kelp forests are one of the most productive and biologically diverse ecosystems in the world, providing habitat for numerous species of marine plants and animals. Kelp forests face numerous threats, including rising ocean heat, overfishing, pollution, and invasive species. We analyze the relationship between quarterly kelp presence data from Kelp Watch and monthly sea surface temperature (SST) data from MUR, and other variables (coastal elevation and sunlight availability). Our study focuses on kelp between 27N and 37N along the coast of California because it is suspected to contain a single species of kelp, Macrocystis pyrifera i.e. giant kelp. We train various regression models with data from 2003 to 2023 to predict the abundance of kelp given the environmental factors. We find an inverse correlation between the change in kelp and sea surface temperature which also follows a seasonal cycle with most of the growth happening in the Spring and Summer quarters. We find the largest correlation between kelp presence and SST lagged by one quarter, corresponding to a kelp response timescale. We then use our resulting linear ecological model to project kelp presence in the future given downscaled SST from the global climate models under various emissions scenarios.  the  with temperature estimates from climate models to determine how the kelp will respond to heat waves and climate change.
+
+Biodiversity is essential to the existence and proper functioning of all ecosystems and the provision of ecosystem services that humans depend on for food, air, water, and other natural benefits. However, biodiversity loss has been accelerating globally \citep{Butchart2010}. Ecological projections on multi-decadal timescales and ecological forecasting on shorter timescales are increasingly important tools to understand the threats to biodiversity and inform ecosystem management. Following recommendations from the 2017 Earth Science Decadal Survey, NASA has made biodiversity a priority through current and upcoming remote sensing missions like ECOSTRESS, UAVSAR, and PACE. These missions will provide high-resolution time series of environmental variables related to ecological systems in the next few years. This presents a timely opportunity to advance ecological modeling by combining these new observations with numerical models. Here, we demonstrate a use case of EcoPro (Ecological Projection Analytic Collaborative Framework) to support multidisciplinary teams conducting ecological projection studies using cutting-edge data science methodologies. EcoPro will contain an analytic toolkit, a data gateway, and a web portal for publishing results and enabling collaboration. EcoPro will be demonstrated in three use cases: giant sequoia ecosystems (Sudip et al. in prep.), kelp forests (our study), and coral reefs (Kalmus et al. in prep.). By improving ecological projections and connecting researchers across disciplines, EcoPro will be an important resource for understanding biodiversity threats, informing ecosystem management, and exploring new observation strategies.
+
+Kelp forests along the California coast provide habitat for diverse and economically important species and play a key role in coastal carbon cycling. However, these ecosystems have experienced declines due to marine heatwaves, urchin grazing, and disease outbreaks (Rogers-Bennett and Catton 2019). Bull kelp forests in northern California saw large declines during a 2014 marine heatwave, resulting in ecological impacts and fishery losses (Cavanaugh et al. 2019). As climate change increases future marine heatwave frequency and intensity, more regional kelp loss is expected. However, projections of climate change impacts on kelp distributions are lacking. We will use the EcoPro framework to relate future sea surface temperature and other environmental factors to temperature thresholds associated with declines in giant kelp abundance. This suitability modeling will forecast climate impacts on key kelp species across the California coast this century.
+
+Kelp forests are threatened by climate change and have experienced significant declines in recent decades in many regions globally (Krumhansl et al. 2016, Wernberg et al. 2016). Climate factors like marine heatwaves can cause abrupt kelp forest loss, facilitating phase shifts to turf-dominated systems (Filbee-Dexter and Wernberg 2018). Giant kelp in California saw declines during marine heatwaves and is projected to experience future habitat contraction under continued warming (Kavanaugh et al. 2018, Wilson et al. 2022). Threshold temperatures linked to kelp loss (~24 C in southern California) have been estimated in prior work, providing an approach to model future climate suitability (Bartsch et al. 2016, Cavanaugh et al. 2019). However, kelp forests also have mechanisms that may confer resilience to climatic stress, such as the dispersal of detached macrophytes (Fujiwara and Caswell 2021). Our study will build on this prior research to project climate change impacts on key kelp species across the California coast this century using an ecological modeling framework relating future temperature projections to identified thermal thresholds.
+
+Machine learning techniques like random forests and neural networks have shown promise for forecasting across a range of domains (Elith et al. 2008, LeCun et al. 2015). These methods can uncover complex nonlinear relationships between environmental predictors and ecological response variables making them a suitable algorithm for our kelp study. Machine learning has been applied to model giant kelp biomass in California using satellite data (Cavanaugh et al. 2015?) and to predict future kelp habitat suitability in Australia under climate change (Young et al. 2022). However, forecasting future kelp dynamics along the California coast using machine learning and climate model projections has yet to be explored. Our study will test random forest and multi-layer neural network models to forecast giant kelp canopy biomass across the 21st century. We will integrate Earth system model outputs of future sea surface temperature, bathymetric depth, and other relevant environmental variables with historical kelp biomass data. This machine learning approach will enable nonlinear modeling of kelp dynamics under novel future climate conditions.
+
+The Multi-scale Ultra-high Resolution (MUR) Sea Surface Temperature (SST) Analyses is part of the NASA Making Earth System Data Records for Use in Research Environments (MEaSUREs) Program\footnote{https://podaac.jpl.nasa.gov/MEaSUREs-MUR}. MEaSUREs, develops consistent global- and continental-scale Earth system data records. The MUR SST data produced by the NASA MEaSUREs program provides daily SST maps at 0.01° resolution globally from 2002-present by combining observations from multiple satellite sensors. MUR analysis uses a multi-resolution variational approach to optimally blend complementary data from infrared and microwave sensors while preserving fine-scale spatial features. The result is an ultra-high resolution SST record revealing ocean processes down to 1 km scales. MUR adheres to community data standards and includes per-pixel uncertainty estimates, land masks, and sea ice data. With its unprecedented spatial detail, the freely available MUR SST dataset enables new insights into ocean circulation patterns, fronts, eddies, and other surface dynamics relevant to ecological forecasting.
+
+The Kelp Watch program has generated an extensive time series of kelp canopy area and biomass along the US West Coast using Landsat satellite data spanning 1984-present (Bell et al. 2020). Kelp canopy area and biomass are estimated from surface reflectance and empirical relationships for giant kelp. The data provide quarterly 30m resolution maps of giant and bull kelp canopy area for California, Oregon, Washington, and Baja California. Multiple Landsat sensors have been cross-calibrated and synthesized to derive a continuous time series (Bell et al. 2020). This unique long-term kelp dataset enables analysis of kelp forest dynamics over recent decades in relation to climate variability and change. The open access Kelp Watch\footnote{https://kelpwatch.org/} data will be a valuable asset for ecological forecasting studies to understand and project climate change impacts on these critical nearshore ecosystems.
+
+The National Centers for Environmental Information (NCEI) Coastal Relief Model (CRM) provides 90-meter resolution digital elevation models spanning onshore and offshore regions along U.S. coastlines by merging topographic data from the USGS with bathymetric soundings. The CRM offers researchers and managers a comprehensive elevation layer for GIS mapping and analysis in coastal areas. With elevations resolved to 0.1 meters, the CRM supports applications like modeling storm impacts, managing coastal development, and understanding sea level rise. The CRM uses a geographic NAD83 horizontal datum and an unspecified vertical datum, with elevations in meters. The large cell size results in ~1 meter vertical uncertainty, exceeding differences between tidal datums, so no vertical datum transformation was performed. The CRM delivers key elevation information to study interconnected processes across the land-sea interface.
+
+Our study focuses on the latitude band spanning 27°N to 37°N along the southern California coast (see Figure \ref{fig:kelp_map}). This region encompasses the biogeographic range of giant kelp (Macrocystis pyrifera) as the dominant canopy-forming kelp species (?). Our analysis integrated time series of sea surface temperature and giant kelp canopy abundance from 2003-2023 (see Figure \ref{fig:timeseries}). Since the original SST and kelp data are on two different timescales, we downscale the temperature data using a spatial modeling code described in (Kalmus et al. 2022) such that we can have estimates on a quarterly basis to match the kelp time series. We first explore seasonal and lag correlations between SST and kelp changes. We then developed statistical models using ordinary least squares (OLS) regression, random forest, and multilayer perceptron neural networks to predict the kelp abundance based on SST, elevation data, and sunlight availability. This analytical approach elucidates temperature effects on giant kelp while leveraging machine learning techniques to uncover nonlinear relationships and enhance ecological forecasting capabilities for this foundation species.
+
+The quarterly lag we identified in giant kelp canopy autocorrelation aligns with multiple previous studies. Reed et al. (2011) found autocorrelation peaks at 3-4 month lags in California kelp biomass related to individual lifespan. Cavanaugh et al. (2011) reported ~quarterly lags attributed to both lifespan and seasonal effects. Across California, Bell et al. (2015) noted persistent quarterly autocorrelation important for forecasting. Schroeter et al. (2015) identified maximum autocorrelation near a quarterly lag due to intrinsic and environmental drivers. Most recently, Wilson et al. (2022) confirmed distinct quarterly cycles in giant kelp linked to sporophyte longevity, recruitment, and seasonal dynamics. Our results agree with these analyses finding quarterly coherence as a robust feature of giant kelp time series. This intrinsic population driver should be considered in developing ecological forecast models. % DOUBLE CHECK THESE REFERENCES AND FACTS
+
+We project giant kelp presence to 2100 using downscaled SST from global climate models in the region of our study. 
+
+These results suggest temperature trends over the next decade could significantly reduce giant kelp habitat suitability and distribution. In order to compare our measurements to climate simulation data it is first downscaled to match our kelp locations using the perscription in Kalmus et al. 2022. The authors employed a novel statistical downscaling method to project sea surface temperatures (SSTs) at a high spatial resolution of 1 km for coral reef locations worldwide. The standard downscaling approach used in ecological projection studies involves deterministically interpolating coarse-resolution climate model anomalies to a fine-scale observational grid, which assumes a homogeneous spatial dependence structure (e.g., Van Hooidonk et al., 2016). Instead, we adopted a bivariate Gaussian process model that jointly models the fine-scale observational SST data (NASA/JPL MUR) and the coarse-scale climate model output, enabling the spatial dependence structure to be learned from the data in a nonstationary manner (Ekanayaka et al., 2022). This novel method utilizes observational data more effectively in the downscaling process and allows for the quantification of uncertainties in the downscaled projections. Validation studies showed that this method outperformed the standard downscaling technique, particularly in near-coastal regions where many coral reefs are located, reducing the mean squared error by up to 31% compared to withheld test data (Kalmus et al. 2022).
+
+Our study utilizes an ensemble of global climate model simulations from the Coupled Model Intercomparison Project Phase 6 (CMIP6). Specifically, one realization from each of 35 CMIP6 model groups providing monthly sea surface temperature (SST) output was included, encompassing the historical experiment from 1870-2014 and two future emissions scenarios (SSP1-2.6 and SSP5-8.5) from the Shared Socioeconomic Pathways spanning 2015-2100 (O'Neill et al., 2014). These two scenarios represent a range of potential future greenhouse gas emissions trajectories and associated radiative forcing levels. The high emissions SSP5-8.5 scenario could raise temperatures by ~4°C globally by 2100. The resulting temperatures are used in our regression model and shown in Figure \ref{comparison}. Under the extreme SSP5-8.5 warming trajectory where offshore SSTs increase by $\sim20\%$ or more by 2100, the downscaled projections indicate kelp forests along the California coast could experience sustained temperature increases beyond their thermal tolerance. Such chronic heat exposure may reduce canopy-forming kelp abundance by up to 50% in many areas, potentially causing fundamental regime shifts in these productive coastal ecosystems. The high-resolution projections can help identify potential climate refugia to prioritize kelp conservation efforts under future warming.
+
+Kelp forests provide critical habitat along the California coast, but face threats from climate change and other anthropogenic stressors. We developed an ecological forecasting model to project giant kelp dynamics in relation to environmental drivers. Focusing on southern California, we found an inverse relationship between kelp abundance changes and sea surface temperature, following a seasonal cycle with peak growth in spring/summer. We identified a one-quarter lag as the dominant timescale linking kelp fluctuations to temperature due to intrinsic population processes. We designed a regression model using quarterly lagged-temperature and estimate kelp abundances using temperature data from climate models and satellite measurements. In the worst case scenario, one of the climate scenarios shows a ~20% increase in temperature with a ~50% decrease in kelp. Quantifying environmental effects and forecasting future kelp distributions will inform conservation strategies for this highly productive and biodiverse ecosystem. Going forward, incorporating additional stressors and higher-resolution data could further improve kelp projection capabilities.
+
+Some of the research described in this publication was carried out in part at the Jet Propulsion Laboratory, California Institute of Technology, under a contract with the National Aeronautics and Space Administration. This research has used data from the Kelp Watch Program and National Oceanic and Atmospheric Administration. We acknowledge funding support from the National Aeronautics and Space Administration (NASA) Advanced Information Systems Technology (AIST) Grant Number NNH21ZDA001N.
+
