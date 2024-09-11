@@ -1,0 +1,77 @@
+
+Imagine placing a few glasses of water around a football field. You’re asked to compute how much water there is on the field, in which case you’d sum up or add all that water into a bucket. If we’re trying to compute the fractional coverage, then we would normalize by the area of the football field rather than the total surface area of the cups.
+ 
+I worry that if we average and scale the result, we will be overestimating the amount of kelp. The equivalent analogy would be, if every cup is 50% full and then we average and scale those results, it would say the football field is covered in 50% water when there are only a few cups in the area.
+ 
+It depends how we want to generalize this behavior on larger scales. This is one of the reasons I opted for leaving the kelp at the native resolution and interpolated the temperatures to match. Imagine that football analogy again, but this time we have 100,000s of football fields in different locations. My choice of interpolation algorithm (nearest neighbor) claims I don’t care what the variation is within one field because that’s insignificant compared to 1) our measurement uncertainty and 2) measuring the trend across 100,000s of fields. To prove this, I did a little experiment with that subset of the MUR data I just sent. I compute the temperature gradient from cell-to-cell and found it only changes by < 0.1 degrees. The average measurement uncertainty on the MUR data set is between ~0.3-0.4 degrees. The gradient is much smaller than the uncertainty. Changing to a linear interpolation would only perturb our original temperature measurements by less than 0.1 degrees from the original value. That perturbation is even within our uncertainty and arguable not significant. We’re not interested in the trend within one football field but many which spans changes on the order of 10+ degrees so I don’t see how perturbing our original measurements by ~0.05 degrees on average will influence our trend at scale. We could round the temperatures to the nearest tenth of degree and get the same result regardless of interpolation algorithm. Nearest neighbors should be adequate given our precision and spatial extent of our trend. I fear this whole investigate into downscaling and interpolation is not needed and what we did before should be fine. If the MUR gradient was larger and closer to 1 degree or more then I would agree that linear interpolation is necessary. Implementing linear interpolation not only increases the run time by an order of magnitude but also doesn’t change things significantly to justify its use.
+ 
+explain ecological fallacy and how it might apply to our analysis of measuring kelp 
+
+Ecological fallacy is a logical error that occurs when inferences about individuals or smaller units are made based on aggregate data for a group. In other words, it's the mistake of assuming that relationships observed at a higher level of aggregation (like a group or population) necessarily hold true at a lower level (like individuals or smaller subgroups).
+
+In the context of your kelp analysis, ecological fallacy could potentially apply in several ways:
+
+1. Spatial scale mismatch:
+   If you're using data aggregated at a larger spatial scale (e.g., satellite imagery with coarse resolution) to make inferences about kelp at a smaller scale (e.g., individual kelp beds or patches), you might fall into an ecological fallacy. The relationships or patterns observed at the larger scale may not accurately represent what's happening at the smaller, more localized level.
+
+2. Temporal aggregation:
+   If you're using data averaged over long time periods to make conclusions about short-term kelp dynamics, you might miss important variations or relationships that exist at finer temporal scales.
+
+3. Species-level inferences:
+   If you're studying kelp as a broad category and applying findings to specific kelp species without considering their individual characteristics, you might be committing an ecological fallacy.
+
+4. Environmental factor correlations:
+   If you find a correlation between kelp abundance and an environmental factor (like temperature) at a large scale, it would be an ecological fallacy to assume this relationship holds true for every individual kelp bed or location within your study area.
+
+5. Averaging effects:
+   When you average kelp coverage over large areas, you might lose important information about local variations. For example, if you conclude that kelp coverage is stable based on a large-scale average, you might miss that some areas are experiencing significant declines while others are seeing increases.
+
+To avoid ecological fallacy in your kelp analysis:
+
+1. Be cautious about scaling up or down: Clearly state the scale at which your data is collected and analyzed, and be careful about making inferences at different scales.
+
+2. Use multi-scale approaches: When possible, analyze data at multiple spatial and temporal scales to understand how relationships might change across scales.
+
+3. Consider individual variability: Remember that individual kelp beds or locations might behave differently from the overall trend.
+
+4. Use appropriate statistical methods: Employ methods that can account for hierarchical data structures, like mixed-effects models or geographically weighted regression.
+
+5. Validate with finer-scale data: When possible, use finer-scale data (e.g., field observations) to validate patterns observed in coarser-scale data.
+
+By being aware of the potential for ecological fallacy, you can design your analysis and interpret your results in a way that avoids overgeneralizing findings and provides a more accurate understanding of kelp dynamics across different scales.
+
+I understand you're concerned about ecological fallacy and so I am. I would argue that by aggregating and downscaling this data we're introducing a fallacy into our analysis because we have to make an assumption from a few datapoints how the kelp behaves on a larger scale (i.e. within the cell). Do we sum, average or scale the results will ultimately change the trend we measure. I'm trying to process the data at as fine of resolution as possible and argue we can actually get away with using the temperature measurements without interpolating because it's decently sampled. Unfortunately we don't have temperatures at the same resolution as kelp because the depth of the ocean will likely play a large role. 
+
+Your concern is well-founded and I appreciate your thoughtful approach to this issue. You're absolutely right that aggregating and downscaling data can introduce assumptions and potential fallacies into the analysis. Your approach of trying to process the data at the finest resolution possible is a good strategy to minimize these issues. Let's break this down:
+
+1. Kelp data resolution:
+   You're working with the highest resolution kelp data available, which is excellent. This allows you to capture fine-scale variations in kelp distribution and abundance.
+
+2. Temperature data:
+   The temperature data is at a coarser resolution than the kelp data. Your argument that we can use the temperature measurements without interpolation because they're decently sampled is valid, especially if the temperature gradient between cells is small relative to the measurement uncertainty (as you mentioned in your previous explanation about the <0.1 degree gradient vs. 0.3-0.4 degree uncertainty).
+
+3. Avoiding assumptions:
+   By not aggregating or downscaling the kelp data, you're avoiding making assumptions about how kelp behaves within each temperature cell. This is a strength of your approach, as it preserves the original information content of the kelp data.
+
+4. Scale mismatch:
+   The mismatch in resolution between kelp and temperature data is a limitation, but it's often unavoidable in ecological studies. Your approach of using the nearest neighbor temperature for each kelp pixel is a reasonable compromise, given the small temperature gradients you've observed.
+
+5. Depth considerations:
+   You're right that ocean depth likely plays a significant role, and it's unfortunate that we don't have temperature data at the same resolution as the kelp data that accounts for depth variations. This is a limitation of the available data that should be acknowledged in your analysis.
+
+6. Trend analysis:
+   By keeping the kelp data at its native resolution and associating it with the nearest temperature measurement, you're allowing the analysis to capture trends at the finest possible scale given the available data. This approach minimizes the risk of introducing artifacts or biases that could result from aggregation or interpolation.
+
+Your approach has several advantages:
+1. It preserves the original information content of the kelp data.
+2. It avoids making assumptions about kelp distribution within temperature cells.
+3. It minimizes computational complexity and potential errors introduced by interpolation.
+4. It allows for analysis at the finest possible scale given the available data.
+
+Recommendations:
+1. Clearly document your methodology and the rationale behind your decisions.
+2. Acknowledge the limitations of the temperature data resolution in your analysis.
+3. Consider performing a sensitivity analysis to see how different approaches to handling the temperature data (e.g., nearest neighbor vs. linear interpolation) might affect your results.
+4. If possible, validate your findings with some higher-resolution temperature data or in-situ measurements, even if only for a subset of your study area.
+
+Your approach seems well-reasoned and appropriate given the data constraints and the goal of minimizing assumptions and potential fallacies in the analysis. The key is to be transparent about the methods, their limitations, and to interpret the results with these considerations in mind.
