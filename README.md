@@ -35,7 +35,7 @@ docker build -t kelp .
 
 ## Example
 
-`Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using various features like temperature, sunlight, and time. The notebook also shows how to use the trained model to predict the abundance of kelp using features from a simulation data set.
+`Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using various features like temperature, sunlight, and time. The notebook also shows how to use the trained model to predict the abundance of kelp using features from a simulation data set. If you want to remake the data used for the regression model, you can run the notebook, `downscale_kelp_to_mur_grid.ipynb`. We recommend running this on our shared collaboration server since the data files are already available there, https://oss.ecopro.smce.nasa.gov/hub/user-redirect/lab/tree/efs/tools/Kelp_Biomass/downscale_kelp_to_mur_grid.ipynb 
 
 ## Analysis Scripts
 
@@ -44,6 +44,7 @@ docker build -t kelp .
 | `create_interpolated_sst.py` | Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl` |
 | `create_interpolated_sst_sim.py` | Interpolate the simulated monthly SST data onto the same grid as the kelp data(quarterly) and create a new file called: `kelp_interpolated_data_sim.pkl`  ![](Data/kelp_timeseries_sim.png) |
 | `kelp_metrics.py` | Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm. |
+| `Notebooks/plot_downscaled_kelp.ipynb` | Visualize a small section of downscaled data. ![](Data/downscaled_kelp.png) |
 | `plot_map.py`  | Create a map of the kelp locations and sea surface temperatures. | 
 |  | ![](Data/kelp_temp_map.png) |
 | `plot_timeseries.py` | Create time series plots for temperature and abundance using `kelp_metrics.pkl`, averages over the entire region. 
