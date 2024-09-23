@@ -37,6 +37,15 @@ docker build -t kelp .
 
 `Regression_quick.ipynb` is a notebook that demonstrates how to train a regression model to predict the abundance of kelp using various features like temperature, sunlight, and time. The notebook also shows how to use the trained model to predict the abundance of kelp using features from a simulation data set. If you want to remake the data used for the regression model, you can run the notebook, `downscale_kelp_to_mur_grid.ipynb`. We recommend running this on our shared collaboration server since the data files are already available there, https://oss.ecopro.smce.nasa.gov/hub/user-redirect/lab/tree/efs/tools/Kelp_Biomass/downscale_kelp_to_mur_grid.ipynb 
 
+
+Anytime you want to start a new analysis the first thing will be to format and clean the input data. This includes interpolating the MUR SST data onto the same grid as the kelp data and calculating various metrics like lag temperatures and derivatives for each kelp location. 
+
+1. `create_interpolated_sst.py` - Interpolate the monthly SST data onto the same grid as the kelp data and create a new file called: `kelp_interpolated_data.pkl`
+
+2. `kelp_metrics.py` - Calculate various metrics like lag temps and derivatives for each kelp location then save the data to a new file called: `kelp_metrics.pkl`. These metrics are used as features for our regression algorithm.
+
+Afterwards, you will have a file called `kelp_metrics.pkl` that contains the features and target variable for the regression model. You can then train the regression model using the `regressors_train.py` script.
+
 ## Analysis Scripts
 
 | Script Name | Description | 
